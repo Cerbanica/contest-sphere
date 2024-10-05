@@ -1,0 +1,54 @@
+DO $$
+DECLARE
+  name1 TEXT[] := ARRAY['Huion', 'Wacom', 'Xp pen', 'Google', 'Summer', 'Winter','Autumn', 'Spring','Titan'];
+  name2 TEXT[] := ARRAY['Contest', 'Challenge', 'Competition', '2024'];
+  category TEXT[] := ARRAY['Writing', 'Digital Arts', 'Programming', 'Arts'];
+  status TEXT[] := ARRAY['On Going', 'Ending Soon', 'Upcoming'];
+  description TEXT := 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.';
+  
+  selected_firstPrize INT;
+  prizeRange INT := 0;
+  deadline DATE;
+  selected_title TEXT;
+  selected_category TEXT;
+  selected_status TEXT;
+BEGIN
+  FOR i IN 1..40 LOOP
+    -- Generate random firstPrize
+    selected_firstPrize := (RANDOM() * 3000)::int;
+
+    -- Set prizeRange based on firstPrize
+       -- Set prizeRange based on firstPrize
+    IF selected_firstPrize > 10000 THEN
+      prizeRange := 5;
+    ELSIF selected_firstPrize > 5000 THEN
+      prizeRange := 4;
+    ELSIF selected_firstPrize > 1000 THEN
+      prizeRange := 3;
+    ELSIF selected_firstPrize > 500 THEN
+      prizeRange := 2;
+    ELSIF selected_firstPrize > 50 THEN
+      prizeRange := 1;
+    END IF;
+    
+    -- Generate a random date for deadline (within the next year)
+    deadline := CURRENT_DATE + (RANDOM() * 365)::int;
+    
+    -- Randomly select from arrays
+    selected_title := name1[ceil(random() * array_length(name1, 1))] || ' ' || name2[ceil(random() * array_length(name2, 1))];
+    selected_category := category[ceil(random() * array_length(category, 1))];
+    selected_status := status[ceil(random() * array_length(status, 1))];
+    
+    -- Insert data into the table
+    INSERT INTO contests (title, "firstPrize", category, status, description, deadline, "prizeRange")
+    VALUES (
+      selected_title,         -- Randomly chosen title
+      selected_firstPrize,             -- Randomly generated first prize
+      selected_category,      -- Randomly chosen category
+      selected_status,        -- Randomly chosen status
+      description,            -- Static description
+      deadline,               -- Randomly generated deadline
+      prizeRange              -- Calculated prizeRange
+    );
+  END LOOP;
+END $$;

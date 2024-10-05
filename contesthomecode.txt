@@ -1,0 +1,320 @@
+'use client';
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import supabase from "../utils/supabaseClient";
+import { ContestCard } from "./components";
+import { categories } from "./components/DataList";
+import Image from "next/image";
+
+export default function Home() {
+    const [contestList, setContestList] = useState([]);
+    const [fetchError, setFetchError] = useState(null);
+    const [categoriesList, setCategoriesList] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedSort, setSelectedSort] = useState('');
+    const [selectedPrize, setSelectedPrize] = useState('');
+    const [totalItems, setTotalItems]=useState(0);
+    const [totalPages,setTotalPage]= useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const page = parseInt(searchParams.get('page') ?? '1', 10);  
+      const itemsPerPage = 12;
+    const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage - 1;
+   
+    // Handle category and sort selection from URL query
+    useEffect(() => {
+        const categoryFromQuery = searchParams.get('category') || '';
+        const sortFromQuery = searchParams.get('sort') || '';
+        const prizeFromQuery = searchParams.get('prize') || '';
+        const searchFromQuery = searchParams.get('search') || '';
+
+        setSelectedCategories(categoryFromQuery);
+        setSelectedSort(sortFromQuery);
+        setSelectedPrize(prizeFromQuery);
+        setSearchTerm(searchFromQuery);
+
+        //le Pagination
+       
+        
+        
+
+        const fetchContests = async () => {
+            try {
+                let query = supabase.from('contests') .select('id, title, prizeRange, firstPrize, category, deadline,status', { count: 'exact' }).range(start, end);
+                
+                // Filter by category if specified
+                if (categoryFromQuery) {
+                    query = query.eq('category', categoryFromQuery);    
+                }
+
+                  // Filter by search term in title or category
+                if (searchFromQuery) {
+                    
+                    query = query.or(`title.ilike.%${searchFromQuery}%,category.ilike.%${searchFromQuery}%`);
+                        
+                }
+                // Sort by main prize if specified
+                if (sortFromQuery === 'ending') {
+                    query = query.order('deadline', { ascending: true });
+                }
+
+                 // Sort by main prize if specified
+                 if (prizeFromQuery != '') {
+                    
+                    query = query.gte('prizeRange', prizeFromQuery).lte('prizeRange', 5);
+                }
+
+                const { data, error, count } = await query;
+
+                if (error) {
+                    throw error;
+                }
+
+                setContestList(data);
+                setFetchError(null);
+                setTotalItems(count);
+                setTotalPage(Math.ceil(count / itemsPerPage))
+            } catch (error) {
+                setFetchError('Couldn\'t fetch contest data');
+                setContestList([]);
+                console.log(error);
+            }
+        };
+
+        fetchContests();
+     }, [searchParams, selectedCategories, selectedSort, selectedPrize, start, end]);
+
+    const handleSearchChange = () => {
+        const params = new URLSearchParams(searchParams);  // Get existing URL parameters
+        params.set('search', searchTerm);  // Set the new search term in URL params
+        params.set('page', 1);  // Reset to first page on search
+        router.push(`/?${params.toString()}`, { shallow: true });  // Update the URL with the new search params
+    };
+    // Handle category change
+    const handleCategoryChange = (selectedCategory) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('category', selectedCategory);
+        params.set('page',1); 
+
+        router.push(`/?${params.toString()}`, { shallow: true });
+    };
+
+    // Handle sort change
+    const handleSortChange = (sortOption) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('sort', sortOption);
+        params.set('page',1); 
+
+        router.push(`/?${params.toString()}`, { shallow: true });
+    };
+
+    // Handle prize change
+    const handlePrizeChange = (prizeOption) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('prize', prizeOption);
+        params.set('page',1); 
+        router.push(`/?${params.toString()}`, { shallow: true });
+    };
+
+    // Fetch categories count on component mount
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const { data, error } = await supabase
+                .from('categoriescount')
+                .select();
+
+            if (error) {
+                setFetchError('Couldn\'t fetch categories');
+                setCategoriesList([]);
+                console.log(error);
+            } else {
+                setCategoriesList(data);
+                setFetchError(null);
+            }
+        };
+
+        fetchCategories();
+    }, []); // Empty dependency array ensures this only runs once on mount
+
+    const handleNextPage = () => {
+       if(page<Math.ceil(totalItems / itemsPerPage)){
+        const params = new URLSearchParams(searchParams);
+        params.set('page', String(parseInt(page) + 1));  // Increment the page
+        // The other query params (category, sort, prize) remain intact
+        router.push(`/?${params.toString()}`, { shallow: true });
+       }
+    };
+    
+    const handlePrevPage = () => {
+        if (page > 1) {
+            const params = new URLSearchParams(searchParams);
+            params.set('page', String(page - 1));  // Decrement the page
+            // The other query params (category, sort, prize) remain intact
+            router.push(`/?${params.toString()}`, { shallow: true });
+        }
+    };
+
+    const handlePageChange = (selectedPage) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('page', selectedPage);
+    
+        router.push(`/?${params.toString()}`, { shallow: true });
+    };
+    
+
+    return (
+        <div className="min-h-screen bg-gray-200 text-gray-300">
+            <div className="container mx-auto p-6 sm:p-12">
+                <div className="p-6 rounded-lg">
+                    <section>
+                        <a className="text-black my-2 border border-solid border-black-900 rounded-md p-2 bg-white" href="/about">
+                            Add Contest
+                        </a>
+                    </section>
+                    <section>
+                    <h1 className="text-black text-xl font-bold my-2">Search and Filters</h1>
+                    <div className="flex flex-row">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)} 
+                          
+                            placeholder="Search contests..."
+                            className="mt-1 block w-72 p-2 border border-gray-300 rounded-md"
+                        />
+                         <button
+                                onClick={ handleSearchChange}
+                                className={`w-48 text-center text-xl font-bold mx-1 text-white bg-blue-600 p-2 `} > Find Contest
+                                                        
+                        </button>
+
+                        </div>
+                        <h1 className="text-black text-xl font-bold my-2">Search and Filters</h1>
+                      
+                        <div className="mb-4 flex flex-row space-x-5">
+                        <select
+                                id="category"
+                                value={selectedCategories}
+                                onChange={(e) => handleCategoryChange(e.target.value)}
+                                className="mt-1 block w-72 p-2 border border-gray-300 rounded-md">
+                                <option value="">Categories</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.name}>
+                                        {cat.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                id="sort"
+                                value={selectedSort}
+                                onChange={(e) => handleSortChange(e.target.value)}
+                                className="mt-1 block w-72 p-2 border border-gray-300 rounded-md">
+                                <option value="">Sort By</option>
+                                <option value="latest">Latest</option>
+                                <option value="ending">Ending Soon</option>
+
+                            </select>
+                            <select
+                                id="prize"
+                                value={selectedPrize}
+                                onChange={(e) => handlePrizeChange(e.target.value)}
+                                className="mt-1 block w-72 p-2 text-black border  border-gray-300 rounded-md">
+                                <option value="">All Prize Value</option>
+                                <option value="1">USD50+</option>
+                                <option value="2">USD500+</option>
+                                <option value="3">USD1000+</option>
+                                <option value="4">USD5000+</option>
+                                <option value="5">USD10000+</option>
+                                
+
+                            </select>
+                        </div>
+                       
+                    </section>
+                    <section>
+                        <h1 className="text-black text-xl font-bold my-2">Categories</h1>
+                        {categoriesList.map((category) => (
+                            <div key={category.id} className="w-48 border bg-white border-gray-300 p-3 rounded-md">
+                                <p className="text-black">{category.name} ({category.count})</p>
+                            </div>
+                        ))}
+                    </section>
+                    {fetchError && (<p>{fetchError}</p>)}
+                    <section>
+                    <h1 className="text-black text-xl font-bold my-2">Total page: {totalPages} Total Items : {totalItems} , Ceil shit :{Math.ceil(totalItems / itemsPerPage)} page : {page}</h1>
+                        {contestList.length > 0 ? (
+                            <>
+                            <div className="home__cars-wrapper">
+                                {contestList.map((contest) => (
+                                    <ContestCard key={contest.id} contest={contest} />
+                                ))}
+                            </div>
+                            <div className="flex flex-row w-full justify-center mt-12">
+
+                                        <button className="bg-white text-black border border-solid border-gray w-12"onClick={handlePrevPage} disabled={page <= 1}>
+                                        &lt;
+                                            </button>
+                                            {Array.from({ length: totalPages }, (_, index) => {
+                                            const currentPage = parseInt(page);
+                                            const visiblePages = 5;  // Total number of pages to show around the current page
+                                            
+                                            let startPage = 1;  // 
+                                            let endPage = totalPages; 
+                                            if(totalPages>=visiblePages){       
+                                                
+
+                                                startPage = Math.max(currentPage - 2, 1);  // At least show 2 pages before the current page
+                                            endPage = Math.min(currentPage + 2, totalPages);  // At least show 2 pages after the current page
+                                            
+                                            // Adjust start and end pages if we're at the start or end of the pagination
+                                            if (currentPage <= 3) {
+                                                startPage = 1;
+                                                endPage = Math.min(visiblePages, totalPages);
+                                            } else if (currentPage + 2 >= totalPages) {
+                                                startPage = Math.max(totalPages - visiblePages + 1, 1);
+                                                endPage = totalPages;
+                                            }
+                                            }
+                                            
+
+                                            if (index + 1 >= startPage && index + 1 <= endPage) {
+                                                return (
+                                                    <button
+                                                        key={index + 1}
+                                                        onClick={() => handlePageChange(index + 1)}
+                                                        className={`w-12 text-center text-xl font-bold mx-1 ${index + 1 === currentPage ? 'bg-blue-500 text-white' : 'bg-white text-black'}`}
+                                                    >
+                                                        {index + 1}
+                                                    </button>
+                                                );
+                                            }
+                                            return null;
+                                        })}
+                                            <button className="bg-white text-black border border-solid border-gray w-12" onClick={handleNextPage} disabled={page>=totalPages} >
+                                            &gt;
+                                            </button>
+                                            </div>
+                            </>
+                            
+                            
+                        ) : (
+                            !fetchError &&  <div className="relative w-auto h-[70vh] justify-center align-middle">
+                            <Image
+                                src="/defaultimage.png"
+                                alt="contest-image"
+                                layout="fill"
+                                objectFit="contain"  // Adjust as needed (contain, cover, etc.)
+                                className="rounded-t-xl"
+                            />
+                        </div>
+                        )}
+                        
+                           
+                    </section>
+                </div>
+            </div>
+        </div>
+    );
+}

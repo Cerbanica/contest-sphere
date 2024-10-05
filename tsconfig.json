@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.jsx", "app/contest/[contestId]/page.jsx", "app/components/SearchBar.jsx", "app/components/navbar.jsx", "app/myContest/[userId]/page.jsx", "app/about/page.jsx", "app/login/page.jsx", "app/myContest/page.jsx", "app/createContest/page.jsx"],
   "exclude": ["node_modules"]
 }
