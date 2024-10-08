@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect,Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import supabase from "../utils/supabaseClient";
 import { ContestCard, SearchBar, MyListbox, Pagination } from "./components";
@@ -285,6 +285,7 @@ export default function Home() {
       };
     
     return (
+        <Suspense fallback={<div>Loading...</div>}>
         <div className="min-h-screen bg-transparent flex flex-row  ">
             <div className=" w-0 lg:w-2/12">ADS</div>
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-2 ">
@@ -478,5 +479,6 @@ export default function Home() {
             <div className=" w-0 lg:w-2/12">ADS</div>
 
         </div>
+        </Suspense>
     );
 }
