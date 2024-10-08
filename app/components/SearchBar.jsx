@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid'
 const SearchBar = ({ onSearchChange, initialSearchTerm = '' }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
@@ -16,6 +16,7 @@ const SearchBar = ({ onSearchChange, initialSearchTerm = '' }) => {
   };
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className=" w-full  flex flex-col justify-center items-center ">
       <div className="flex w-full flex-row text-lg text-left default rounded-2xl justify-center items-center ">
         <input
@@ -35,6 +36,7 @@ const SearchBar = ({ onSearchChange, initialSearchTerm = '' }) => {
         
       </div>
     </div>
+    </Suspense>
   );
 };
 
