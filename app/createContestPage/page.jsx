@@ -9,15 +9,15 @@ import supabase from '@/utils/supabaseClient';
 
 
 // Your API Key
-const API_KEY = "AIzaSyD21hPJONklHLwQdU2i3Ts3Vskdv_oCTbU";
+
 
 const Page = () => {
   const prompt = contestPromptAI;
   const [output, setOutput] = useState("(Results will appear here)");
   const [showForm, setShowForm] = useState(false);
 
-
-
+  const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+  
   const defaultFormData = {
     title: '',
     category: '',
