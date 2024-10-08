@@ -59,7 +59,7 @@ export default function Home() {
     // Use effect to handle URL parameter changes
     useEffect(() => {
 
-        // Update filters state
+        // Update filters stateS
         setFilters({
             category: searchParams.get('category') || 'All Categories',
             sort: searchParams.get('sort') || 'Latest',
