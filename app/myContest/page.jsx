@@ -63,7 +63,7 @@ const Page = () => {
     router.push(`/contest/${contestId}`);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading....</div>;
 
   return (
     <div className="min-h-screen bg-transparent ">
