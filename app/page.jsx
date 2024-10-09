@@ -57,7 +57,7 @@ export default function Home() {
     };
 
     // Use effect to handle URL parameter changes
-    useEffect(() => {
+    useEffect(() => {   
 
         // Update filters stateSs
         setFilters({

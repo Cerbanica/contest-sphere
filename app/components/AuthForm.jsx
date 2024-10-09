@@ -11,7 +11,7 @@ export default function AuthForm(){
         view="magic_link"
         showLinks={false}
         providers={google}
-        redirectTo='https://localhost:3000/auth/callback'
+        redirectTo='https://contest-sphere-4hs0h6m9h-cerbanicas-projects.vercel.app/'
         appearance={{
             theme: 'dark',
             button: {
