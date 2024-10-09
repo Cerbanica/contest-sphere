@@ -2,8 +2,8 @@
 import { useEffect,Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import supabase from "../utils/supabaseClient";
-import { ContestCard, SearchBar, MyListbox, Pagination } from "./components";
-import { prizeRangeList, categoriesList, sortList } from '@/app/dataList';
+import { ContestCard, ContestDetailsCard,SearchBar, MyListbox, Pagination } from "./components";
+import { prizeRangeList, categoriesList, sortList, loremIpsum } from '@/app/dataList';
 import Image from "next/image";
 import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
 import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
@@ -13,6 +13,8 @@ export default function Home() {
     const userAuth = useAuth(); 
     const [isAdded, setIsAdded] = useState(false);
     const [showPanel, setShowPanel] = useState(false);
+    const [modalOpen, setModalOpen]= useState(false);
+    const toggleModal = () => setModalOpen(!modalOpen);
     const defaultFormData = {
         id:'',
         title: '',
@@ -190,6 +192,7 @@ export default function Home() {
         }
     }
     const viewContestDetails = (contestId) => {
+        
        
         const checkIfContestAdded = async () => {
             if (userAuth) {
@@ -224,6 +227,7 @@ export default function Home() {
                 setContestDetails(data);
 
                 setShowPanel(true);
+                setModalOpen(true);
 
 
 
@@ -233,7 +237,7 @@ export default function Home() {
        
 
         checkIfContestAdded();
-        
+       
 
     };
     const formatEntry = (fee) => {
@@ -259,7 +263,7 @@ export default function Home() {
               if (error) {
                 alert(`Error: ${error.message}`);
               } else {
-                alert('Contest removed from list.');
+                
                 setIsAdded(false); // Update UI
               }
             } else {
@@ -271,12 +275,12 @@ export default function Home() {
               if (error) {
                 alert(`Error: ${error.message}`);
               } else {
-                alert('Contest added to list.');
+                
                 setIsAdded(true); // Update UI
               }
             }
           } else {
-            alert("Please login to save contest");
+            
             router.push('/login'); // Redirect if not logged in
           }
         } catch (err) {
@@ -287,8 +291,22 @@ export default function Home() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
         <div className="min-h-screen bg-transparent flex flex-row  ">
-            <div className=" w-0 lg:w-2/12">ADS</div>
+            <div className=" hidden lg:block w-0 lg:w-2/12">ADS</div>
+            
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-2 ">
+            {modalOpen && (
+            <div className=" block bg-gray-200 dark:bg-gray-800 border border-white dark:border-gray-700 sticky lg:hidden top-[10vh] rounded-2xl h-[100vh]  z-40 ">
+             <button  onClick={toggleModal} className='  w-full py-3 text-center text-xl rounded-lg gap-2'> Close </button>
+            
+             <ContestDetailsCard 
+                                      contestDetails={contestDetails}
+                                      isAdded={isAdded}
+                                      handleAddUserContest={handleAddUserContest}
+                                      formatDateManual={formatDateManual}
+                                      formatEntry={formatEntry}
+                                      calculateDaysRemaining={calculateDaysRemaining}
+                                    />                                    </div>)}
+          
 
                 <section>
                     <div className="lg:w-1/2 sm:w-full md:w-5/6 mb-4 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto">
@@ -343,130 +361,24 @@ export default function Home() {
 
                                 <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
                             </div>
+                           
                             <div className="flex-1 hidden lg:block mb-4 rounded-2xl ">
                                 <div className="  sticky top-24 overflow-y-auto ">
 
                                     {showPanel ? (
-                                        <div className=" border default dark:border-gray-600 border-slate-100  rounded-xl p-4">
-                                            <div
-                                                className="bg-cover bg-center lg:min-h-[30vh] min-h-[40vh]  min-w-[20vh] h-full w-full rounded-xl   border-0 lg:border-e-2 border-slate-100 dark:border-gray-700"
-                                                style={{
-                                                    backgroundImage:
-                                                        "url('https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg')",
-                                                }}
-                                            ></div>
-
-                                            <div className=" w-full default rounded-r-xl ">
-                                                <div className="flex flex-col w-full  pt-2 lg:rounded-tr-xl">
-
-                                                    <div className="flex w-full flex-row items-end justify-between pb-2">
-                                                        <h2 className="w-9/12 font-bold text-3xl overflow-hidden">{contestDetails.title}</h2>
-
-                                                        <div className="flex flex-col gap-1 items-end w-3/12">
-                                                        {isAdded?  
-                                                        <button  onClick={() => handleAddUserContest(contestDetails.id)} className="bg-cs  w-fit rounded-lg p-1 pt-2 text-white "> <BookmarkSolid className=" w-10 h-8  mb-1 cursor-pointer text-white " /> </button>
-                                                        :
-                                                        <button  onClick={() => handleAddUserContest(contestDetails.id)}className="border border-gray-400  w-fit rounded-lg p-1 pt-2 text-gray-400 "> <BookmarkOutline className=" w-10 h-8  mb-1 cursor-pointer  " /> </button>
-                                                        }
-
-                                                        </div>
-                                                    </div>
-
-
-
-                                                
-                                                    <div className="flex flex-row justify-between"> 
-                                                    <div className=' flex flex-col w-9/12 pb-2'>
-                                                        <div className="flex flex-row align-middle">
-                                                            <span className="self-start text-lg text-blue-400  border border-blue-400   px-2 rounded-lg">
-                                                                {contestDetails.category}
-                                                            </span>
-                                                            <span className="text-lg text-gray-400  px-2">
-                                                                {formatDateManual(contestDetails.startdate, contestDetails.deadline)}
-                                                            </span>
-
-                                                        </div>
-
-
-                                                    </div>
-                                                 
-                                                        <span className={` text-right text-lg font-bold ${calculateDaysRemaining(contestDetails.deadline) <= 14 ? "text-red-400" : "text-green-400"}`}>
-                                                            {calculateDaysRemaining(contestDetails.deadline) === 1 ? `1 day left` : `${calculateDaysRemaining(contestDetails.deadline)} days left`}
-                                                        </span>
-                                                   
-                                                    </div>
-                                                </div>
-
-
-                                                <div className="w-full flex flex-col pt-1 bg-none  ">
-                                                    <div className=" flex flex-row items-center justify-bottom text-center py-2  rounded-br-xl">
-                                                        <div className="flex-1 ">
-                                                            <div className="flex flex-col text-start   ">
-                                                                <span className="text-gray-400 text-sm">Entry Fee</span>
-                                                                <span className=" text-3xl  dark:text-gray-300">
-
-                                                                    {formatEntry(contestDetails.entryFee)}
-                                                                </span>
-                                                            </div>
-
-                                                        </div>
-
-
-
-                                                        <div className="flex-1 ">
-                                                            <div className="flex flex-col  px-3 justify-end ">
-                                                                <span className="text-gray-400 text-sm text-end">Main Prize</span>
-                                                                <div className="flex flex-row justify-end">
-
-                                                                    <span className=" font-bold text-3xl  text-cs  ">
-                                                                        {contestDetails.mainPrize}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-                                            <div className="overflow-y-auto  max-h-[50vh]  ">
-                                                <div className=" py-4 border-t shadow-inner border-slate-200 dark:border-gray-600 ">
-                                                    <span className="text-default text-lg text-justify ">{contestDetails.description}</span>
-                                                </div>
-
-                                                <div className=" py-4 border-t border-slate-200 dark:border-gray-600 ">
-
-                                                    <h6 className=" text-default text-2xl w-full text-center font-bold">List Of Prizes</h6>
-
-                                                    {(Array.isArray(contestDetails.prizeList) ? contestDetails.prizeList : JSON.parse(contestDetails.prizeList)).map((prize, index) => (
-                                                        <div key={index} className="mt-2">
-                                                            <h6 className=" text-gray-400 text-lg">{prize.label}</h6>
-                                                            <span className="text-xl text-default">{prize.value}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-
-                                                <div className=" py-4 border-t border-slate-200 dark:border-gray-600 mb-96">
-
-                                                    <h6 className=" text-default text-2xl w-full text-center font-bold">Judges</h6>
-
-                                                    {(Array.isArray(contestDetails.judges) ? contestDetails.judges : JSON.parse(contestDetails.judges)).map((prize, index) => (
-                                                        <div key={index} className="mt-2">
-                                                            <h6 className=" text-gray-400 text-lg">{prize.label}</h6>
-                                                            <span className="text-xl text-default">{prize.value}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-
-
-
-                                            </div>
-                                        </div>
+                                      <ContestDetailsCard 
+                                      contestDetails={contestDetails}
+                                      isAdded={isAdded}
+                                      handleAddUserContest={handleAddUserContest}
+                                      formatDateManual={formatDateManual}
+                                      formatEntry={formatEntry}
+                                      calculateDaysRemaining={calculateDaysRemaining}
+                                    />
+                                    
                                     ) : (<h1 className="default p-20">no man</h1>)}
 
                                 </div>
+                                
                             </div>
                         </div>
                     ) : (
@@ -475,8 +387,9 @@ export default function Home() {
                         )
                     )}
                 </section>
+                
             </div>
-            <div className=" w-0 lg:w-2/12">ADS</div>
+            <div className=" hidden lg:block w-0 lg:w-2/12">ADS</div>
 
         </div>
         </Suspense>

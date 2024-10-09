@@ -9,6 +9,6 @@ import SearchBar from "./SearchBar"
 
 import LeGeminiAnalyzer from "./LeGeminiAnalyzer"
 import {LeTextInput,LeDateInput, LeTextArea, LeDynamicInputList} from "./formComponent"
+import ContestDetailsCard from "./contestDetailsCard"
 
-
-export{ContestCard, customButton,Navbar,AddContest,Pagination,Tabs ,LeDynamicInputList ,MyListbox, SearchBar,LeTextInput,LeTextArea,LeDateInput, LeGeminiAnalyzer}
+export{ContestCard, ContestDetailsCard, customButton,Navbar,AddContest,Pagination,Tabs ,LeDynamicInputList ,MyListbox, SearchBar,LeTextInput,LeTextArea,LeDateInput, LeGeminiAnalyzer}

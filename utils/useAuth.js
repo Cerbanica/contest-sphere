@@ -9,7 +9,7 @@ export const useAuth = (redirectPath = '/login') => {
 
   useEffect(() => {
     const getSession = async () => {
-      alert(pathname);
+      
       const { data: { session }, error } = await supabase.auth.getSession();
       if (error) {
         console.error('Error fetching session:', error);
@@ -20,10 +20,10 @@ export const useAuth = (redirectPath = '/login') => {
       } else {
         // Check if the current path is "/"
         if (pathname === '/') {
-          alert("no login");
+         
            // Redirect to login or another page if not authenticated
         }else{
-          alert("login");
+         
           router.push(redirectPath);
         }
       }
