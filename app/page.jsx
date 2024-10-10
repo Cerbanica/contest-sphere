@@ -243,8 +243,8 @@ export default function Home() {
     };
     const toggleDetailsCardMobile=()=>{
 
-        setShowDetailsCardMobile(!showDetailsCardMobile);
-        setShowContestList(!showContestList);
+        setShowDetailsCardM(false);
+        //setShowContestList(!showContestList);
     }
     const formatEntry = (fee) => {
         if (fee == "Free" || fee == null) {
@@ -302,7 +302,7 @@ export default function Home() {
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
             {showDetailsCard && (
             <div className=" absolute bg-gray-200 dark:bg-gray-800 border  border-white dark:border-gray-700 top-[20vh]  lg:hidden rounded-2xl h-[100vh]  z-50 ">
-             <button  onClick={() => toggleDetailsCardMobile}  className='  w-full py-3 text-center text-xl rounded-lg gap-2'> Close </button>
+             <button  onClick={() => setShowDetailsCard(false)}  className='  w-full py-3 text-center text-xl rounded-lg gap-2'> Close </button>
             
              <ContestDetailsCard 
                                       contestDetails={contestDetails}
