@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-      <body className='relative bg-pink-500'>
+      <body className='relative bg-gray-200 dark:bg-gray-800 overflow-x-hidden'>
         <ThemeProvider attribute="class">
           <Navbar />
           <div className="flex flex-col min-h-screen pt-4 bg-gray-200 text-black dark:bg-gray-800 dark:text-white">
