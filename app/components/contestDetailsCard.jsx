@@ -13,7 +13,8 @@ const ContestDetailsCard = ({
   calculateDaysRemaining,
 }) => {
   return (
-    <div className="border default dark:border-gray-600 border-slate-100 rounded-xl p-4">
+    <div className="border default dark:border-gray-600 border-slate-100 rounded-xl p-4 pr-0">
+      <div className="overflow-y-auto max-h-[80vh] border-t border-slate-200 dark:border-gray-600 pr-4">
       {/* Image Section */}
       <div
         className="bg-cover bg-center lg:min-h-[30vh] min-h-[30vh] min-w-[20vh] h-full w-full rounded-xl border-0 lg:border-e-2 border-slate-100 dark:border-gray-700"
@@ -24,10 +25,10 @@ const ContestDetailsCard = ({
 
       {/* Content Section */}
       <div className="w-full default rounded-r-xl">
-        <div className="flex flex-col w-full pt-2 lg:rounded-tr-xl">
+        <div className="flex flex-col w-full pt-2 lg:rounded-tr-xl sticky top-0 default border-b  border-slate-200 dark:border-gray-600">
 
           {/* Title and Bookmark */}
-          <div className="flex w-full flex-row items-end justify-between pb-2">
+          <div className="flex w-full flex-row items-end justify-between pb-2 ">
             <h2 className="w-9/12 font-bold text-3xl overflow-hidden">
               {contestDetails.title}
             </h2>
@@ -78,7 +79,11 @@ const ContestDetailsCard = ({
           </div>
         </div>
 
-        {/* Entry Fee and Main Prize */}
+       
+
+        {/* Description */}
+       
+             {/* Entry Fee and Main Prize */}
         <div className="w-full flex flex-col pt-1 bg-none">
           <div className="flex flex-row items-center justify-between text-center py-2 rounded-br-xl">
             <div className="flex-1">
@@ -101,9 +106,6 @@ const ContestDetailsCard = ({
             </div>
           </div>
         </div>
-
-        {/* Description */}
-        <div className="overflow-y-auto max-h-[50vh]">
           <div className="py-4 border-t shadow-inner border-slate-200 dark:border-gray-600">
             <span className="text-default text-lg text-justify">
               {contestDetails.description}

@@ -12,9 +12,10 @@ import { useAuth } from '@/utils/useAuth';
 export default function Home() {
     const userAuth = useAuth(); 
     const [isAdded, setIsAdded] = useState(false);
-    const [showPanel, setShowPanel] = useState(false);
-    const [modalOpen, setModalOpen]= useState(false);
-    const toggleModal = () => setModalOpen(!modalOpen);
+    const [showDetailsCard, setShowDetailsCard] = useState(false);
+    const [showDetailsCardMobile, setShowDetailsCardMobile] = useState(false);
+    const [showContestList, setShowContestList]= useState(true);
+  
     const defaultFormData = {
         id:'',
         title: '',
@@ -225,9 +226,9 @@ export default function Home() {
 
 
                 setContestDetails(data);
-
-                setShowPanel(true);
-                setModalOpen(true);
+              //toggleDetailsCardMobile();
+                setShowDetailsCard(true);
+             
 
 
 
@@ -240,6 +241,11 @@ export default function Home() {
        
 
     };
+    const toggleDetailsCardMobile=()=>{
+
+        setShowDetailsCardMobile(!showDetailsCardMobile);
+        setShowContestList(!showContestList);
+    }
     const formatEntry = (fee) => {
         if (fee == "Free" || fee == null) {
             return "Free"
@@ -293,10 +299,10 @@ export default function Home() {
         <div className="min-h-screen bg-transparent flex flex-row  ">
             <div className=" hidden lg:block w-0 lg:w-2/12">ADS</div>
             
-            <div className="flex flex-col w-full lg:w-8/12 mx-auto px-2 ">
-            {modalOpen && (
-            <div className=" block bg-gray-200 dark:bg-gray-800 border border-white dark:border-gray-700 sticky lg:hidden top-[10vh] rounded-2xl h-[100vh]  z-40 ">
-             <button  onClick={toggleModal} className='  w-full py-3 text-center text-xl rounded-lg gap-2'> Close </button>
+            <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
+            {showDetailsCard && (
+            <div className=" absolute bg-gray-200 dark:bg-gray-800 border  border-white dark:border-gray-700 top-[20vh]  lg:hidden rounded-2xl h-[100vh]  z-50 ">
+             <button  onClick={() => toggleDetailsCardMobile}  className='  w-full py-3 text-center text-xl rounded-lg gap-2'> Close </button>
             
              <ContestDetailsCard 
                                       contestDetails={contestDetails}
@@ -305,9 +311,10 @@ export default function Home() {
                                       formatDateManual={formatDateManual}
                                       formatEntry={formatEntry}
                                       calculateDaysRemaining={calculateDaysRemaining}
-                                    />                                    </div>)}
-          
-
+                                    />                     
+                           </div>)}
+          {showContestList &&(
+                    <div className="px-2">
                 <section>
                     <div className="lg:w-1/2 sm:w-full md:w-5/6 mb-4 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto">
                         <SearchBar onSearchChange={handleSearchChange} initialSearchTerm={filters.searchTerm} />
@@ -365,7 +372,7 @@ export default function Home() {
                             <div className="flex-1 hidden lg:block mb-4 rounded-2xl ">
                                 <div className="  sticky top-24 overflow-y-auto ">
 
-                                    {showPanel ? (
+                                    {showDetailsCard ? (
                                       <ContestDetailsCard 
                                       contestDetails={contestDetails}
                                       isAdded={isAdded}
@@ -387,7 +394,7 @@ export default function Home() {
                         )
                     )}
                 </section>
-                
+                </div>)}
             </div>
             <div className=" hidden lg:block w-0 lg:w-2/12">ADS</div>
 
