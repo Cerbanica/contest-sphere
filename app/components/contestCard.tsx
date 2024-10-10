@@ -85,7 +85,7 @@ const ContestCard = ({contest, onClick} : ContestCardProps) => {
     <div className="relative">
       {/* Image */}
       <div
-        className="bg-cover bg-center lg:min-h-[20vh] min-h-[20vh]  min-w-[20vh] h-full w-full rounded-t-xl lg:rounded-t-none lg:rounded-l-xl  border-0 lg:border-e-2 border-slate-100 dark:border-gray-700"
+        className="bg-cover bg-center lg:min-h-[20vh] min-h-[20vh]  min-w-[20vh] h-full w-full rounded-t-xl lg:rounded-r-none lg:rounded-l-xl border-0 lg:border-e-2 border-slate-100 dark:border-gray-700"
         style={{backgroundImage:
             "url('https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg')",
         }}
