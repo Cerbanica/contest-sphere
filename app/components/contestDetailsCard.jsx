@@ -13,8 +13,8 @@ const ContestDetailsCard = ({
   calculateDaysRemaining,
 }) => {
   return (
-    <div className="border default dark:border-gray-600 border-slate-100 rounded-xl p-4 pr-0">
-      <div className="overflow-y-auto max-h-[80vh] border-t border-slate-200 dark:border-gray-600 pr-4">
+    <div className="border default dark:border-gray-600 border-slate-100 rounded-xl  pr-0">
+      <div className="overflow-y-auto max-h-[80vh] border-0 border-slate-200 dark:border-gray-600 ">
       {/* Image Section */}
       <div
         className="bg-cover bg-center lg:min-h-[30vh] min-h-[30vh] min-w-[20vh] h-full w-full rounded-xl border-0 lg:border-e-2 border-slate-100 dark:border-gray-700"
@@ -22,7 +22,7 @@ const ContestDetailsCard = ({
           backgroundImage: `url('${contestDetails.image || 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'}')`,
         }}
       ></div>
-
+        <div className='p-4 pt-0'>
       {/* Content Section */}
       <div className="w-full default rounded-r-xl">
         <div className="flex flex-col w-full pt-2 lg:rounded-tr-xl sticky top-0 default border-b  border-slate-200 dark:border-gray-600">
@@ -117,7 +117,7 @@ const ContestDetailsCard = ({
             <h6 className="text-default text-2xl w-full text-center font-bold">
               List Of Prizes
             </h6>
-            {(Array.isArray(contestDetails.prizeList)
+            {contestDetails.prizeList!=null&&(Array.isArray(contestDetails.prizeList)
               ? contestDetails.prizeList
               : JSON.parse(contestDetails.prizeList)
             ).map((prize, index) => (
@@ -133,7 +133,7 @@ const ContestDetailsCard = ({
             <h6 className="text-default text-2xl w-full text-center font-bold">
               Judges
             </h6>
-            {(Array.isArray(contestDetails.judges)
+            {contestDetails.judges!=null&&(Array.isArray(contestDetails.judges)
               ? contestDetails.judges
               : JSON.parse(contestDetails.judges)
             ).map((judge, index) => (
@@ -145,6 +145,7 @@ const ContestDetailsCard = ({
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -368,7 +368,7 @@ export default function Home() {
 
                                 <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
                             </div>
-                           
+                          
                             <div className="flex-1 hidden lg:block mb-4 rounded-2xl ">
                                 <div className="  sticky top-24 overflow-y-auto ">
 
@@ -382,7 +382,7 @@ export default function Home() {
                                       calculateDaysRemaining={calculateDaysRemaining}
                                     />
                                     
-                                    ) : (<h1 className="default p-20">no man</h1>)}
+                                    ) : (<div className="default  rounded-2xl h-screen p-20">Place holder</div>)}
 
                                 </div>
                                 

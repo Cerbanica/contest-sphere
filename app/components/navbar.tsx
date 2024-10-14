@@ -68,8 +68,9 @@ const Navbar: React.FC = () => {
     return null; // Do not render the component on the login page
   }
   return (
+   
     <div className="w-full default sticky top-0 z-50 shadow-lg">
-      <div className="w-full lg:w-7/12  mx-auto flex justify-between items-center px-6 py-4">
+      <div className="w-full lg:w-8/12  mx-auto flex justify-between items-center px-4 py-4">
 
         {/* Left Section: Logo */}
         <div className="flex items-center">
