@@ -70,7 +70,7 @@ select{
 
 }
 .default-2{
-  @apply bg-slate-100 text-slate-500 transition-colors duration-0 ease-in-out;
+  @apply bg-slate-100 text-slate-500 transition-colors duration-0 ease-in-out border-slate-300;
 
 }
 .dark .default-2{

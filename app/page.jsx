@@ -246,8 +246,8 @@ export default function Home() {
             
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
             {showDetailsCard && (
-            <div className=" fixed bg-gray-200 dark:bg-gray-800 border  border-white dark:border-gray-700 top-[20vh]  lg:hidden rounded-2xl h-[100vh]  z-50 ">
-             <button  onClick={() => setShowDetailsCard(false)}  className='  w-full py-3 text-center text-xl rounded-lg gap-2'> Close </button>
+            <div className=" fixed default border   top-[20vh]  lg:hidden rounded-2xl h-[100vh]  z-50 ">
+             <button  onClick={() => setShowDetailsCard(false)}  className='  w-full py-3 pr-8  text-center text-default-2 text-xl rounded-lg gap-2'> X </button>
             
              <ContestDetailsCard 
                                       contestDetails={contestDetails}

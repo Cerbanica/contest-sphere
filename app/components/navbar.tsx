@@ -125,34 +125,34 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu: Shows when mobile menu is toggled */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 border-b border-slate-200 dark:border-grey w-full bg-gray-200 dark:bg-gray-800 lg:hidden shadow-lg">
-            <div className="flex flex-col p-4 space-y-4">
-              <div className="flex default rounded-lg py-1 text justify-center ">
+          <div className="absolute top-full left-0 border rounded-b-xl default w-full  lg:hidden shadow-lg">
+            <div className="flex flex-col border-b default-2  ">
+              <div className="flex default-2  border-b py-2 justify-center ">
                 <button
                   onClick={toggleTheme}
-                  className='flex flex-row default rounded-lg py-2 gap-2 text-center'        >
+                  className='flex flex-row   gap-2 text-center'        >
                   {theme === 'light' ? <><MoonIcon className="h-6 w-6" /> <p>Dark Mode</p></> : <><SunIcon className="h-6 w-6" /><p>Light Mode</p></>}
 
                 </button>
               </div>
-              <a href="/createContestPage" className='default rounded-lg py-3 text-center'>Post Contest</a>
-              <CustomButton title='Send Feedback' btnType='button' containerStyles='default rounded-lg' />
-              <CustomButton title='About Us' btnType='button' containerStyles='default rounded-lg' />
+              <a href="/createContestPage" className='default-2 py-2 border-b rounded-lg text-center'>Post Contest</a>
+              <button className='default-2 py-2 border-b'>Send Feedback</button>
+
               {user ? (
-                <a href="/myContest" className='default rounded-lg py-3 text-center'>My Contest</a>
+                <a href="/myContest" className='default-2 py-2 border-b text-center'>My Contest</a>
               ) : ''}
               {user ? (
                 <>
 
-                  <button onClick={handleLogout} className="default rounded-lg py-3 text-center">Logout</button>
+                  <button onClick={handleLogout} className="default-2 py-2 border-b text-center">Logout</button>
                 </>
               ) : (
-                <Link href="/login" className="default rounded-lg py-3 text-center">Login</Link>
+                <Link href="/login" className="default-2 py-2 border-b text-center">Login</Link>
               )}
 
               <button
                 onClick={toggleMobileMenu}
-                className=' py-3 text-default rounded-lg gap-2'>X Close Menu</button>
+                className='text-default-2 rounded-2xl py-2 '>X</button>
 
             </div>
           </div>
