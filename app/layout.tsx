@@ -24,10 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-      <body className='relative bg-gray-200 dark:bg-gray-800 overflow-x-hidden'>
+      <body className='relative main overflow-x-hidden'>
         <ThemeProvider attribute="class">
           <Navbar />
-          <div className="flex flex-col min-h-screen pt-4 bg-gray-200 text-black dark:bg-gray-800 dark:text-white">
+          <div className="flex flex-col min-h-screen pt-4 main ">
 
             <main className="flex-grow">
               <Suspense fallback={<div>Loading...</div>}>
@@ -39,9 +39,9 @@ export default function RootLayout({
 
 
           </div>
-          <footer className="flex flex-col w-full pt-4 text-center bg-white dark:bg-gray-800">
-            <span className="flex bg-transparent w-full order border-cs"></span>
-            <p className="bg-white py-4 dark:bg-gray-800">ContestSphere</p>
+          <footer className="flex flex-col w-full  text-center main ">
+            <span className="flex bg-transparent w-full order border-cs "></span>
+            <p className="py-4 default">Contest Sphere 2024</p>
           </footer>
         </ThemeProvider>
       </body>

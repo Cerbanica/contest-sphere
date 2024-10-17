@@ -36,13 +36,13 @@ const LeGeminiAnalyzer = ({ handleSubmit }) => {
   };
 
   return (
-    <div className="default">
-      <h1 className="text-3xl font-bold text-cs text-center">
-        LeGemini Contest Analyzer
+    <div className="flex flex-col default">
+      <h1 className="text-3xl  font-bold text-cs  text-center">
+        Create Contest 
       </h1>
-      <p className="default text-lg font-medium">
+      <p className="text-default-2 text-md ">
         Enter the contest details as images or texts, and our unpaid interns will auto-fill the forms. 
-        Click the autofill button again if the interns didn't do a good job, we will subtract their allowances.
+        Click the autofill button again if the interns didn't do a good job, we will reduce their allowances.
       </p>
       <form className="space-y-6 mt-8" onSubmit={onSubmit}>
         <div className="flex flex-col lg:flex-row w-full gap-4">
@@ -50,14 +50,14 @@ const LeGeminiAnalyzer = ({ handleSubmit }) => {
             <label className="block text-lg text-center mb-2"> Images </label>
             {/* Custom File Input with Drag and Drop */}
             <div
-              className={`relative image-picker space-y-2 py-10 p-4 border rounded-md cursor-pointer min-h-72 ${
-                isDragging ? 'border-blue-500 bg-blue-100' : 'border-gray-300'
+              className={`relative image-picker space-y-2 py-10 default p-4 border rounded-md cursor-pointer min-h-72 ${
+                isDragging ? 'border-blue-500 bg-blue-100' : 'border-gray-600'
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              <div className="flex justify-center text-white">
+              <div className="flex justify-center text-white ">
                 <PlusCircleIcon className="w-16 bg-cs rounded-full" />
               </div>
 
@@ -66,7 +66,7 @@ const LeGeminiAnalyzer = ({ handleSubmit }) => {
                 id="fileInput"
                 type="file"
                 multiple
-                className="absolute inset-0 w-full  h-full opacity-0 cursor-pointer"
+                className="absolute inset-0 w-full default  h-full opacity-0 cursor-pointer"
                 onChange={handleFileChange}
               />
 
@@ -78,7 +78,7 @@ const LeGeminiAnalyzer = ({ handleSubmit }) => {
                 ) : (
                   <p className="text-sm text-gray-400">
                     Drag and drop images here, or{' '}
-                    <span className="text-cs">click to browse</span>
+                    <span className="text-blue-400 underline">click to browse</span>
                   </p>
                 )}
               </div>
@@ -98,7 +98,7 @@ const LeGeminiAnalyzer = ({ handleSubmit }) => {
                 setTextInput(e.target.value);
                 setFiles([]); // Clear the files when text is inputted
               }}
-              className="w-full bg-gray-100 text-sm px-4 py-2 border  min-h-72 rounded-md"
+              className="w-full default text-sm px-4 py-2 border  min-h-72 rounded-md"
               rows="12"
               placeholder="Enter contest details for AI analysis"
             ></textarea>

@@ -74,7 +74,7 @@ export default function Home() {
 
         const fetchContests = async () => {
             try {
-                let query = supabase.from('contests').select('id, title, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
+                let query = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
 
                 // Filter by category
                 if (filters.category && filters.category != "All Categories") {
@@ -149,49 +149,7 @@ export default function Home() {
     const handlePageChange = (selectedPage) => {
         updateURLParams('page', selectedPage);
     };
-    const calculateDaysRemaining = (deadline) => {
-        const currentDate = new Date();
-        const deadlineDate = new Date(deadline);
-
-        // Calculate the difference in milliseconds
-        const diffInMs = deadlineDate.getTime() - currentDate.getTime();
-
-        // Convert milliseconds to days
-        const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-        diffInDays > 14 ? status = "On Going" : status = "Ending";
-
-        return diffInDays >= 0 ? diffInDays : 0; // Return 0 if the deadline has passed
-    };
-    const formatDateManual = (date1, date2) => {
-        let startDate;
-        const endDate = new Date(date2);
-        const months = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
-            'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
-        ];
-        if (date1 != null) {
-            startDate = new Date(date1);
-
-            const month1 = months[startDate.getMonth()];
-            const day1 = startDate.getDate();
-            const year1 = startDate.getFullYear();
-            const month2 = months[endDate.getMonth()];
-            const day2 = endDate.getDate();
-            const year2 = endDate.getFullYear();
-
-            const formattedYear1 = year1 === year2 ? '' : year1;
-
-            return ` ${day1} ${month1} ${formattedYear1} - ${day2} ${month2} ${year2} `;
-        } else {
-
-            const month2 = months[endDate.getMonth()];
-            const day2 = endDate.getDate();
-            const year2 = endDate.getFullYear();
-
-            return `Ends ${day2} ${month2} ${year2} `;
-
-        }
-    }
+    
     const viewContestDetails = (contestId) => {
         
        
@@ -241,20 +199,7 @@ export default function Home() {
        
 
     };
-    const toggleDetailsCardMobile=()=>{
-
-        setShowDetailsCardM(false);
-        //setShowContestList(!showContestList);
-    }
-    const formatEntry = (fee) => {
-        if (fee == "Free" || fee == null) {
-            return "Free"
-        }
-        else {
-            return fee;
-        }
-
-    }
+  
     const handleAddUserContest = async (contestId) => {
         try {
           if (userAuth) {
@@ -308,9 +253,7 @@ export default function Home() {
                                       contestDetails={contestDetails}
                                       isAdded={isAdded}
                                       handleAddUserContest={handleAddUserContest}
-                                      formatDateManual={formatDateManual}
-                                      formatEntry={formatEntry}
-                                      calculateDaysRemaining={calculateDaysRemaining}
+                                      
                                     />                     
                            </div>)}
           {showContestList &&(
@@ -370,19 +313,17 @@ export default function Home() {
                             </div>
                           
                             <div className="flex-1 hidden lg:block mb-4 rounded-2xl ">
-                                <div className="  sticky top-24 overflow-y-auto ">
+                                <div className="  sticky bottom-24  top-24 overflow-y-auto ">
 
                                     {showDetailsCard ? (
                                       <ContestDetailsCard 
                                       contestDetails={contestDetails}
                                       isAdded={isAdded}
                                       handleAddUserContest={handleAddUserContest}
-                                      formatDateManual={formatDateManual}
-                                      formatEntry={formatEntry}
-                                      calculateDaysRemaining={calculateDaysRemaining}
+                                      
                                     />
                                     
-                                    ) : (<div className="default  rounded-2xl h-screen p-20">Place holder</div>)}
+                                    ) : (<div className="default  rounded-2xl  border h-screen p-20">Place holder</div>)}
 
                                 </div>
                                 

@@ -9,9 +9,9 @@ const prizeRangeList = [
  
   const categoriesList = [
     { id: 0, value: '', name: 'All Categories' },
-    { id: 1, value: 'Digital Arts', name: 'Digital Arts' },
-    { id: 2, value: 'Programming', name: 'Programming' },
-    { id: 3, value: 'Writing', name: 'Writing' },
+    { id: 1, value: 'Digital Arts', name: 'Digital Arts', colour:"blue-500" },
+    { id: 2, value: 'Programming', name: 'Programming', colour:"green-500" },
+    { id: 3, value: 'Writing', name: 'Writing', colour:"pink-600" },
     { id: 4, value: 'Videography', name: 'Videography' },
   ];
   
@@ -22,7 +22,7 @@ const prizeRangeList = [
     .join(', ');
   
   // AI prompt with dynamic categories
-const baseprompt ="Title={title} description={just describe the contest details in general, and mention stuffs that hasnt been mentioned in this prompt } MainPrize={mainPrize}, "
+const baseprompt ="Title={title} organizer={event organizer/sponsor/company} description={just describe the contest details in general, and mention stuffs that hasnt been mentioned in this prompt } MainPrize={mainPrize}, "
 const categoryPrompt="choose a category from this list, use exact capitalization, first letter is <capped></capped>, eg if writing, then category=Writing:"+categoriesString;
 const judgePrompt=" for each judge, make a judgeList=[judgeName@ and their link if available, else leave it empty], eg: judgeList=[judge1name @ www.something.com/judge1, judge2name@ judge2link,], if theres no judges, just put judgeList=[No judges @]"
 const prizePrompt=`for prizes,  main Prize is mainPrize=mainPrize, and mainPrizeValue={estimate the mainPrize value in usd, google it fam, if it is in usd, just put the numbers}, for example, mainPrizeValue=700, for other prizes below that eg 2nd place etc, put   otherPrizes={other prizes and amount of winner per prizes, eg x2} 

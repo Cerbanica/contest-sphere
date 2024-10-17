@@ -1,38 +1,46 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 // Import the necessary icons or components
 import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
 import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
+import { formatDateManual, formatEntry, calculateDaysRemaining } from '@/utils/contestUtils';
+import { categoriesList } from '../dataList';
 
 const ContestDetailsCard = ({
   contestDetails,
   isAdded,
-  handleAddUserContest,
-  formatDateManual,
-  formatEntry,
-  calculateDaysRemaining,
+  handleAddUserContest
+ 
 }) => {
+  const daysRemaining = calculateDaysRemaining(contestDetails.deadline);
+  const selectedCategory = categoriesList.find(category => category.name === contestDetails.category) || { colour: 'bg-purple-400', name: 'Unknown' };
+ 
+
+  
   return (
-    <div className="border default dark:border-gray-600 border-slate-100 rounded-xl  pr-0">
-      <div className="overflow-y-auto max-h-[80vh] border-0 border-slate-200 dark:border-gray-600 ">
+    <div className="border default  rounded-xl  pr-2">
+      <div className="overflow-y-auto max-h-[100vh] border-0 border-slate-200 dark:border-gray-600">
       {/* Image Section */}
       <div
         className="bg-cover bg-center lg:min-h-[30vh] min-h-[30vh] min-w-[20vh] h-full w-full rounded-xl border-0 lg:border-e-2 border-slate-100 dark:border-gray-700"
         style={{
-          backgroundImage: `url('${contestDetails.image || 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'}')`,
+          backgroundImage: `url('${contestDetails.linkToThumbnail || 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'}')`,
         }}
       ></div>
         <div className='p-4 pt-0'>
       {/* Content Section */}
-      <div className="w-full default rounded-r-xl">
-        <div className="flex flex-col w-full pt-2 lg:rounded-tr-xl sticky top-0 default border-b  border-slate-200 dark:border-gray-600">
+      <div className="w-full  rounded-r-xl">
+        <div className="flex flex-col w-full pt-2 lg:rounded-tr-xl sticky top-0  border-b  default">
 
           {/* Title and Bookmark */}
-          <div className="flex w-full flex-row items-end justify-between pb-2 ">
-            <h2 className="w-9/12 font-bold text-3xl overflow-hidden">
+          <div className="flex w-full flex-row items-end justify-between pb-2   ">
+            <div className='w-9/12 flex flex-col'>
+            <span className=" font-bold text-3xl overflow-hidden m-0">
               {contestDetails.title}
-            </h2>
-            <div className="flex flex-col gap-1 items-end w-3/12">
+            </span>
+            <a href={"/?search="+contestDetails.organizer} className='text-lg text-blue-400 -mt-2 underline'>{contestDetails.organizer}</a>
+            </div>
+            <div className="flex flex-col gap-1 items-end w-3/12 pr-2">
               {isAdded ? (
                 <button
                   onClick={() => handleAddUserContest(contestDetails.id)}
@@ -40,10 +48,10 @@ const ContestDetailsCard = ({
                 >
                   <BookmarkSolid className="w-10 h-8 mb-1 cursor-pointer text-white" />
                 </button>
-              ) : (
+              ) : ( 
                 <button
                   onClick={() => handleAddUserContest(contestDetails.id)}
-                  className="border border-gray-400 w-fit rounded-lg p-1 pt-2 text-gray-400"
+                  className="border default-2 w-fit rounded-lg p-1 pt-2 text-slate-600"
                 >
                   <BookmarkOutline className="w-10 h-8 mb-1 cursor-pointer" />
                 </button>
@@ -54,10 +62,11 @@ const ContestDetailsCard = ({
           {/* Category, Date, and Deadline */}
           <div className="flex flex-row justify-between">
             <div className="flex flex-col w-9/12 pb-2">
-              <div className="flex flex-row align-middle">
-                <span className="self-start text-lg text-blue-400 border border-blue-400 px-2 rounded-lg">
+              <div className="flex   flex-row align-middle">
+                <a href={`/?category=${contestDetails.category}`}className={`self-start bg-opacity-40  font-bold  text-sm  p-1 px-2 rounded-lg ${
+          selectedCategory.colour ? `text-${selectedCategory.colour} bg-${selectedCategory.colour}` : 'bg-purple-400 text-purple-400'  }`}>
                   {contestDetails.category}
-                </span>
+                </a>
                 <span className="text-lg text-gray-400 px-2">
                   {formatDateManual(contestDetails.startdate, contestDetails.deadline)}
                 </span>
@@ -66,15 +75,8 @@ const ContestDetailsCard = ({
 
             {/* Days Remaining */}
             <span
-              className={`text-right text-lg font-bold ${
-                calculateDaysRemaining(contestDetails.deadline) <= 14
-                  ? 'text-red-400'
-                  : 'text-green-400'
-              }`}
-            >
-              {calculateDaysRemaining(contestDetails.deadline) === 1
-                ? '1 day left'
-                : `${calculateDaysRemaining(contestDetails.deadline)} days left`}
+            className={`text-right px-3 text-lg font-bold w-3/12  ${daysRemaining <= 14 ? "text-red-400" : "text-green-400 "}`}>
+              {daysRemaining == 0 ? "Ends Today" : daysRemaining === -1 ? " Closed" : "Ends in " + daysRemaining + " days"}
             </span>
           </div>
         </div>
@@ -88,15 +90,15 @@ const ContestDetailsCard = ({
           <div className="flex flex-row items-center justify-between text-center py-2 rounded-br-xl">
             <div className="flex-1">
               <div className="flex flex-col text-start">
-                <span className="text-gray-400 text-sm">Entry Fee</span>
-                <span className="text-3xl dark:text-gray-300">
+                <span className="text-default-2 text-sm">Entry Fee</span>
+                <span className="text-3xl text-default">
                   {formatEntry(contestDetails.entryFee)}
                 </span>
               </div>
             </div>
             <div className="flex-1">
               <div className="flex flex-col px-3 justify-end">
-                <span className="text-gray-400 text-sm text-end">Main Prize</span>
+                <span className="text-default-2 text-sm text-end">Main Prize</span>
                 <div className="flex flex-row justify-end">
                   <span className="font-bold text-3xl text-cs">
                     {contestDetails.mainPrize}
@@ -106,14 +108,14 @@ const ContestDetailsCard = ({
             </div>
           </div>
         </div>
-          <div className="py-4 border-t shadow-inner border-slate-200 dark:border-gray-600">
-            <span className="text-default text-lg text-justify">
+          <div className="py-4 border-t shadow-inner default">
+            <span className="text-default-2  text-lg text-justify">
               {contestDetails.description}
             </span>
           </div>
 
           {/* Prize List */}
-          <div className="py-4 border-t border-slate-200 dark:border-gray-600">
+          <div className="py-4 border-t default">
             <h6 className="text-default text-2xl w-full text-center font-bold">
               List Of Prizes
             </h6>
@@ -122,14 +124,14 @@ const ContestDetailsCard = ({
               : JSON.parse(contestDetails.prizeList)
             ).map((prize, index) => (
               <div key={index} className="mt-2">
-                <h6 className="text-gray-400 text-lg">{prize.label}</h6>
+                <h6 className="text-default-2 text-lg">{prize.label}</h6>
                 <span className="text-xl text-default">{prize.value}</span>
               </div>
             ))}
           </div>
 
           {/* Judges List */}
-          <div className="py-4 border-t border-slate-200 dark:border-gray-600 mb-96">
+          <div className="py-4 border-t default pb-64">
             <h6 className="text-default text-2xl w-full text-center font-bold">
               Judges
             </h6>
@@ -138,7 +140,7 @@ const ContestDetailsCard = ({
               : JSON.parse(contestDetails.judges)
             ).map((judge, index) => (
               <div key={index} className="mt-2">
-                <h6 className="text-gray-400 text-lg">{judge.label}</h6>
+                <h6 className="text-default-2 text-lg">{judge.label}</h6>
                 <span className="text-xl text-default">{judge.value}</span>
               </div>
             ))}

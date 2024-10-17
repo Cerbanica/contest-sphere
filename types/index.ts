@@ -11,6 +11,7 @@ export interface ContestProps{
     startdate: string,
     description:string,
     entryFee: string,
+    linkToThumbnail:string,
 
   
 }

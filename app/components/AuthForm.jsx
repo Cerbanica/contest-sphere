@@ -13,7 +13,7 @@ export default function AuthForm(){
         providers={google}
         redirectTo='https://contest-sphere.vercel.app/'
         appearance={{
-            theme: 'dark',
+            theme: 'dark',  
             button: {
                 className: 'bg-white-400 text-gray-900 hover:bg-gray-600'
             },

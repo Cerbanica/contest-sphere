@@ -2,8 +2,8 @@ import React from 'react';
 
 const LeTextInput = ({ title,name,value, onChange }) => {
   return (
-    <div className="space-y-2 default">
-      <label htmlFor={title} className="block text-lg font-medium">
+    <div className=" default mt-4">
+      <label htmlFor={title} className="block text-lg text-default-2 ">
         {title}
       </label>
       <input
@@ -12,7 +12,7 @@ const LeTextInput = ({ title,name,value, onChange }) => {
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full default px-4 py-2 border border-gray-300 rounded-md"
+        className="w-full default px-4 py-2 border rounded-md"
       />
     </div>
   );
@@ -20,8 +20,8 @@ const LeTextInput = ({ title,name,value, onChange }) => {
 
 const LeDateInput = ({ title,name,value, onChange }) => {
     return (
-      <div className="space-y-2 default">
-        <label htmlFor={title} className="block text-lg font-medium">
+      <div className="default mt-4">
+        <label htmlFor={title} className="block text-lg text-default-2">
           {title}
         </label>
         <input
@@ -30,7 +30,7 @@ const LeDateInput = ({ title,name,value, onChange }) => {
           name={name}
           value={value}
           onChange={onChange}
-          className="w-full px-4 py-2 default border border-gray-300 rounded-md"
+          className="w-full px-4 py-2 default border  rounded-md"
         />
       </div>
     );
@@ -38,8 +38,8 @@ const LeDateInput = ({ title,name,value, onChange }) => {
 
 const LeTextArea = ({ title,name,value, onChange,rows }) => {
     return (
-      <div className="space-y-2 default">
-        <label htmlFor={title} className="block text-lg font-medium">
+      <div className="mt-4 default">
+        <label htmlFor={title} className="block text-default-2 text-lg ">
           {title}
         </label>
         <textarea
@@ -49,7 +49,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
           value={value}
           onChange={onChange}
           rows={rows}
-          className="w-full px-4 py-2 default border border-gray-300 rounded-md"
+          className="w-full p-2 default border  rounded-md"
         />
       </div>
     );
@@ -79,8 +79,8 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
     return (
       <div>
         {items.map((item, index) => (
-          <div key={index} className="space-y-2 default">
-            <label className="block text-lg font-medium mt-2">
+          <div key={index} className="mt-4 default">
+            <label className="block text-lg text-default-2 mt-2">
               {item.label}
             </label>
             <div className="flex items-center space-x-2">
@@ -88,13 +88,13 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
                 type="text"
                 value={item.value}
                 onChange={(e) => handleInputChange(index, e.target.value)}
-                className="flex-1 px-4 py-2 default border border-gray-300 rounded-md"
+                className="flex-1 px-4 py-2 default border  rounded-md"
                 placeholder={item.label}
               />
               <button
                 type="button"
                 onClick={() => removeItem(index)}
-                className="px-3 py-1 bg-red-500 text-white rounded-lg"
+                className="px-4 py-2 bg-red-500 text-white rounded-lg"
               >
                 &times;
               </button>
@@ -105,7 +105,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
         <button
           type="button"
           onClick={addItem}
-          className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md"
+          className="mt-4 px-4 py-2 mx-auto bg-green-500 text-white rounded-md"
         >
           Add {itemType}
         </button>

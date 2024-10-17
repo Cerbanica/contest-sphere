@@ -15,13 +15,13 @@ const MyListbox = ({ items, selectedItem, onSelect }) => {
   return (
    
       <Listbox value={selected} onChange={handlePrizeChange}>
-      <ListboxButton className="flex flex-row w-full default text-sm text-left py-1.5 px-3 rounded-xl items-center justify-between">
+      <ListboxButton className="flex flex-row w-full default text-sm text-left py-1.5 px-3 rounded-lg items-center justify-between border">
   <div className="w-full pr-4 flex items-center truncate">{selectedItem}</div>
   <div className="flex items-center justify-center">
     <ChevronDownIcon className="size-4" />
   </div>
 </ListboxButton>
-      <ListboxOptions anchor="bottom start" className="mt-2 w-full lg:w-72 default-2  text-sm text-left  rounded-2xl py-3">
+      <ListboxOptions anchor="bottom start" className="mt-2 w-full lg:w-72 default  border text-sm text-left  rounded-2xl py-3">
         {items.map((item) => (
           <ListboxOption key={item.id} value={item} className="group flex cursor-default items-center  py-2 px-4 select-none data-[focus]:bg-slate-200 dark:data-[focus]:bg-slate-700 " 
 >
@@ -33,4 +33,33 @@ const MyListbox = ({ items, selectedItem, onSelect }) => {
   );
 };
 
-export default MyListbox;
+const LeListbox = ({ items, selectedItem, onSelect }) => {
+  const [selected, setSelected] = useState(selectedItem);
+
+  const handlePrizeChange = (value) => {
+    setSelected(value);
+    onSelect(value); // Notify parent component of the change
+  };
+
+  return (
+   
+      <Listbox value={selected} onChange={handlePrizeChange}>
+      <ListboxButton className="flex flex-row w-full default text-sm text-left py-1.5 px-3 rounded-md items-center justify-between border">
+  <div className="w-full text-lg flex items-center truncate">{selectedItem}</div>
+  <div className="flex items-center justify-center">
+    <ChevronDownIcon className="size-4" />
+  </div>
+</ListboxButton>
+      <ListboxOptions anchor="bottom start" className="mt-2 w-full lg:w-72 default  border text-sm text-left  rounded-md py-3">
+        {items.map((item) => (
+          <ListboxOption key={item.id} value={item} className="group flex cursor-default items-center  py-2 px-4 select-none data-[focus]:bg-slate-200 dark:data-[focus]:bg-slate-700 " 
+>
+            {item.name}
+          </ListboxOption>
+        ))}
+      </ListboxOptions>
+    </Listbox>
+  );
+};
+
+export  {MyListbox,LeListbox};

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { categoriesList, contestPromptAI } from "../dataList";
-import { DynamicForm, LeGeminiAnalyzer, LeTextInput, LeDateInput, LeTextArea, MyListbox, LeDynamicInputList } from "../components";
+import { DynamicForm, LeGeminiAnalyzer, LeTextInput, LeDateInput, LeTextArea,LeListbox,  LeDynamicInputList } from "../components";
 import supabase from '@/utils/supabaseClient';
 
 
@@ -14,12 +14,14 @@ import supabase from '@/utils/supabaseClient';
 const Page = () => {
   const prompt = contestPromptAI;
   const [output, setOutput] = useState("(Results will appear here)");
+  const[error,setError]=useState("Click the button to auto-fill the form");
   const [showForm, setShowForm] = useState(false);
 
   const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-  
+
   const defaultFormData = {
     title: '',
+    organizer: '',
     category: '',
     description: '',
     startdate: null,
@@ -33,6 +35,8 @@ const Page = () => {
     submission: '',
     linkToPost: '',
     prizeRange: 0,
+    linkToPost: '',
+    linkToThumbnail: '',
   }
   const [formData, setFormData] = useState(defaultFormData);
 
@@ -40,11 +44,14 @@ const Page = () => {
   const handleSubmit = async ({ files, textInput }) => {
     //e.preventDefault();
     setOutput("Generating...");
+    setError("Generating...");
 
     try {
       // Check if no files are uploaded and no text input is provided
       if (files.length === 0 && (!textInput || textInput.trim() === "")) {
-        throw new Error("Please upload at least one image or enter contest details.");
+        let ErrorText="Please upload at least one image or enter contest details.";
+        setError(ErrorText)
+        throw new Error(ErrorText);
       }
 
       let imagesBase64 = [];
@@ -102,13 +109,14 @@ const Page = () => {
       }
 
       const realTitle = extractField(parsedData, "Title") || "";
+      const realOrganizer = extractField(parsedData, "Organizer") || "";
       const realCategory = extractField(parsedData, "category") || "";
       const realDescription = extractField(parsedData, "description") || "";
 
 
       const realDeadline = extractField(parsedData, "Deadline") || "";
       const realStartDate = extractField(parsedData, "StartDate") || "";
-      const realWinnerAnn = extractField(parsedData, "WinnerAnnouncement") || "";
+      const realWinnerAnnouncement = extractField(parsedData, "WinnerAnnouncement") || "";
 
       const mainPrizeValue = extractField(parsedData, "mainPrizeValue") || "";
       const realPrize = extractField(parsedData, "MainPrize") || "";
@@ -133,6 +141,8 @@ const Page = () => {
         if (prize > 10000) prizeRange = 5;
       }
       setOutput(parsedData);
+      setError("Form has been auto-filled! Click again if you're not satisfied");
+
       let mappedPrizes;
       let mappedJudges;
       let prizeList;
@@ -171,12 +181,13 @@ const Page = () => {
 
       setFormData({
         title: realTitle || formData.title,
+        organizer: realOrganizer || formData.organizer,
         category: realCategory || formData.category,
         description: realDescription,
 
         startdate: realStartDate,
         deadline: realDeadline || formData.description,
-        winnerAnnouncement: realWinnerAnn,
+        winnerAnnouncement: realWinnerAnnouncement || formData.winnerAnnouncement,
 
         mainPrize: realPrize || formData.prize,
         prizeList: mappedPrizes || formData.prizeList,
@@ -194,7 +205,8 @@ const Page = () => {
       });
       setShowForm(true);
     } catch (error) {
-      setOutput(`<hr>${error.message}`);
+      setOutput(`${error.message}`);
+      handleSubmit;
     }
 
   };
@@ -239,20 +251,22 @@ const Page = () => {
       const { data, error } = await supabase
         .from('contests')
         .insert([{
-          title: formData.title || 'test',
-          category: formData.category || "categ",
+          title: formData.title || 'No title',
+          category: formData.category || "No Categories",
           description: formData.description,
+          organizer: formData.organizer,
           startdate: null,
-          deadline: formatDate(formData.deadline) || "12/09/1999",
+          deadline: formatDate(formData.deadline) || "12/09/1869",
           mainPrize: formData.mainPrize,
           status: "On Going",
           prizeRange: formData.prizeRange,
           prizeList: formData.prizeList,
           judges: formData.judgeList,
           entryFee: formData.entryFee,
-          winnerAnnouncement: null,
+          winnerAnnouncement: formatDate(formData.winnerAnnouncement) || null,
           eligibility: formData.eligibility,
           linkToPost: formData.linkToPost,
+          linkToThumbnail: formData.linkToThumbnail,
 
 
         }]);
@@ -277,7 +291,7 @@ const Page = () => {
 
 
   const formatDate = (dateString) => {
-    if (dateString == null || dateString == "NA") {
+    if (dateString == null || dateString == "NA" || dateString == "") {
       return null;
     }
     // If the date is in DD/MM/YYYY format, convert it to YYYY-MM-DD
@@ -289,41 +303,68 @@ const Page = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-12 p-6 default shadow-md rounded-md">
+    <div className="max-w-4xl mx-auto mt-12 p-6 default border shadow-md rounded-md mb-64">
 
       <LeGeminiAnalyzer handleSubmit={handleSubmit} />
-
-      <div className="output-box mt-8 p-4 rounded-md border">
+      <div className="w-full flex justify-center mt-2">
+    <span className="text-default-2 text-center  ">{error}</span>
+  </div>
+     {/*  <div className="output-box mt-8 p-4 rounded-md border">
+       
         <h3 className="text-xl font-semibold mb-4">AI Output</h3>
         <div className="output" dangerouslySetInnerHTML={{ __html: output }} />
       </div>
-
+ */}
 
 
       {showForm && (
         <>
-          <h2 className="text-2xl font-bold mt-12 mb-6">Generated Form</h2>
+          <h2 className="text-2xl font-bold pt-4 text-center mt-12 mb-6 default border-t">Generated Form</h2>
           <form onSubmit={handleFormSubmit} className="space-y-6">
-            <div className="form-group">
+            <div className="form-group ">
 
               <LeTextInput title="Title" name="title" value={formData.title} onChange={handleFormChange} />
-              <label htmlFor="category" className="block text-lg font-medium">Category</label>
-              <MyListbox items={categoriesList} selectedItem={formData.category} onSelect={handleCategoryChange} />
+             
+              <div className="flex flex-row space-x-2">
+                <div className="flex-1">
+                <LeTextInput title="Organizer" name="organizer" value={formData.organizer} onChange={handleFormChange} />
+
+                </div>
+                <div className="flex-1">
+                <label htmlFor="category" className="block text-lg text-default-2 mt-4">Category</label>
+              <LeListbox items={categoriesList} selectedItem={formData.category} onSelect={handleCategoryChange} />
+
+                </div>
+
+              </div>
               <LeTextArea title="Description" name="description" value={formData.description} onChange={handleFormChange} rows={12} />
 
-              <LeDateInput title="Start Date" name="startdate" value={formatDate(formData.startdate)} onChange={handleFormChange} />
-              <LeDateInput title="Deadline" name="deadline" value={formatDate(formData.deadline)} onChange={handleFormChange} />
-              <LeDateInput title="Winner Announcement" name="winnerAnnouncement" value={formatDate(formData.winnerAnnouncement)} onChange={handleFormChange} />
+              <div className="flex flex-row space-x-2">
+                <div className="flex-1">
+                  <LeDateInput title="Start Date" name="startdate" value={formatDate(formData.startdate)} onChange={handleFormChange} />
 
-              <h3 className="text-2xl font-bold mt-12 mb-6 default">Prizes</h3>
+                </div>
+                <div className="flex-1">
+                  <LeDateInput title="Deadline" name="deadline" value={formatDate(formData.deadline)} onChange={handleFormChange} />
+
+                </div>
+                <div className="flex-1">
+                  <LeDateInput title="Winner Announcement" name="winnerAnnouncement" value={formatDate(formData.winnerAnnouncement)} onChange={handleFormChange} />
+
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold pt-4 text-center mt-12 mb-6 default border-t">Prizes</h3>
               <LeTextInput title="Main Prize" name="mainPrize" value={formData.mainPrize} onChange={handleFormChange} />
               <LeDynamicInputList items={formData.prizeList} setItems={(newList) => updateList('prizeList', newList)} itemType={"Prize"} />
 
-              <h3 className="text-2xl font-bold mt-12 mb-6 default">Judges</h3>
+              <h3 className="text-2xl font-bold pt-4 text-center mt-12 mb-6 default border-t">Judges</h3>
               <LeDynamicInputList items={formData.judgeList} setItems={(newList) => updateList('judgeList', newList)} itemType={"Judge"} />
+              <h3 className="text-2xl font-bold pt-4 text-center mt-12 mb-6 default border-t">Others</h3>
+
               <LeTextInput title="Entry Fee" name="entryFee" value={formData.entryFee} onChange={handleFormChange} />
               <LeTextInput title="Eligibility" name="eligibility" value={formData.eligibility} onChange={handleFormChange} />
               <LeTextInput title="Link to post" name="linkToPost" value={formData.linkToPost} onChange={handleFormChange} />
+              <LeTextInput title="Thumbnail Image Link" name="linkToThumbnail" value={formData.linkToThumbnail} onChange={handleFormChange} />
 
               {/*  
     <label htmlFor="deadline" className="block text-lg font-medium">Deadline</label>
