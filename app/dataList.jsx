@@ -6,7 +6,23 @@ const prizeRangeList = [
     { id: 4, value:4 ,name: 'USD5000+'},
     { id: 5, value:5 ,name: 'USD10000+'},
   ]
- 
+  const defaultFormData = {
+    id:'',
+    title: '',
+    category: '',
+    description: '',
+    startdate: null,
+    mainPrize: '',
+    deadline: null,
+    prizeList: [null],
+    judgeList: [null],
+    winnerAnnouncement: null,
+    entryFee: '',
+    eligibility: '',
+    submission: '',
+    linkToPost: '',
+    prizeRange: 0,
+}
   const categoriesList = [
     { id: 0, value: '', name: 'All Categories' },
     { id: 1, value: 'Digital Arts', name: 'Digital Arts', colour:"blue-500" },
@@ -65,4 +81,4 @@ There are many variations of passages of Lorem Ipsum available, but the majority
 
 `
   
-  export{prizeRangeList, categoriesList, sortList, contestPromptAI, loremIpsum};
+  export{prizeRangeList,defaultFormData, categoriesList, sortList, contestPromptAI, loremIpsum};

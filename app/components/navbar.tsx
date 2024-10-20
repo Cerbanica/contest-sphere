@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
     router.push("/");
   };
   // Don't render the navbar if the current route is the login page
-  if (pathname === '/login') {
+  if (pathname === '/login'||pathname==="/admin") {
     return null; // Do not render the component on the login page
   }
   return (
