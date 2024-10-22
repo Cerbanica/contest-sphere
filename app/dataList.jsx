@@ -23,13 +23,14 @@ const prizeRangeList = [
     linkToPost: '',
     prizeRange: 0,
 }
-  const categoriesList = [
-    { id: 0, value: '', name: 'All Categories' },
-    { id: 1, value: 'Digital Arts', name: 'Digital Arts', colour:"blue-500" },
-    { id: 2, value: 'Programming', name: 'Programming', colour:"green-500" },
-    { id: 3, value: 'Writing', name: 'Writing', colour:"pink-600" },
-    { id: 4, value: 'Videography', name: 'Videography' },
-  ];
+const categoriesList = [
+  { id: 0, value: '', name: 'All Categories', colour: 'bg-purple-400' },
+  { id: 1, value: 'Digital Arts', name: 'Digital Arts', colour: 'bg-blue-500 text-blue-500 border-blue-500' },
+  { id: 2, value: 'Programming', name: 'Programming', colour: 'bg-green-500 text-green-500 border-green-500' },
+  { id: 3, value: 'Writing', name: 'Writing', colour: 'bg-pink-400 border-pink-400 text-pink-400' },
+  { id: 4, value: 'Videography', name: 'Videography', colour: 'bg-blue-500' },
+];
+
   
   // Generate categories string dynamically
   const categoriesString = categoriesList

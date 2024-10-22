@@ -66,18 +66,26 @@ select{
 
 }
 .dark .default{
-  @apply bg-slate-900 text-white border-slate-700;
+  @apply bg-slate-800 text-white border-slate-700;
 
+}
+.default-0{
+  @apply bg-slate-200   border-slate-300;
+}
+.dark .default-0{
+  @apply bg-slate-900   border-slate-700;
 }
 .default-2{
   @apply bg-slate-100 text-slate-500 transition-colors duration-0 ease-in-out border-slate-300;
 
 }
 .dark .default-2{
-  @apply bg-slate-800 text-slate-400 border-slate-600;
+  @apply bg-slate-700 text-slate-400 border-slate-500;
 
 }
-
+.default-border{
+  @apply bg-transparent border-slate-300 dark:border-slate-700 ;
+}
 .text-default{
   @apply  text-black transition-colors duration-0 ease-in-out;
 

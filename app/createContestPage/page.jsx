@@ -5,7 +5,8 @@ import { categoriesList, contestPromptAI } from "../dataList";
 import { DynamicForm, LeGeminiAnalyzer, LeTextInput, LeDateInput, LeTextArea,LeListbox,  LeDynamicInputList } from "../components";
 import supabase from '@/utils/supabaseClient';
 
-
+import { useAuth } from '@/utils/useAuth';
+import { useRouter } from 'next/navigation';
 
 
 // Your API Key
@@ -16,6 +17,8 @@ const Page = () => {
   const [output, setOutput] = useState("(Results will appear here)");
   const[error,setError]=useState("Click the button to auto-fill the form");
   const [showForm, setShowForm] = useState(false);
+  const router = useRouter(); // Next.js router for redirection
+  const userAuth = useAuth();
 
   const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
@@ -39,7 +42,13 @@ const Page = () => {
     linkToThumbnail: '',
   }
   const [formData, setFormData] = useState(defaultFormData);
-
+  useEffect(() => {
+    if (userAuth) {
+      setUser(userAuth);
+    
+      fetchUserContests(userAuth.email);
+    }
+  }, [userAuth]);
 
   const handleSubmit = async ({ files, textInput }) => {
     //e.preventDefault();

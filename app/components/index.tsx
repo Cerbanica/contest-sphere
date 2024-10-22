@@ -11,5 +11,6 @@ import LeGeminiAnalyzer from "./LeGeminiAnalyzer"
 import {LeTextInput,LeDateInput, LeTextArea, LeDynamicInputList} from "./formComponent"
 import ContestDetailsCard from "./contestDetailsCard"
 import {ListSection, CategoryLink, RemainingDays,BookmarkButton, MainPrizeEntryFee} from "./contestDetailsCard/components"
+import {ReportFeedbackForm, ReportFeedbackCard} from "./reportFeedback/components"
 
-export{ContestCard, ListSection, CategoryLink, MainPrizeEntryFee,RemainingDays,BookmarkButton,ContestDetailsCard, customButton,LeListbox,Navbar,AddContest,Pagination,Tabs ,LeDynamicInputList ,MyListbox, SearchBar,LeTextInput,LeTextArea,LeDateInput, LeGeminiAnalyzer}
+export{ContestCard, ListSection, ReportFeedbackForm, ReportFeedbackCard, CategoryLink, MainPrizeEntryFee,RemainingDays,BookmarkButton,ContestDetailsCard, customButton,LeListbox,Navbar,AddContest,Pagination,Tabs ,LeDynamicInputList ,MyListbox, SearchBar,LeTextInput,LeTextArea,LeDateInput, LeGeminiAnalyzer}

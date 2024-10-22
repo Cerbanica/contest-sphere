@@ -4,21 +4,34 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import supabase from '@/utils/supabaseClient'
 import { defaultFormData } from '../dataList'
-import { ContestCard } from '../components'
+import { ContestCard, ReportFeedbackCard } from '../components'
 import { formatDateManual, formatEntry, calculateDaysRemaining } from '@/utils/contestUtils';
 import { BookmarkButton, CategoryLink, ListSection, MainPrizeEntryFee, RemainingDays } from '../components/contestDetailsCard/components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 const page = () => {
     const [theme, setTheme] = useState('dark');
+    const [count,setCount]=useState({newUser:-1000,totalUser:-1000,totalContest:-1000,pendingContest:-1000, newReport:-1000, totalReport:-1000})
     const [contestDetails, setContestDetails] = useState(defaultFormData);
     const [contestList, setContestList] = useState([]);
+    const [reportFeedbackList, setReportFeedbackList] = useState([]);
     const [showDetailsCard, setShowDetailsCard] = useState(false);
-
+    let totalContest, pendingContest, newReport, totalReport, newUser, totalUser;
     let status = "Pending";
-
+    const updateCount = (newValues) => {
+        setCount((prevCount) => ({
+            ...prevCount,  // Keep the previous state
+            ...newValues   // Merge new values
+        }));
+    };
+    useEffect(() => {
+        
+      
+    },[count]);
 
     useEffect(() => {
+      
 
         const storedTheme = localStorage.getItem('theme');
         if (storedTheme) {
@@ -32,50 +45,139 @@ const page = () => {
 
         const fetchContests = async () => {
             try {
-                let query = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee').eq('status', status);;
+                let pendingQuery = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).eq('status', status);;
 
 
-                const { data, error, count } = await query;
+                const { data, error, count:pendingContestCount } = await pendingQuery;
 
                 if (error) throw error;
 
+                let totalQuery = supabase
+                .from('contests')
+                .select('*', { count: 'exact' });
+    
+                const { count: totalContestCount, error: totalError } = await totalQuery;
+
                 setContestList(data);
-                /*   setFetchError(null);
-                  setTotalItems(count);
-                  setTotalPage(Math.ceil(count / itemsPerPage)); */
+                
+                  // Now update the count state
+        updateCount({
+            pendingContest: pendingContestCount,
+            totalContest: totalContestCount
+        });
+                
+
+
+
             } catch (error) {
                 //setFetchError('Couldn\'t fetch contest data');
                 setContestList([]);
+
             }
         };
+        const fetchReportFeedback = async () => {
+            try {
+                let query = supabase.from('reportFeedback').select('*',{ count: 'exact' }).eq('status', status);
+                let totalQuery = supabase.from('reportFeedback').select('*',{ count: 'exact' });
 
+
+                const { data, error, count:newReportCount } = await query;
+                const {   count:totalReportCount } = await totalQuery;
+               
+                if (error) throw error;
+
+                setReportFeedbackList(data);
+                
+                updateCount({
+                    newReport: newReportCount,
+                    totalReport: totalReportCount,
+                });
+
+            } catch (error) {
+                console.log("error : ", error)
+                setReportFeedbackList([]);
+            }
+        };
+        const fetchUser = async () => {
+            try {
+                let query = supabase.from('users').select('*',{ count: 'exact' }). gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());  
+                let totalQuery = supabase.from('users').select('*',{ count: 'exact' });
+
+
+                const {  error, count:newUserCount } = await query;
+                const {   count:totalUserCount } = await totalQuery;
+               
+                if (error) throw error;
+
+                
+                
+                updateCount({
+                    newUser: newUserCount,
+                    totalUser: totalUserCount,
+                });
+
+            } catch (error) {
+                console.log("error : ", error)
+               
+            }
+        };
+        fetchUser();
         fetchContests();
+        fetchReportFeedback();
+        
     }, []);
-    const approveReject =  async (contestId,newStatus) =>{
+    
+    const approveReject = async (contestId, newStatus) => {
         const { data, error } = await supabase
-        .from('contests')      // Select the 'contests' table
-        .update({ status: newStatus })  // Specify the column to update and its new value
-        .eq('id', contestId);  // Match the row where 'id' equals 'contestId'
+            .from('contests')      // Select the 'contests' table
+            .update({ status: newStatus })  // Specify the column to update and its new value
+            .eq('id', contestId);  // Match the row where 'id' equals 'contestId'
 
-    if (error) {
-        console.error('Error updating contest:', error);
-    } else {
-        console.log('Contest updated:', data);
-        const updatedContestList = contestList.filter(contest => contest.id !== contestId);
-        setContestList(updatedContestList);
-
-        const newContest = updatedContestList.length > 0 ? updatedContestList[0] : null;
-
-           // Step 4: If another contest is available, set it as the contestDetails
-           if (newContest) {
-           // alert(newContest.id);
-            viewContestDetails(newContest.id);
+        if (error) {
+            console.error('Error updating contest:', error);
         } else {
-            // Handle the case where no contest is available (empty list)
-            setShowDetailsCard(false);
-            setContestList([]);
+            console.log('Contest updated:', data);
+            const updatedContestList = contestList.filter(contest => contest.id !== contestId);
+            setContestList(updatedContestList);
+
+            const newContest = updatedContestList.length > 0 ? updatedContestList[0] : null;
+
+            // Step 4: If another contest is available, set it as the contestDetails
+            if (newContest) {
+                // alert(newContest.id);
+                viewContestDetails(newContest.id);
+            } else {
+                // Handle the case where no contest is available (empty list)
+                setShowDetailsCard(false);
+                setContestList([]);
+            }
         }
     }
+    const fixedDismiss = async (Id, newStatus) => {
+        alert("clicked");
+        const { data, error } = await supabase
+            .from('reportFeedback')      // Select the 'contests' table
+            .update({ status: newStatus })  // Specify the column to update and its new value
+            .eq('id', Id);  // Match the row where 'id' equals 'contestId'
+
+        if (error) {
+            console.error('Error updating contest:', error);
+        } else {
+            console.log('Report Feedback updated:', data);
+            const updatedList = reportFeedbackList.filter(item => item.id !== Id);
+            setReportFeedbackList(updatedList);
+
+            const newItems = updatedList.length > 0 ? updatedList[0] : null;
+
+            // Step 4: If another contest is available, set it as the contestDetails
+            if (newItems) {
+                // alert(newContest.id);
+                setReportFeedbackList(newItems);
+            } else {
+
+                setReportFeedbackList([]);
+            }
+        }
     }
     const viewContestDetails = (contestId) => {
 
@@ -109,10 +211,11 @@ const page = () => {
 
 
     };
+
     return (
-        <div className='flex flex-row p-4'>
-            <div className='w-2/12 default-2 border p-4 pt-0 h-[95vh] rounded-2xl rounded-r-none flex flex-col'>
-                <div className="text-lg default-2 border-b min-h-20 flex justify-center  p-2 flex-col ">
+        <div className='flex flex-row p-4 '>
+            <div className='w-2/12 default border p-4 pt-0 h-[90vh] rounded-2xl rounded-r-none flex flex-col'>
+                <div className="text-lg default border-b min-h-20 flex justify-center  p-2 flex-col ">
 
                     <h1 className='text-lg text-default'>email</h1>
                     <h1 className='text-sm text-default-2'>admin</h1>
@@ -124,12 +227,12 @@ const page = () => {
                 <button className='p-2 cursor-pointer hover:dark:bg-slate-700 text-left'>Create a Post</button>
                 <button className='p-2 cursor-pointer hover:dark:bg-slate-700 text-left'>Light Mode</button>
 
-                <div className="mt-auto mb-10">
-                    <span className='default-2 border-t text-lg text-default py-4 flex flex-col'>Logout</span>
+                <div className="mt-auto ">
+                    <span className='default border-t text-lg text-default py-4 flex flex-col'>Logout</span>
                 </div>
             </div>
-            <div className="w-10/12 default overflow-y-auto p-4 pt-0 border border-l-0 h-[95vh] rounded-2xl rounded-l-none flex flex-col">
-                <div className="w-full default border-b min-h-20 flex items-center justify-between">
+            <div className="w-10/12  p-4 default-border overflow-y-auto  pt-0 border border-l-0 h-[90vh] rounded-2xl rounded-l-none flex flex-col">
+                <div className="w-full default-border border-b min-h-20 flex items-center justify-between">
                     <Image
                         src={theme === 'light' ? "/contestSpherelight.png" : "/contestSpheredark.png"}
                         alt="logo"
@@ -141,27 +244,27 @@ const page = () => {
                     <span className='  text-lg text-default border border-cs '>last 24 Hours</span>
                 </div>
 
-                <div className="w-full default border-b p-4  flex justify-between flex-row gap-2">
+                <div className="w-full default-border border-b p-4  flex justify-between flex-row gap-2">
                     <div className="flex-1  bg-slate-800 flex flex-col rounded-lg p-4 text-center ">
-                        <span className='text-4xl text-default '>24</span>
+                        <span className='text-4xl text-default '>{count.pendingContest}</span>
                         <span className='text-sm text-default'>contest pending approval</span>
-                        <span className='text-sm text-default-2'>684 total contests</span>
+                        <span className='text-sm text-default-2'>{count.totalContest} total contests</span>
                     </div>
                     <div className="flex-1  flex flex-col rounded-lg p-4 text-center">
-                        <span className='text-4xl text-default'>100</span>
+                        <span className='text-4xl text-default'>{count.newReport}</span>
                         <span className='text-sm text-default'>unread reports & feedbacks</span>
-                        <span className='text-sm text-default-2'>64 total reports & feedbacks</span>
+                        <span className='text-sm text-default-2'>{count.totalReport} total reports & feedbacks</span>
                     </div>
                     <div className="flex-1   flex flex-col rounded-lg p-4 text-center">
-                        <span className='text-4xl text-default'>20</span>
+                        <span className='text-4xl text-default'>{count.newUser}</span>
                         <span className='text-sm text-default'>new user</span>
-                        <span className='text-sm text-default-2'>104 total users</span>
+                        <span className='text-sm text-default-2'>{count.totalUser} total users</span>
                     </div>
 
 
                 </div>
                 <div className="   p-4 flex flex-col gap-4">
-                    <h1 className="w-full text-center text-cs text-3xl sticky top-0">Contests</h1>
+                    <span className="w-full   text-center text-cs text-3xl ">Contests</span>
                     {!showDetailsCard ? (
                         <>
                             <h1 className="w-full text-center text-cs text-3xl">Searchbar</h1>
@@ -239,19 +342,29 @@ const page = () => {
                                     <ListSection title={"List of Prizes"} items={contestDetails.prizeList} />
 
                                 </div>
-                                <div className="flex-1 default flex flex-col">Others
-                                <button onClick={()=>approveReject(contestDetails.id,"On Going")} className=' p-2 rounded -lg min-w-72 bg-green-700 text-default-inverse text-lg font-bold'>Approve</button>
-                                <button onClick={()=>approveReject(contestDetails.id,"Denied")} className='mt-2 min-w-72 border border-green-700 text-default-inverse text-lg font-bold p-2 rounded -lg '>Reject</button>
+                                <div className="flex-1 default flex flex-col gap-2 w-full justify-center">Others
+                                    <button onClick={() => approveReject(contestDetails.id, "On Going")} className=' p-2 rounded  min-w-72 border-green-400 border bg-green-600 dark:bg-green-700 text-white text-lg font-bold'>Approve</button>
+                                    <button onClick={() => approveReject(contestDetails.id, "Denied")} className='min-w-72 border default text-default text-lg font-bold p-2  '>Reject</button>
 
-                           
+
                                 </div>
 
                             </span>
-                            </>
+                        </>
                     )}
                     <h1 className="w-full text-center text-cs text-3xl sticky top-0">Report and Feedback</h1>
 
+                    <h1 className="w-full text-center text-cs text-3xl">Searchbar</h1>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 
+                        {reportFeedbackList.map((reportFeedback) => (
+
+                            <div key={reportFeedback.id} >
+                                <ReportFeedbackCard reportFeedback={reportFeedback} fixed={() => fixedDismiss(reportFeedback.id, "Fixed")} dismiss={() => fixedDismiss(reportFeedback.id, "Dismiss")} />
+                            </div>
+                        ))}
+
+                    </div>
                 </div>
 
             </div>

@@ -39,10 +39,7 @@ export default function RootLayout({
 
 
           </div>
-          <footer className="flex flex-col w-full  text-center main ">
-            <span className="flex bg-transparent w-full order border-cs "></span>
-            <p className="py-4 default">Contest Sphere 2024</p>
-          </footer>
+          
         </ThemeProvider>
       </body>
     </html>
