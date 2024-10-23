@@ -31,7 +31,7 @@ const ListSection = ({ title, items }) => (
     
       <a 
       href={`/?category=${category}`}
-      className={`self-start border font-bold bg-opacity-20 text-sm p-1 px-2 rounded-lg ${
+      className={` border font-bold bg-opacity-20 text-sm p-1 px-2 rounded-lg ${
         selectedCategory.colour ? `${selectedCategory.colour}` : 'bg-purple-400 text-purple-400'
       }`}
     >

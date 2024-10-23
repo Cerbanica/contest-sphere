@@ -61,7 +61,7 @@ const ContestCard = ({ contest, onClick }: ContestCardProps) => {
         </div>
 
 
-        <div className="w-full flex flex-col pt-1 border-t rounded-br-2xl default text-default-2">
+        <div className="w-full flex flex-col pt-1 border-t rounded-br-2xl default-border text-default-2">
           <span className='text-sm mt-1 text-justify line-clamp-4   px-3 '>{description}</span>
           <div className=" flex flex-row items-center justify-bottom text-center py-2  rounded-br-xl">
             <div className="w-4/12 ">

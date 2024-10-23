@@ -11,6 +11,7 @@ import { useAuth } from '@/utils/useAuth';
 
 export default function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -19,7 +20,6 @@ export default function Home() {
     const [showDetailsCard, setShowDetailsCard] = useState(false);
     const [showDetailsCardMobile, setShowDetailsCardMobile] = useState(false);
     const [showContestList, setShowContestList] = useState(true);
-
 
     const [contestDetails, setContestDetails] = useState(defaultFormData);
     const [contestList, setContestList] = useState([]);
@@ -46,7 +46,9 @@ export default function Home() {
         params.set(key, value);
         router.push(`/?${params.toString()}`, { shallow: true })
     };
-
+    function handleWindowSizeChange() {
+        setWidth(window.innerWidth);
+    }
     // Use effect to handle URL parameter changes
     useEffect(() => {
 
@@ -107,13 +109,26 @@ export default function Home() {
         fetchContests();
         
     }, [searchParams, start, end]);
+     // Function to handle window resize
+  function handleWindowSizeChange() {
+    setWidth(window.innerWidth);
+  }
+
+  // Effect to listen for resize events and update width
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowSizeChange);
+    return () => {
+      window.removeEventListener('resize', handleWindowSizeChange);
+    };
+  }, []);
+
+  // Determine if the screen is mobile-sized
+  const isMobile = width <= 768;
     useEffect(() => {
-        if (contestList && contestList.length > 0) {
-            viewContestDetails(contestList[0].id);
-        } else {
-            console.log("contestList is empty or undefined");
-        }
-    }, [contestList]);
+        if (!isMobile && contestList && contestList.length > 0) {
+          viewContestDetails(contestList[0].id);
+        } 
+      }, [isMobile, contestList]);
 
     // Handle search change
     const handleSearchChange = (searchTerm) => {
@@ -246,7 +261,7 @@ export default function Home() {
                 <ReportFeedbackForm contestTitle={contestDetails.title} isOpen={isModalOpen} onClose={handleCloseModal} contestId={contestDetails.id} />
 
                 {showDetailsCard && (
-                    <div className=" fixed default border   top-[20vh]  lg:hidden rounded-2xl h-[100vh]  z-30 ">
+                    <div className=" fixed default border  bottom-0 top-[10vh]  lg:hidden rounded-2xl   z-30 ">
                         <button onClick={() => setShowDetailsCard(false)} className='  w-full py-3 pr-8  text-center text-default-2 text-xl rounded-lg gap-2'> X </button>
 
                         <ContestDetailsCard
@@ -312,10 +327,12 @@ export default function Home() {
                                         <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
                                     </div>
 
-                                    <div className="flex-1 hidden lg:block mb-4 rounded-2xl ">
-                                        <div className="  sticky bottom-24  top-24 overflow-y-auto ">
+                                    <div className="flex-1 hidden lg:block   ">
+{/*                                     <div className="sticky top-24 overflow-y-auto default  rounded-2xl border " style={{ height: "calc(95vh - 6rem)" }}>
+ */}
 
                                             {showDetailsCard ? (
+                                                <>
                                                 <ContestDetailsCard
                                                     contestDetails={contestDetails}
                                                     isAdded={isAdded}
@@ -323,13 +340,14 @@ export default function Home() {
                                                     report={handleOpenModal}
 
                                                 />
-
-                                            ) : (<div className="default  rounded-2xl  border h-screen p-20">Place holder</div>)}
+                                                </>           
+                                            ) : (<div className="default  rounded-2xl  border h-full p-20">Place holder</div>)}
 
                                         </div>
+                                        
 
-                                    </div>
-                                </div>
+{/*                                     </div>
+ */}                                </div>
                             ) : (
                                 !fetchError && (
                                     <h1 className="default">No contest</h1>
