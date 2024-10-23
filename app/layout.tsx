@@ -24,10 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-      <body className='relative main overflow-x-hidden'>
+      <body className=' main overflow-x-hidden'>
         <ThemeProvider attribute="class">
           <Navbar />
-          <div className="flex flex-col min-h-screen pt-4 main ">
+          <div className="flex flex-col min-h-screen  main ">
 
             <main className="flex-grow">
               <Suspense fallback={<div>Loading...</div>}>

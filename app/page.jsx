@@ -2,7 +2,7 @@
 import { useEffect, Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import supabase from "../utils/supabaseClient";
-import { ContestCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm } from "./components";
+import { ContestCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm, LeListbox } from "./components";
 import { prizeRangeList, categoriesList, sortList, loremIpsum, defaultFormData } from '@/app/dataList';
 import Image from "next/image";
 import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
@@ -254,7 +254,7 @@ export default function Home() {
     
 
     return (
-        <div className="min-h-screen bg-transparent flex flex-row  ">
+        <div className="min-h-screen bg-transparent flex flex-row mt-4 ">
             <div className=" hidden lg:block w-0 lg:w-2/12">L</div>
 
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
@@ -274,7 +274,7 @@ export default function Home() {
                 {showContestList && (
                     <div className="px-2">
                         <section>
-                            <div className="lg:w-1/2 sm:w-full md:w-5/6 mb-4 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto">
+                            <div className="lg:w-1/2 sm:w-full md:w-5/6 mb-4 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
                                 <SearchBar onSearchChange={handleSearchChange} initialSearchTerm={filters.searchTerm} />
 
                                 <div className="flex flex-col lg:flex-row w-full justify-between gap-2">
@@ -313,7 +313,25 @@ export default function Home() {
 
 
                                     <div className="flex-1 ">
+                                    <div className="flex flex-row w-full justify-center mx-auto mb-4  ">
+                                    <div className="flex-row rounded-2xl default border">
+
+                                    <div className="w-auto p-2  flex  items-center justify-center">
+                                    <span className="w-48 flex gap-2 items-center justify-center text-default-2 text-sm default border-r mr-4 ">
+                                        <span className="text-lg text-default">143 </span> Contests found</span>
+                                        
+                                        <button className="w-24 text-center px-2 py-1 text-md  mx-1 rounded-lg bg-cs text-white">All</button>
+                                        <button className="w-24 hidden text-center px-2 py-1 text-md  mx-1 rounded-lg default">Latest</button>
+                                        <button className="w-24 hidden text-center px-2 py-1 text-md  mx-1 rounded-lg default">Ending </button>
+                                        
+                                        </div>
+                                       
+                                        
+                                        </div>
+                                       
+                                        </div>
                                         <div className=" flex flex-col   gap-2  w-full  ">
+
                                             {contestList.map((contest) => (
 
                                                 /*                                         <div key={contest.id} className="rounded-2xl transition-transform transform hover:translate-y-[-10px] hover:shadow-xl hover:drop-shadow-xl dark:shadow-slate-700">

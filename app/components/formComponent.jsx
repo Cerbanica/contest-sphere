@@ -3,7 +3,7 @@ import React from 'react';
 const LeTextInput = ({ title,name,value, onChange }) => {
   return (
     <div className=" default mt-4">
-      <label htmlFor={title} className="block text-lg text-default-2 ">
+      <label htmlFor={title} className="default-input-label ">
         {title}
       </label>
       <input
@@ -12,7 +12,7 @@ const LeTextInput = ({ title,name,value, onChange }) => {
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full default px-4 py-2 border rounded-md"
+        className="default-input"
       />
     </div>
   );
@@ -21,7 +21,7 @@ const LeTextInput = ({ title,name,value, onChange }) => {
 const LeDateInput = ({ title,name,value, onChange }) => {
     return (
       <div className="default mt-4">
-        <label htmlFor={title} className="block text-lg text-default-2">
+        <label htmlFor={title} className="default-input-label">
           {title}
         </label>
         <input
@@ -30,7 +30,7 @@ const LeDateInput = ({ title,name,value, onChange }) => {
           name={name}
           value={value}
           onChange={onChange}
-          className="w-full px-4 py-2 default border  rounded-md"
+          className="default-input "
         />
       </div>
     );
@@ -39,7 +39,7 @@ const LeDateInput = ({ title,name,value, onChange }) => {
 const LeTextArea = ({ title,name,value, onChange,rows }) => {
     return (
       <div className="mt-4 default">
-        <label htmlFor={title} className="block text-default-2 text-lg ">
+        <label htmlFor={title} className="default-input-label">
           {title}
         </label>
         <textarea
@@ -49,7 +49,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
           value={value}
           onChange={onChange}
           rows={rows}
-          className="w-full p-2 default border  rounded-md"
+          className="default-input"
         />
       </div>
     );
@@ -80,7 +80,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
       <div>
         {items.map((item, index) => (
           <div key={index} className="mt-4 default">
-            <label className="block text-lg text-default-2 mt-2">
+            <label className="default-input-label">
               {item.label}
             </label>
             <div className="flex items-center space-x-2">
@@ -88,7 +88,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
                 type="text"
                 value={item.value}
                 onChange={(e) => handleInputChange(index, e.target.value)}
-                className="flex-1 px-4 py-2 default border  rounded-md"
+                className="flex-1 default-input"
                 placeholder={item.label}
               />
               <button

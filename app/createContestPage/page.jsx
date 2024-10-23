@@ -18,7 +18,7 @@ const Page = () => {
   const[error,setError]=useState("Click the button to auto-fill the form");
   const [showForm, setShowForm] = useState(false);
   const router = useRouter(); // Next.js router for redirection
-  const userAuth = useAuth();
+  //const userAuth = useAuth();
 
   const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
@@ -39,16 +39,19 @@ const Page = () => {
     linkToPost: '',
     prizeRange: 0,
     linkToPost: '',
+    howToEnter:'',
     linkToThumbnail: '',
   }
   const [formData, setFormData] = useState(defaultFormData);
-  useEffect(() => {
+ /*  useEffect(() => {
     if (userAuth) {
       setUser(userAuth);
     
       fetchUserContests(userAuth.email);
+    }else{
+      alert("not logged");
     }
-  }, [userAuth]);
+  }, [userAuth]); */
 
   const handleSubmit = async ({ files, textInput }) => {
     //e.preventDefault();
@@ -133,7 +136,8 @@ const Page = () => {
       const realEntryFee = extractField(parsedData, "entryFee") || "";
 
       const judges = extractField(parsedData, "judgeList") || "";
-
+      const howToEnter = extractField(parsedData, "HowToEnter") || "";
+      
       const eligibility = extractField(parsedData, "eligibility") || "";
       const submission = extractField(parsedData, "submission") || "";
       const linkToPost = extractField(parsedData, "linkToPost") || "";
@@ -202,9 +206,9 @@ const Page = () => {
         prizeList: mappedPrizes || formData.prizeList,
         prizeRange: prizeRange || formData.prizeRange,
         entryFee: realEntryFee,
-
+        howToEnter: howToEnter,
         judgeList: mappedJudges || formData.judgeList,
-
+        
         eligibility: eligibility,
         submission: submission,
         linkToPost: linkToPost,
@@ -275,6 +279,7 @@ const Page = () => {
           winnerAnnouncement: formatDate(formData.winnerAnnouncement) || null,
           eligibility: formData.eligibility,
           linkToPost: formData.linkToPost,
+          howToEnter: formData.howToEnter,
           linkToThumbnail: formData.linkToThumbnail,
 
 
@@ -318,12 +323,12 @@ const Page = () => {
       <div className="w-full flex justify-center mt-2">
     <span className="text-default-2 text-center  ">{error}</span>
   </div>
-     {/*  <div className="output-box mt-8 p-4 rounded-md border">
+       <div className="output-box mt-8 p-4 rounded-md border">
        
         <h3 className="text-xl font-semibold mb-4">AI Output</h3>
         <div className="output" dangerouslySetInnerHTML={{ __html: output }} />
       </div>
- */}
+ 
 
 
       {showForm && (
@@ -346,7 +351,8 @@ const Page = () => {
                 </div>
 
               </div>
-              <LeTextArea title="Description" name="description" value={formData.description} onChange={handleFormChange} rows={12} />
+              <LeTextArea title="Description" name="description" value={formData.description} onChange={handleFormChange} rows={4} />
+              <LeTextArea title="How To Enter" name="howToEnter" value={formData.howToEnter} onChange={handleFormChange} rows={4} />
 
               <div className="flex flex-row space-x-2">
                 <div className="flex-1">

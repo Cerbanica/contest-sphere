@@ -70,7 +70,16 @@ const ContestDetailsCard = ({
             <span className="text-default-2  text-lg text-justify">
               {contestDetails.description}
             </span>
+           
           </div>
+          {contestDetails.howToEnter&&
+          <div className="py-4 border-t shadow-inner default">
+            <h1 className='text-default text-center text-2xl font-bold'>How To Enter</h1>
+            <span className="text-default-2  text-lg text-justify">
+              {contestDetails.howToEnter}
+            </span>
+           
+          </div>}
 
           {/* Prize List */}
           <ListSection title={"List of Prizes"} items={contestDetails.prizeList} />

@@ -44,8 +44,8 @@ const LeListbox = ({ items, selectedItem, onSelect }) => {
   return (
    
       <Listbox value={selected} onChange={handlePrizeChange}>
-      <ListboxButton className="flex flex-row w-full default text-sm text-left py-1.5 px-3 rounded-md items-center justify-between border">
-  <div className="w-full text-lg flex items-center truncate">{selectedItem}</div>
+      <ListboxButton className="flex flex-row w-full bg-slate-100 dark:bg-slate-700 py-1.5 text-sm text-left  px-3 rounded-md items-center justify-between ">
+  <div className="w-full text-lg items-center truncate">{selectedItem}</div>
   <div className="flex items-center justify-center">
     <ChevronDownIcon className="size-4" />
   </div>
