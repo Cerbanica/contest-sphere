@@ -49,7 +49,7 @@ option:hover{
   @apply bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 text-slate-50
 }
 .main{
-  @apply bg-slate-200 text-black
+  @apply bg-neutral-100 text-black
 }
 select{
   border: none;

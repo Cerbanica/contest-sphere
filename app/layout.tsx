@@ -39,7 +39,7 @@ export default function RootLayout({
 
 
           </div>
-          
+          <div className="w-full default mt-4 p-4 border border-t text-center "><span className="text-cs">Contest Sphere By Cerbanica 2024</span></div>
         </ThemeProvider>
       </body>
     </html>

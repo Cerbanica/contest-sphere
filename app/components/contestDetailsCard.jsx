@@ -17,7 +17,7 @@ const ContestDetailsCard = ({
 
   return (
 
-    <div className=" sticky top-24  default  rounded-2xl  border  overflow-y-auto  border-t-0 lg:border-t default  w-full lg:rounded-xl  p-0 lg:pr-2"  style={{ height: "calc(95vh - 6rem)" }}>
+    <div className=" sticky top-24  default  rounded-2xl  border  overflow-y-auto  border-t-0 lg:border-t default  w-full lg:rounded-xl  p-0 lg:pr-2"  style={{ height: "calc(95vh - 4rem)" }}>
 
       {/* Image Section */}
       <div
@@ -32,7 +32,7 @@ const ContestDetailsCard = ({
           <div className="flex flex-col w-full pt-2  sticky top-0  border-b  border-t lg:border-t-0  default">
 
             {/* Title and Bookmark */}
-            <div className="flex w-full flex-row items-end justify-between pb-2   ">
+            <div className="flex w-full flex-row items-end justify-between pb-2 mb-2  ">
               <div className='w-9/12 flex flex-col'>
                 <span className=" font-bold text-3xl overflow-hidden m-0">
                   {contestDetails.title}
@@ -47,9 +47,9 @@ const ContestDetailsCard = ({
 
             {/* Category, Date, and Deadline */}
             <div className="flex flex-row pb-2">
-                <div className="flex  flex-row w-8/12  ">
-                  <CategoryLink category={contestDetails.category} />
-                  <span className="  text-md  lg:text-lg text-gray-400 px-2">
+                <div className="flex gap-2 flex-row w-8/12  ">
+                  <CategoryLink category={contestDetails.category}  />
+                  <span className="  text-md  lg:text-lg text-gray-400 ">
                     
                     {formatDateManual(contestDetails.startdate, contestDetails.deadline)} 
                  </span>
@@ -82,7 +82,7 @@ const ContestDetailsCard = ({
           </div>}
 
           {/* Prize List */}
-          <ListSection title={"List of Prizes"} items={contestDetails.prizeList} />
+          <ListSection title={"List of Other Prizes"} items={contestDetails.prizeList} />
 
           {/* Judges List */}
           <ListSection title={"List of Judges"} items={contestDetails.judges} />

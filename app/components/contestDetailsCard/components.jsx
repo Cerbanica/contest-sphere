@@ -25,15 +25,14 @@ const ListSection = ({ title, items }) => (
 
   const CategoryLink = ({category}) =>{
     
-    const selectedCategory = categoriesList.find(list => list.name === category) || { colour: 'bg-purple-400', name: 'Unknown' };
+    const selectedCategory = categoriesList.find(list => list.name === category) || { colour: ' bg-teal-400 border-teal-400 text-teal-400'};
     
     return(
     
       <a 
       href={`/?category=${category}`}
-      className={` border font-bold bg-opacity-20 text-sm p-1 px-2 rounded-lg ${
-        selectedCategory.colour ? `${selectedCategory.colour}` : 'bg-purple-400 text-purple-400'
-      }`}
+      className={` border font-bold bg-opacity-20 text-sm p-1  px-2 rounded-lg ${
+        selectedCategory.colour }`}
     >
       {category}
     </a>
@@ -68,7 +67,7 @@ const ListSection = ({ title, items }) => (
         
           <span
           className={`text-right px-3 text-lg font-bold w-full ${daysRemaining <= 14 ? "text-red-400" : "text-green-400 "}`}>
-            {daysRemaining == 0 ? "Ends Today" : daysRemaining === -1 ? " Closed" : "Ends in " + daysRemaining + " days"}
+            {daysRemaining == 0 ? "Ends Today" : daysRemaining === -1 ? " Closed" :  daysRemaining + " days left"}
           </span>
     )
   }

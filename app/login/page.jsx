@@ -40,11 +40,12 @@ const page = () => {
     };
   
     return (
-      <div className="min-h-screen flex items-center bg-opacity-15 justify-center overflow-hidden p-0 m-0 "  style={{ 
+      <div className="min-h-screen flex items-center  justify-center overflow-hidden p-0 m-0 "  style={{ 
         backgroundImage: `url('/csbg (1).png')`, // Path to the image
         backgroundSize: 'cover', // To make the background cover the entire div
         backgroundPosition: 'center', // To center the background
-        backgroundRepeat: 'no-repeat' // Prevent the background from repeating
+        backgroundRepeat: 'no-repeat', // Prevent the background from repeating
+        background:''
       }}>
       <div className="flex flex-col lg:flex-row default border shadow-lg rounded-lg max-w-4xl w-full overflow-hidden">
         {/* Left side with Image */}

@@ -38,7 +38,7 @@ export default function Home() {
     const itemsPerPage = 12;
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage - 1;
-
+    let contestCount=-1000;
     // Helper function to update URL params, key=filter type, value is value la
     const updateURLParams = (key, value) => {
 
@@ -291,14 +291,10 @@ export default function Home() {
                                         /></div>
                                     <div className="flex-1"> <MyListbox
                                         items={sortList}
-                                        selectedItem={filters.sort}
+                                        selectedItem={"Filters"}
                                         onSelect={handleSortChange}
                                     /></div>
-                                    <div className="flex-1 "> <MyListbox
-                                        items={sortList}
-                                        selectedItem={filters.sort}
-                                        onSelect={handleSortChange}
-                                    /></div>
+                                   
                                 </div>
                             </div>
                         </section>
@@ -313,21 +309,21 @@ export default function Home() {
 
 
                                     <div className="flex-1 ">
-                                    <div className="flex flex-row w-full justify-center mx-auto mb-4  ">
-                                    <div className="flex-row rounded-2xl default border">
+                                    <div className="flex flex-row w-full justify-between  pb-2 px-2  ">
 
-                                    <div className="w-auto p-2  flex  items-center justify-center">
-                                    <span className="w-48 flex gap-2 items-center justify-center text-default-2 text-sm default border-r mr-4 ">
-                                        <span className="text-lg text-default">143 </span> Contests found</span>
-                                        
-                                        <button className="w-24 text-center px-2 py-1 text-md  mx-1 rounded-lg bg-cs text-white">All</button>
-                                        <button className="w-24 hidden text-center px-2 py-1 text-md  mx-1 rounded-lg default">Latest</button>
-                                        <button className="w-24 hidden text-center px-2 py-1 text-md  mx-1 rounded-lg default">Ending </button>
-                                        
+                                 
+                                    <span className=" flex gap-2 items-center justify-center text-default-2 text-sm   ">
+                                        <span className="text-lg text-default">{totalItems}</span> 
+                                         Contests found</span>
+                                        <div className="flex text-default-2 ">
+                                        Sort by Latest v
                                         </div>
+                                     
+                                   
+                                        
                                        
-                                        
-                                        </div>
+                                       
+                                      
                                        
                                         </div>
                                         <div className=" flex flex-col   gap-2  w-full  ">
