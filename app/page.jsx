@@ -237,7 +237,9 @@ export default function Home() {
 
     };
     const shareToWhatsApp = () => {
-        const currentUrl = "test"; // Get the current URL
+        const currentUrl = `https://contest-sphere.vercel.app/?contestId=${contestDetails.id}`; 
+        // Get the current URL
+        alert(currentUrl);
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(currentUrl)}`;
         window.open(whatsappUrl, '_blank'); // Open WhatsApp link in a new tab
     };
