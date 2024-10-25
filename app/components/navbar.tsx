@@ -79,15 +79,15 @@ const Navbar: React.FC = () => {
 
           {/* Left Section: Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex justify-center items-center">
-              <Image
+          <a href="/" onClick={() => window.location.reload()} className="flex justify-center items-center">
+          <Image
                 src={theme === 'light' ? "/contestSpherelight.png" : "/contestSpheredark.png"}
                 alt="logo"
                 width={118}
                 height={18}
                 className="object-contain"
               />
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -132,8 +132,8 @@ const Navbar: React.FC = () => {
           {/* Mobile Menu: Shows when mobile menu is toggled */}
           {mobileMenuOpen && (
             <div className="absolute top-full left-0 border rounded-b-xl default w-full  lg:hidden shadow-lg">
-              <div className="flex flex-col border-b default-2  ">
-                <div className="flex default-2  border-b py-2 justify-center ">
+              <div className="flex flex-col border-b default  ">
+                <div className="flex default  border-b py-2 justify-center ">
                   <button
                     onClick={toggleTheme}
                     className='flex flex-row   gap-2 text-center'        >
@@ -141,24 +141,24 @@ const Navbar: React.FC = () => {
 
                   </button>
                 </div>
-                <a href="/createContestPage" className='default-2 py-2 border-b rounded-lg text-center'>Post Contest</a>
-                <button className='default-2 py-2 border-b rounded-lg text-center ' onClick={handleOpenModal}>Give Feedback</button>
+                <a href="/createContestPage" className='default py-2 border-b rounded-lg text-center'>Post Contest</a>
+                <button className='default py-2 border-b rounded-lg text-center ' onClick={handleOpenModal}>Give Feedback</button>
 
                 {user ? (
-                  <a href="/myContest" className='default-2 py-2 border-b text-center'>My Contest</a>
+                  <a href="/myContest" className='default py-2 border-b text-center'>My Contest</a>
                 ) : ''}
                 {user ? (
                   <>
 
-                    <button onClick={handleLogout} className="default-2 py-2 border-b text-center">Logout</button>
+                    <button onClick={handleLogout} className="default py-2 border-b text-center">Logout</button>
                   </>
                 ) : (
-                  <Link href="/login" className="default-2 py-2 border-b text-center">Login</Link>
+                  <Link href="/login" className="default py-2 border-b text-center">Login</Link>
                 )}
 
                 <button
                   onClick={toggleMobileMenu}
-                  className='text-default-2 rounded-2xl py-2 '>X</button>
+                  className='text-default rounded-2xl py-2 '>X</button>
 
               </div>
             </div>
