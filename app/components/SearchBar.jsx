@@ -18,7 +18,7 @@ const SearchBar = ({ onSearchChange, initialSearchTerm = '' }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
     <div className=" w-full  flex flex-col justify-center items-center ">
-      <div className="flex w-full flex-row text-lg text-left default-2 rounded-2xl justify-center items-center ">
+      <div className="flex w-full flex-row text-lg text-left  default-2 rounded-2xl justify-center items-center ">
         <input
           type="text"
           value={searchTerm}

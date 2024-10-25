@@ -8,6 +8,8 @@ import Image from "next/image";
 import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
 import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
 import { useAuth } from '@/utils/useAuth';
+import { ShareIcon } from '@heroicons/react/24/solid'
+
 
 export default function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,14 +57,16 @@ export default function Home() {
         // Update filters stateSs
         setFilters({
             category: searchParams.get('category') || 'All Categories',
-            sort: searchParams.get('sort') || 'Latest',
+            sort: searchParams.get('sort')||'Sort By Latest',
             prize: searchParams.get('prize') || 0,
             searchTerm: searchParams.get('search') || '',
             selectedPrizeName: prizeRangeList[parseInt(searchParams.get('prize') || 0)].name,
+            contestId:searchParams.get('contestId')|| null,
         });
 
 
         const fetchContests = async () => {
+            let sharedContestData=null;
             try {
                 let query = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
               
@@ -85,18 +89,37 @@ export default function Home() {
                 if (filters.sort === 'Sort By Ending') {
                     query = query.order('deadline', { ascending: true });
                 }
+              
                 
-                if (filters.sort === 'Sort By Latest'||filters.sort === '') {
+                if (filters.sort !=='Sort By Ending' ) {
 
                 
                     query = query.order('created_at', { ascending: false });
                 }
-
+                if (filters.contestId !== undefined&&filters.contestId !== null) {
+                    console.log(filters.contestId);
+                    let SharedContestQuery = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).eq('id', filters.contestId);
+                    const { data, error, } = await SharedContestQuery;
+                        
+                    setContestList(data);
+                }
                 const { data, error, count } = await query;
 
-                if (error) throw error;
+                
+               
+                
+                setContestList((prevContestList) => {
+                    // Assuming each item has a unique 'id' property
+                    const existingIds = new Set(prevContestList.map((item) => item.id));
+                
+                    // Filter out items in newData that already exist in prevContestList
+                    const filteredNewData = data.filter((item) => !existingIds.has(item.id));
+                
+                    // Combine prevContestList with filteredNewData
+                    return [...prevContestList, ...filteredNewData];
+                });
+                
 
-                setContestList(data);
                
                 setFetchError(null);
                 setTotalItems(count);
@@ -110,7 +133,7 @@ export default function Home() {
 
         fetchContests();
         
-    }, [searchParams, start, end]);
+    }, [ searchParams,filters.contestId,start, end]);
      // Function to handle window resize
   function handleWindowSizeChange() {
     setWidth(window.innerWidth);
@@ -126,11 +149,12 @@ export default function Home() {
   
   // Determine if the screen is mobile-sized
   const isMobile = width <= 768;
-    useEffect(() => {
+     useEffect(() => {
         if (!isMobile && contestList && contestList.length > 0) {
           viewContestDetails(contestList[0].id);
+          
         } 
-      }, [isMobile, contestList]);
+      }, [isMobile, contestList]); 
 
     // Handle search change
     const handleSearchChange = (searchTerm) => {
@@ -166,8 +190,6 @@ export default function Home() {
     };
 
     const viewContestDetails = (contestId) => {
-
-
         const checkIfContestAdded = async () => {
             if (userAuth) {
                 const { data: existingEntry, error } = await supabase
@@ -197,9 +219,9 @@ export default function Home() {
             } else {
 
 
-
+                
                 setContestDetails(data);
-                //toggleDetailsCardMobile();
+                
                 setShowDetailsCard(true);
 
 
@@ -211,10 +233,14 @@ export default function Home() {
 
 
         checkIfContestAdded();
-
+        
 
     };
-
+    const shareToWhatsApp = () => {
+        const currentUrl = "test"; // Get the current URL
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(currentUrl)}`;
+        window.open(whatsappUrl, '_blank'); // Open WhatsApp link in a new tab
+    };
     const handleAddUserContest = async (contestId) => {
         try {
             if (userAuth) {
@@ -267,7 +293,11 @@ export default function Home() {
                         <div className="w-full py-3 px-8 default border-b flex justify-between text-default-2 text-xl  ">
 
                         <button onClick={() => setShowDetailsCard(false)} className='  '> X </button>
-                        <button>Share</button>
+                        <button onClick={shareToWhatsApp}
+              
+              className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
+              Share Contest<ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
+            </button>
 
                         </div>
 
@@ -282,13 +312,13 @@ export default function Home() {
                     </div>)}
                 {showContestList && (
                     <div className="lg:px-2">
-                        <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center text-6xl p-2 lg:p-8 pb-2 font-bold ">
-                        <h1>Thousands of Contests</h1><h1>All in One Place</h1>
+                        <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center text-6xl p-2 lg:p-8 pb-2  ">
+                       <div className="font-bold"> <h1>Thousands of Contests</h1><h1>All in One Place</h1></div>
                         <section className="mt-8">
                             <div className="default border rounded-2xl lg:w-1/2 sm:w-full md:w-5/6 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
                                 <SearchBar onSearchChange={handleSearchChange} initialSearchTerm={filters.searchTerm} />
 
-                                <div className="flex overflow-x-auto lg:flex-row w-full justify-between gap-2">
+                                <div className="flex flex-col lg:flex-row w-full justify-between gap-2">
                                     <div className="flex-1 "> <MyListbox
                                         items={categoriesList}
                                         selectedItem={filters.category}
@@ -347,8 +377,6 @@ export default function Home() {
 
                                             {contestList.map((contest) => (
 
-                                                /*                                         <div key={contest.id} className="rounded-2xl transition-transform transform hover:translate-y-[-10px] hover:shadow-xl hover:drop-shadow-xl dark:shadow-slate-700">
-                                                 */
                                                 <div key={contest.id} >
                                                     <ContestCard contest={contest} onClick={viewContestDetails} />
                                                 </div>
