@@ -17,11 +17,11 @@ const ContestDetailsCard = ({
 
   return (
 
-    <div className=" sticky top-24  default  rounded-2xl  border  overflow-y-auto  border-t-0 lg:border-t default  w-full lg:rounded-xl  p-0 lg:pr-2"  style={{ height: "calc(95vh - 4rem)" }}>
+    <div className=" sticky lg:top-24  default   border  overflow-y-auto  border-t-0 lg:border-t default  w-full lg:rounded-xl  p-0 lg:pr-2"  style={{ height: "calc(95vh - 4rem)" }}>
 
       {/* Image Section */}
       <div
-        className="bg-cover bg-center lg:h-[30vh] h-[30vh] min-w-[20vh]  rounded-xl lg:rounded-b-none "
+        className="bg-cover bg-center lg:h-[30vh] h-[30vh] min-w-[20vh]  lg:rounded-xl lg:rounded-b-none "
         style={{
           backgroundImage: `url('${contestDetails.linkToThumbnail || 'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'}')`,
         }}
@@ -29,7 +29,7 @@ const ContestDetailsCard = ({
       <div className='p-4 pt-0'>
         {/* Content Section */}
         <div className="w-full  rounded-r-xl">
-          <div className="flex flex-col w-full pt-2  sticky top-0  border-b  border-t lg:border-t-0  default">
+          <div className="flex flex-col w-full pt-2  sticky top-0  border-b   default">
 
             {/* Title and Bookmark */}
             <div className="flex w-full flex-row items-end justify-between pb-2 mb-2  ">

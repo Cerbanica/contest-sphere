@@ -263,8 +263,13 @@ export default function Home() {
                 <ReportFeedbackForm contestTitle={contestDetails.title} isOpen={isModalOpen} onClose={handleCloseModal} contestId={contestDetails.id} />
 
                 {showDetailsCard && !isModalOpen&& (
-                    <div className=" fixed default border  bottom-0 top-[10vh]  lg:hidden rounded-2xl   z-30 ">
-                        <button onClick={() => setShowDetailsCard(false)} className='  w-full py-3 pr-8  text-center text-default-2 text-xl rounded-lg gap-2'> X </button>
+                    <div className=" fixed default border  bottom-0 top-0  lg:hidden   z-50 ">
+                        <div className="w-full py-3 px-8 default border-b flex justify-between text-default-2 text-xl  ">
+
+                        <button onClick={() => setShowDetailsCard(false)} className='  '> X </button>
+                        <button>Share</button>
+
+                        </div>
 
                         <ContestDetailsCard
                             contestDetails={contestDetails}
@@ -276,8 +281,8 @@ export default function Home() {
                         />
                     </div>)}
                 {showContestList && (
-                    <div className="px-2">
-                        <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center text-6xl p-8 pb-2 font-bold ">
+                    <div className="lg:px-2">
+                        <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center text-6xl p-2 lg:p-8 pb-2 font-bold ">
                         <h1>Thousands of Contests</h1><h1>All in One Place</h1>
                         <section className="mt-8">
                             <div className="default border rounded-2xl lg:w-1/2 sm:w-full md:w-5/6 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
