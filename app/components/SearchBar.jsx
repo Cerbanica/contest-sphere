@@ -18,13 +18,13 @@ const SearchBar = ({ onSearchChange, initialSearchTerm = '' }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
     <div className=" w-full  flex flex-col justify-center items-center ">
-      <div className="flex w-full flex-row text-lg text-left default rounded-2xl justify-center items-center ">
+      <div className="flex w-full flex-row text-lg text-left default-2 rounded-2xl justify-center items-center ">
         <input
           type="text"
           value={searchTerm}
           onChange={handleInputChange}
           placeholder="Search contests..."
-          className="default w-full pr-12 ml-4 outline-none mr-2"
+          className="bg-transparent w-full pr-12 ml-4 outline-none mr-2"
         />
         <div className="p-1">
           <button

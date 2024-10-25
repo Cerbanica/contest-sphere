@@ -59,8 +59,8 @@ const contestPromptAI=` describe the contest in this format and not json:`+basep
    otherPrizes={other prizes and amount of winner per prizes, eg x2} description={description} 
   choose a category from this list, use exact capitalization, eg if writing, then category=Writing:`+categoriesString;
   const sortList = [
-    {id:1, value:'Latest',  name:'Latest'},
-    {id:2, value:'Ending',  name:'Ending'}
+    {id:1, value:'Sort By Latest',  name:'Sort By Latest'},
+    {id:2, value:'Sort By Ending',  name:'Sort By Ending'}
   ]
   
  const loremIpsum= `

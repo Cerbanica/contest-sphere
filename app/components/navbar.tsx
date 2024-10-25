@@ -142,7 +142,7 @@ const Navbar: React.FC = () => {
                   </button>
                 </div>
                 <a href="/createContestPage" className='default-2 py-2 border-b rounded-lg text-center'>Post Contest</a>
-                <button className='default-2 py-2 border-b'>Send Feedback</button>
+                <button className='default-2 py-2 border-b rounded-lg text-center ' onClick={handleOpenModal}>Give Feedback</button>
 
                 {user ? (
                   <a href="/myContest" className='default-2 py-2 border-b text-center'>My Contest</a>

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LeTextInput, LeTextArea } from "../formComponent";
 import supabase from "@/utils/supabaseClient";
 
@@ -41,6 +41,7 @@ const ReportFeedbackForm = ({ contestTitle, isOpen, onClose, contestId }) => {
     contestId: contestId? contestId: null,
     status:"Pending",
   };
+  
 
   const [reportDetails, setReportDetails] = useState(defaultReportForm);
 

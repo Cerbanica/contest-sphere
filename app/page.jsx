@@ -65,7 +65,7 @@ export default function Home() {
         const fetchContests = async () => {
             try {
                 let query = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
-
+              
                 // Filter by category
                 if (filters.category && filters.category != "All Categories") {
                     query = query.eq('category', filters.category);
@@ -82,11 +82,13 @@ export default function Home() {
                     query = query.gte('prizeRange', filters.prize).lte('prizeRange', 5);
                 }
 
-                if (filters.sort === 'Ending') {
+                if (filters.sort === 'Sort By Ending') {
                     query = query.order('deadline', { ascending: true });
                 }
+                
+                if (filters.sort === 'Sort By Latest'||filters.sort === '') {
 
-                if (filters.sort === '' || filters.sort === 'Latest') {
+                
                     query = query.order('created_at', { ascending: false });
                 }
 
@@ -121,7 +123,7 @@ export default function Home() {
       window.removeEventListener('resize', handleWindowSizeChange);
     };
   }, []);
-
+  
   // Determine if the screen is mobile-sized
   const isMobile = width <= 768;
     useEffect(() => {
@@ -254,13 +256,13 @@ export default function Home() {
     
 
     return (
-        <div className="min-h-screen bg-transparent flex flex-row mt-4 ">
+        <div className="min-h-screen bg-transparent flex flex-row ">
             <div className=" hidden lg:block w-0 lg:w-2/12">L</div>
 
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
                 <ReportFeedbackForm contestTitle={contestDetails.title} isOpen={isModalOpen} onClose={handleCloseModal} contestId={contestDetails.id} />
 
-                {showDetailsCard && (
+                {showDetailsCard && !isModalOpen&& (
                     <div className=" fixed default border  bottom-0 top-[10vh]  lg:hidden rounded-2xl   z-30 ">
                         <button onClick={() => setShowDetailsCard(false)} className='  w-full py-3 pr-8  text-center text-default-2 text-xl rounded-lg gap-2'> X </button>
 
@@ -268,16 +270,20 @@ export default function Home() {
                             contestDetails={contestDetails}
                             isAdded={isAdded}
                             handleAddUserContest={handleAddUserContest}
+                            report={handleOpenModal}
+
 
                         />
                     </div>)}
                 {showContestList && (
                     <div className="px-2">
-                        <section>
-                            <div className="lg:w-1/2 sm:w-full md:w-5/6 mb-4 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
+                        <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center text-6xl p-8 pb-2 font-bold ">
+                        <h1>Thousands of Contests</h1><h1>All in One Place</h1>
+                        <section className="mt-8">
+                            <div className="default border rounded-2xl lg:w-1/2 sm:w-full md:w-5/6 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
                                 <SearchBar onSearchChange={handleSearchChange} initialSearchTerm={filters.searchTerm} />
 
-                                <div className="flex flex-col lg:flex-row w-full justify-between gap-2">
+                                <div className="flex overflow-x-auto lg:flex-row w-full justify-between gap-2">
                                     <div className="flex-1 "> <MyListbox
                                         items={categoriesList}
                                         selectedItem={filters.category}
@@ -298,14 +304,16 @@ export default function Home() {
                                 </div>
                             </div>
                         </section>
+                        </div>
+                       
 
                         <section>
-                            <div className="w-full flex  justify-center items-center">
+                          {/*   <div className="w-full flex  justify-center items-center">
                                 <hr className="border-t-1 border-cs w-full lg:w-1/2 mb-4" />
-                            </div>
+                            </div> */}
 
                             {contestList.length > 0 ? (
-                                <div className="flex flex-row gap-4">
+                                <div className="flex flex-row gap-4 mt-4">
 
 
                                     <div className="flex-1 ">
@@ -316,7 +324,11 @@ export default function Home() {
                                         <span className="text-lg text-default">{totalItems}</span> 
                                          Contests found</span>
                                         <div className="flex text-default-2 ">
-                                        Sort by Latest v
+                                        <MyListbox
+                                        items={sortList}
+                                        selectedItem={filters.sort}
+                                        onSelect={handleSortChange}
+                                    />
                                         </div>
                                      
                                    
