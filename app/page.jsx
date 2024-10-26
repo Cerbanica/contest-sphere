@@ -367,7 +367,7 @@ export default function Home() {
                                 </div>
                             ):(
                                 <button
-                                    onClick={()=>[setShowIcons(true),updateUrl()]}
+                                    onClick={()=>setShowIcons(true)}
                                     className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
                                     Share Contest<ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
                                 </button>
