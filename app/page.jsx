@@ -2,7 +2,7 @@
 import { useEffect, Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import supabase from "../utils/supabaseClient";
-import { ContestCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm, LeListbox } from "./components";
+import { ContestCard,ShareCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm, LeListbox } from "./components";
 import { prizeRangeList, categoriesList, sortList, loremIpsum, defaultFormData } from '@/app/dataList';
 import Image from "next/image";
 import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
@@ -56,15 +56,18 @@ import {
     WorkplaceIcon,
     XIcon,
 } from "react-share";
+import { Helmet } from 'react-helmet';
 
 export default function Home() {
     
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isShareCardOpen, setIsShareCardOpen]=useState(false);
     const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
     const [showIcons,setShowIcons]=useState(false);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
+    const handleCloseShare = () => setIsShareCardOpen(false);
     const userAuth = useAuth();
     const [isAdded, setIsAdded] = useState(false);
     const [showDetailsCard, setShowDetailsCard] = useState(false);
@@ -92,6 +95,7 @@ export default function Home() {
     let contestCount = -1000;
     const textshareUrl = `https://contest-sphere.vercel.app/?title=${encodeURIComponent(contestDetails.title)}&contestId=${encodeURIComponent(contestDetails.id)}`;
     const discordShareText = `Check out this contest: ${textshareUrl}`;
+    const [copied, setCopied] = useState(false);
     // Helper function to update URL params, key=filter type, value is value la
     const updateURLParams = (key, value) => {
 
@@ -293,8 +297,8 @@ export default function Home() {
 
     };
     const updateUrl = () => {
-        alert("url updated");
-        setShareUrl( `https://contest-sphere.vercel.app/?contestId=${contestDetails.id}`);
+       
+        setShareUrl(`Check out this contest -> https://contest-sphere.vercel.app/?contestId=${contestDetails.id}` )
        
     };
     const handleAddUserContest = async (contestId) => {
@@ -335,16 +339,45 @@ export default function Home() {
             alert(`Unexpected error: ${err.message}`);
         }
     };
+    const handleCopy = () => {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 5000); // Reset after 2 seconds
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      };
 
+      const handleDiscord = () => {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 5000); // Reset after 5 seconds
+    
+          // Open Discord in a new tab or window
+          window.open(`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`, '_blank');
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      };
 
     return (
+        
         <div className="min-h-screen bg-transparent flex flex-row ">
             <div className=" hidden lg:block w-0 lg:w-2/12">L</div>
 
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
+            <Helmet>
+        <meta property="og:title" content={contestDetails.title} />
+        <meta property="og:description" content={contestDetails.description} />
+        <meta property="og:image" content={contestDetails.linkToThumbnail} />
+        <meta property="og:url" content={shareUrl} />
+        <meta property="og:type" content="website" />
+      </Helmet>
+            
                 <ReportFeedbackForm contestTitle={contestDetails.title} isOpen={isModalOpen} onClose={handleCloseModal} contestId={contestDetails.id} />
+                <ShareCard contestDetails={contestDetails} isOpen={isShareCardOpen} onClose={handleCloseShare}/>
 {/*                 //mobile contest details card
- */}                {showDetailsCard && !isModalOpen && (
+ */}                {showDetailsCard && !isModalOpen && !isShareCardOpen && (
                     <div className=" fixed default border  bottom-0 top-0  lg:hidden   z-50 ">
                         <div className="w-full py-3 px-8 default border-b flex justify-between text-default-2 text-xl  ">
 
@@ -352,12 +385,11 @@ export default function Home() {
                             {showIcons ? (
                                 <div className="default-border flex flex-row items-center p-1 rounded-full gap-2 border">
                                          {/* Discord Share Button */}
-                                <a
-                                    href={`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <button
+                                   // href={`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`}
+                                    onClick={handleDiscord}
                                     className="flex justify-center items-center p-2 rounded-full bg-blue-600 text-white"
-                                ></a>
+                                >Discord</button>
                                         <WhatsappShareButton title={contestDetails.title} separator="->" url={shareUrl} >   <WhatsappIcon size={32} round />
                                     </WhatsappShareButton>
                                     <TelegramShareButton
@@ -367,10 +399,13 @@ export default function Home() {
                                     >
                                         <TelegramIcon size={32} round />
                                     </TelegramShareButton>
+                                    <button onClick={handleCopy} className="px-4 py-2 bg-blue-500 text-white rounded">
+                                {copied ? 'Copied!' : 'Copy URL'}
+                                </button>
                                 </div>
                             ):(
                                 <button
-                                    onClick={()=>setShowIcons(true)}
+                                    onClick={()=>setIsShareCardOpen(true)}
                                     className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
                                     Share Contest<ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
                                 </button>
@@ -385,12 +420,13 @@ export default function Home() {
             </button> */}
 
                         </div>
-
+                       
                         <ContestDetailsCard
                             contestDetails={contestDetails}
                             isAdded={isAdded}
                             handleAddUserContest={handleAddUserContest}
                             report={handleOpenModal}
+                            showShareCard={()=>setIsShareCardOpen(true)}
 
 
                         />
@@ -402,7 +438,7 @@ export default function Home() {
                             <section className="mt-8">
                                 <div className="default border rounded-2xl lg:w-1/2 sm:w-full md:w-5/6 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
                                     <SearchBar onSearchChange={handleSearchChange} initialSearchTerm={filters.searchTerm} />
-
+                                    
                                     <div className="flex flex-col lg:flex-row w-full justify-between gap-2">
                                         <div className="flex-1 "> <MyListbox
                                             items={categoriesList}
@@ -482,6 +518,7 @@ export default function Home() {
                                                     isAdded={isAdded}
                                                     handleAddUserContest={handleAddUserContest}
                                                     report={handleOpenModal}
+                                                    showShareCard={()=>setIsShareCardOpen(true)}
 
                                                 />
                                             </>

@@ -10,17 +10,11 @@ import { BookmarkButton, CategoryLink, ListSection, MainPrizeEntryFee, Remaining
 const ContestDetailsCard = ({
   contestDetails,
   isAdded,
-  handleAddUserContest, report
+  handleAddUserContest, report, showShareCard
 
 }) => {
 
-  const shareToWhatsApp = () => {
-    const currentUrl = `https://contest-sphere.vercel.app/?=${contestDetails.title}&contestId=${contestDetails.id}`; 
-    // Get the current URL
-    alert(currentUrl);
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(currentUrl)}`;
-    window.open(whatsappUrl, '_blank'); // Open WhatsApp link in a new tab
-};
+ 
 
   return (
 
@@ -48,7 +42,7 @@ const ContestDetailsCard = ({
               </div>
               <BookmarkButton isAdded={isAdded} onClick={() => handleAddUserContest(contestDetails.id)} />
 
-              <button onClick={shareToWhatsApp}
+              <button onClick={showShareCard}
               
               className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
               <ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />

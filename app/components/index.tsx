@@ -12,5 +12,6 @@ import {LeTextInput,LeDateInput, LeTextArea, LeDynamicInputList} from "./formCom
 import ContestDetailsCard from "./contestDetailsCard"
 import {ListSection, CategoryLink, RemainingDays,BookmarkButton, MainPrizeEntryFee} from "./contestDetailsCard/components"
 import {ReportFeedbackForm, ReportFeedbackCard} from "./reportFeedback/components"
+import{ShareCard}from "./shareCard/components"
 
-export{ContestCard, ListSection, ReportFeedbackForm, ReportFeedbackCard, CategoryLink, MainPrizeEntryFee,RemainingDays,BookmarkButton,ContestDetailsCard, customButton,LeListbox,Navbar,AddContest,Pagination,Tabs ,LeDynamicInputList ,MyListbox, SearchBar,LeTextInput,LeTextArea,LeDateInput, LeGeminiAnalyzer}
+export{ContestCard,ShareCard ,ListSection, ReportFeedbackForm, ReportFeedbackCard, CategoryLink, MainPrizeEntryFee,RemainingDays,BookmarkButton,ContestDetailsCard, customButton,LeListbox,Navbar,AddContest,Pagination,Tabs ,LeDynamicInputList ,MyListbox, SearchBar,LeTextInput,LeTextArea,LeDateInput, LeGeminiAnalyzer}
