@@ -350,7 +350,7 @@ export default function Home() {
                             {showIcons ? (
                                 <div className="default-border flex flex-row items-center p-1 rounded-full gap-2 border">
                                         <a 
-                                                 href={`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`}
+                                                 href={`https://discord.com/channels/@me?content=${encodeURIComponent(shareUrl)}`}
 
                         target="_blank"
                         rel="noopener noreferrer"
