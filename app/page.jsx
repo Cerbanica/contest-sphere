@@ -58,6 +58,7 @@ import {
 } from "react-share";
 
 export default function Home() {
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
     const [showIcons,setShowIcons]=useState(false);
@@ -71,6 +72,7 @@ export default function Home() {
     const [showContestList, setShowContestList] = useState(true);
 
     const [contestDetails, setContestDetails] = useState(defaultFormData);
+    const [shareUrl,setShareUrl ]=useState(`https://contest-sphere.vercel.app/?contestId=${contestDetails.id}`);
     const [contestList, setContestList] = useState([]);
     const [fetchError, setFetchError] = useState(null);
     const [filters, setFilters] = useState({
@@ -288,13 +290,10 @@ export default function Home() {
 
 
     };
-    const shareUrl = () => {
-        const currentUrl = `https://contest-sphere.vercel.app/?=${contestDetails.title}&contestId=${contestDetails.id}`;
-        return currentUrl;
-        // Get the current URL
-        /*   alert(currentUrl);
-          const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(currentUrl)}`;
-          window.open(whatsappUrl, '_blank'); */ // Open WhatsApp link in a new tab
+    const updateUrl = () => {
+        alert("url updated");
+        setShareUrl( `https://contest-sphere.vercel.app/?contestId=${contestDetails.id}`);
+       
     };
     const handleAddUserContest = async (contestId) => {
         try {
@@ -342,15 +341,21 @@ export default function Home() {
 
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
                 <ReportFeedbackForm contestTitle={contestDetails.title} isOpen={isModalOpen} onClose={handleCloseModal} contestId={contestDetails.id} />
-
-                {showDetailsCard && !isModalOpen && (
+{/*                 //mobile contest details card
+ */}                {showDetailsCard && !isModalOpen && (
                     <div className=" fixed default border  bottom-0 top-0  lg:hidden   z-50 ">
                         <div className="w-full py-3 px-8 default border-b flex justify-between text-default-2 text-xl  ">
 
                             <button onClick={() => [setShowDetailsCard(false),setShowIcons(false)]} className='  '> X </button>
                             {showIcons ? (
                                 <div className="default-border flex flex-row items-center p-1 rounded-full gap-2 border">
-                                    <WhatsappShareButton url={shareUrl} >   <WhatsappIcon size={32} round />
+                                        <a 
+                                                 href={`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`}
+
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex justify-center items-center p-2 rounded-full bg-blue-600 text-white"> Discord</a>
+                                        <WhatsappShareButton title={contestDetails.title} separator="->" url={shareUrl} >   <WhatsappIcon size={32} round />
                                     </WhatsappShareButton>
                                     <TelegramShareButton
                                         url={shareUrl}
@@ -362,7 +367,7 @@ export default function Home() {
                                 </div>
                             ):(
                                 <button
-                                    onClick={()=>setShowIcons(true)}
+                                    onClick={()=>[setShowIcons(true),updateUrl()]}
                                     className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
                                     Share Contest<ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
                                 </button>
