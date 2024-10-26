@@ -90,6 +90,8 @@ export default function Home() {
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage - 1;
     let contestCount = -1000;
+    const textshareUrl = `https://contest-sphere.vercel.app/?title=${encodeURIComponent(contestDetails.title)}&contestId=${encodeURIComponent(contestDetails.id)}`;
+    const discordShareText = `Check out this contest: ${textshareUrl}`;
     // Helper function to update URL params, key=filter type, value is value la
     const updateURLParams = (key, value) => {
 
@@ -349,12 +351,13 @@ export default function Home() {
                             <button onClick={() => [setShowDetailsCard(false),setShowIcons(false)]} className='  '> X </button>
                             {showIcons ? (
                                 <div className="default-border flex flex-row items-center p-1 rounded-full gap-2 border">
-                                        <a 
-                                                 href={`https://discord.com/channels/@me?content=${encodeURIComponent(shareUrl)}`}
-
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex justify-center items-center p-2 rounded-full bg-blue-600 text-white"> Discord</a>
+                                         {/* Discord Share Button */}
+                                <a
+                                    href={`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex justify-center items-center p-2 rounded-full bg-blue-600 text-white"
+                                ></a>
                                         <WhatsappShareButton title={contestDetails.title} separator="->" url={shareUrl} >   <WhatsappIcon size={32} round />
                                     </WhatsappShareButton>
                                     <TelegramShareButton
