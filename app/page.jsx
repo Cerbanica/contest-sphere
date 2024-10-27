@@ -318,56 +318,35 @@ export default function Home() {
     };
 
     const addItem = (item) => {
-
-        if (item.id == 1) {
-            setSelectedFilterItems((prevItems) => {
-                if (prevItems.some((i) => i.id === item.id)) {
-
-                    setFilters((prevFilters) => ({ ...prevFilters, freeEntry: "false" }));
-                    updateURLParams("freeEntry", false);
-                    // If item exists (by id), remove it
-                    return prevItems.filter((i) => i.id !== item.id);
-                } else {
-
-
-
-                    setFilters((prevFilters) => ({ ...prevFilters, freeEntry: "true" }));
-                    updateURLParams("freeEntry", true);
-
-                    // If item does not exist, add it
-
-                    return [...prevItems, item];
-                }
-            });
-
-
-        }
-        if (item.id == 2) {
-            setSelectedFilterItems((prevItems) => {
-                if (prevItems.some((i) => i.id === item.id)) {
-
-                    setFilters((prevFilters) => ({ ...prevFilters, noRestrictions: "false" }));
-                    updateURLParams("noRestrictions", false);
-                    // If item exists (by id), remove it
-                    return prevItems.filter((i) => i.id !== item.id);
-                } else {
-
-
-
-                    setFilters((prevFilters) => ({ ...prevFilters, noRestrictions: "true" }));
-                    updateURLParams("noRestrictions", true);
-
-                    // If item does not exist, add it
-
-                    return [...prevItems, item];
-                }
-            });
-
-        }
-
-
-
-    }
+        // Define a mapping for filter keys based on item ID
+        const filterMap = {
+            1: { key: "freeEntry" },
+            2: { key: "noRestrictions" },
+        };
+    
+        const filter = filterMap[item.id];
+    
+        if (!filter) return; // Exit if item ID is not valid
+    
+        const { key } = filter;
+    
+        setSelectedFilterItems((prevItems) => {
+            const exists = prevItems.some((i) => i.id === item.id);
+            
+            // Update the filter and URL parameters
+            setFilters((prevFilters) => ({
+                ...prevFilters,
+                [key]: exists ? "false" : "true",
+            }));
+            updateURLParams(key, !exists); // Update URL with the opposite state
+    
+            // Return the new selected items array
+            return exists
+                ? prevItems.filter((i) => i.id !== item.id) // Remove item
+                : [...prevItems, item]; // Add item
+        });
+    };
+    
 
 
 

@@ -51,8 +51,8 @@ const ContestDetailsCard = ({
             </div>
 
             {/* Category, Date, and Deadline */}
-            <div className="flex flex-row pb-2">
-                <div className="flex gap-2 flex-row w-8/12  ">
+            <div className="flex flex-row pb-2 justify-between">
+                <div className="flex gap-2 flex-row   ">
                   <CategoryLink category={contestDetails.category}  />
                   <span className="  text-md  lg:text-lg text-gray-400 ">
                     
@@ -62,7 +62,7 @@ const ContestDetailsCard = ({
               
              
               {/* Days Remaining */}
-              <div className='w-4/12 flex ml-auto'>
+              <div className='flex ml-auto'>
               <RemainingDays deadline={contestDetails.deadline} />
               </div>
             </div>
