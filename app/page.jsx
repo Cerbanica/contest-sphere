@@ -2,7 +2,7 @@
 import { useEffect, Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import supabase from "../utils/supabaseClient";
-import { ContestCard, ShareCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm, LeListboxCheckbox } from "./components";
+import { ContestCard, ShareCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm, LeListboxCheckbox, BookmarkButton } from "./components";
 import { prizeRangeList, categoriesList, sortList, loremIpsum, defaultFormData } from '@/app/dataList';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Checkbox } from '@headlessui/react'
 import { ChevronDownIcon, StopIcon } from '@heroicons/react/20/solid';
@@ -317,7 +317,7 @@ export default function Home() {
         }
     };
 
-    const addItem = (item) => {
+    const toggleCheckBox = (item) => {
         // Define a mapping for filter keys based on item ID
         const filterMap = {
             1: { key: "freeEntry" },
@@ -371,26 +371,26 @@ export default function Home() {
  */}                {showDetailsCard && !isModalOpen && !isShareCardOpen && (
                     <div className=" fixed default border  bottom-0 top-0  lg:hidden   z-50 ">
                         <div className="w-full py-4 default border-b items-center flex justify-end text-default-2 text-xl  ">
-
-
-
+                              <div className="flex flex-row default-2 rounded-xl">
+                            <BookmarkButton  isAdded={isAdded} onClick={handleAddUserContest}/>
+                                
                             <button
                                 onClick={() => setIsShareCardOpen(true)}
-                                className=" flex flex-row default-2 items-center px-2 p-1 gap-2 text-lg w-fit rounded-lg  text-default-2">
+                                className=" flex flex-row  items-center px-2 p-1 gap-2 text-lg w-fit rounded-lg  text-default-2">
                                 <ShareIcon className="w-6 h-6  cursor-pointer  text-default-2" /> Share
                             </button>
-                            <button onClick={() => [setShowDetailsCard(false), setShowIcons(false)]} className='  '> <XMarkIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" /> </button>
+                            </div>
+                            <button onClick={() => [setShowDetailsCard(false), setShowIcons(false)]} className=' ml-4 '> <XMarkIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" /> </button>
 
-
+            
 
 
                         </div>
 
                         <ContestDetailsCard
                             contestDetails={contestDetails}
-                            isAdded={isAdded}
-                            handleAddUserContest={handleAddUserContest}
-                            report={handleOpenModal}
+                            
+                            
                             showShareCard={() => setIsShareCardOpen(true)}
 
 
@@ -434,7 +434,7 @@ export default function Home() {
                                                             className="group gap-2 flex cursor-default items-center py-2 px-4 select-none data-[focus]:bg-slate-200 dark:data-[focus]:bg-slate-700"
                                                         >
 
-                                                            <button onClick={() => addItem(item)} className='text-default-2 flex flex-row gap-2 items-center'>
+                                                            <button onClick={() => toggleCheckBox(item)} className='text-default-2 flex flex-row gap-2 items-center'>
                                                                 {selectedFilterItems.some((selectedItem) => selectedItem.id === item.id) ? (
                                                                     <StopIcon className="size-4 text-green-400" />
                                                                 ) : (

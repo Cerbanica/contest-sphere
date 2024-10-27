@@ -14,7 +14,7 @@ const ContestDetailsCard = ({
 
 }) => {
 
- 
+
 
   return (
 
@@ -33,37 +33,46 @@ const ContestDetailsCard = ({
           <div className="flex flex-col w-full pt-2  sticky top-0  border-b   default">
 
             {/* Title and Bookmark */}
-            <div className="flex w-full flex-row items-end justify-between pb-2 mb-2  ">
-              <div className='w-9/12 flex flex-col'>
+            <div className="flex w-full flex-row items-center justify-between pb-2 mb-2  ">
+              <div className=' flex flex-col'>
                 <span className=" font-bold text-3xl overflow-hidden m-0">
                   {contestDetails.title}
                 </span>
                 <a href={"/?search=" + contestDetails.organizer} className='text-lg text-blue-400 -mt-2 underline'>{contestDetails.organizer}</a>
               </div>
-              <BookmarkButton isAdded={isAdded} onClick={() => handleAddUserContest(contestDetails.id)} />
+              <div className='flex-row flex gap-0  justify-end'>
 
-              <button onClick={showShareCard}
-              
-              className=" hidden lg:block  flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
-              <ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
-            </button>
+                <div className=' hidden lg:block '>
+
+                  <BookmarkButton isAdded={isAdded} onClick={() => handleAddUserContest(contestDetails.id)} />
+
+                </div>
+
+                <button onClick={showShareCard}
+
+                  className=" hidden lg:block  flex-row text-lg  rounded-lg p-1 pt-2 text-default-2">
+                  <ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
+                </button>
+
+              </div>
+
 
             </div>
 
             {/* Category, Date, and Deadline */}
-            <div className="flex flex-row pb-2 justify-between">
-                <div className="flex gap-2 flex-row   ">
-                  <CategoryLink category={contestDetails.category}  />
-                  <span className="  text-md  lg:text-lg text-gray-400 ">
-                    
-                    {formatDateManual(contestDetails.startdate, contestDetails.deadline)} 
-                 </span>
-                </div>
-              
-             
+            <div className="flex flex-row  justify-between items-center">
+              <div className="flex gap-2 flex-row   ">
+                <CategoryLink category={contestDetails.category} />
+                <span className="  text-lg  lg:text-lg text-gray-400 ">
+
+                  {formatDateManual(contestDetails.startdate, contestDetails.deadline)}
+                </span>
+              </div>
+
+
               {/* Days Remaining */}
-              <div className='flex ml-auto'>
-              <RemainingDays deadline={contestDetails.deadline} />
+              <div className='flex '>
+                <RemainingDays deadline={contestDetails.deadline} />
               </div>
             </div>
           </div>
@@ -75,28 +84,36 @@ const ContestDetailsCard = ({
             <span className="text-default-2  text-lg text-justify">
               {contestDetails.description}
             </span>
-           
+
           </div>
-          {contestDetails.howToEnter&&
-          <div className="py-4 border-t shadow-inner default">
-            <h1 className='text-default text-center text-2xl font-bold'>How To Enter</h1>
-            <span className="text-default-2  text-lg text-justify">
-              {contestDetails.howToEnter}
-            </span>
-           
-          </div>}
+          {contestDetails.howToEnter &&
+            <div className="py-4 border-t shadow-inner default">
+              <h1 className='text-default text-center text-2xl font-bold'>How To Enter</h1>
+              <span className="text-default-2  text-lg text-justify">
+                {contestDetails.howToEnter}
+              </span>
+
+            </div>}
 
           {/* Prize List */}
           <ListSection title={"List of Other Prizes"} items={contestDetails.prizeList} />
 
           {/* Judges List */}
           <ListSection title={"List of Judges"} items={contestDetails.judges} />
-          <div className=' relative p-4 default-border border-t lg:block'>
+          <div className=' relative  p-4 default-border border-t lg:block'>
+            <div className='flex flex-row gap-2'>
+            <button
+              onClick={report}
+              className="border-green-400 border text-center  w-8/12  text-lg bg-green-600  rounded-lg p-1 pt-2 text-white">
+              Submit Contest
+            </button>
             <button
               onClick={report}
               className="border flex flex-row text-lg default-2 w-fit rounded-lg p-1 pt-2 text-slate-600">
-              Report Contest <FlagIcon className="w-10 h-8 mb-1 cursor-pointer text-default-2" />
+              Report <FlagIcon className="w-10 h-8 mb-1 cursor-pointer text-default-2" />
             </button>
+            
+            </div>
           </div>
 
         </div>

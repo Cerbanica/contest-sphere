@@ -41,18 +41,18 @@ const ListSection = ({ title, items }) => (
 
   const BookmarkButton = ({ isAdded, onClick }) => {
     return (
-      <div className="flex flex-col gap-1 items-end w-3/12 pr-2">
+      <div className="flex flex-col gap-1  w-fit ">
         {isAdded ? (
           <button
             onClick={onClick}
-            className="bg-cs w-fit rounded-lg p-1 pt-2 text-white"
+            className=" w-fit rounded-lg p-1 pt-2 text-default-2"
           >
-            <BookmarkSolid className="w-10 h-8 mb-1 cursor-pointer text-white" />
+            <BookmarkSolid className="w-10 h-8 mb-1 cursor-pointer " />
           </button>
         ) : (
           <button
             onClick={onClick}
-            className="border default-2 w-fit rounded-lg p-1 pt-2 text-slate-600"
+            className="w-fit rounded-lg p-1 pt-2 text-default-2"
           >
             <BookmarkOutline className="w-10 h-8 mb-1 cursor-pointer" />
           </button>
