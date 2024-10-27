@@ -2,68 +2,22 @@
 import { useEffect, Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import supabase from "../utils/supabaseClient";
-import { ContestCard,ShareCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm, LeListbox } from "./components";
+import { ContestCard, ShareCard, ContestDetailsCard, SearchBar, MyListbox, Pagination, ReportFeedbackForm, LeListboxCheckbox } from "./components";
 import { prizeRangeList, categoriesList, sortList, loremIpsum, defaultFormData } from '@/app/dataList';
-import Image from "next/image";
-import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
-import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Checkbox } from '@headlessui/react'
+import { ChevronDownIcon, StopIcon } from '@heroicons/react/20/solid';
+
 import { useAuth } from '@/utils/useAuth';
-import { ShareIcon } from '@heroicons/react/24/solid'
-import {
-    EmailShareButton,
-    FacebookShareButton,
-    GabShareButton,
-    HatenaShareButton,
-    InstapaperShareButton,
-    LineShareButton,
-    LinkedinShareButton,
-    LivejournalShareButton,
-    MailruShareButton,
-    OKShareButton,
-    PinterestShareButton,
-    PocketShareButton,
-    RedditShareButton,
-    TelegramShareButton,
-    TumblrShareButton,
-    TwitterShareButton,
-    ViberShareButton,
-    VKShareButton,
-    WhatsappShareButton,
-    WorkplaceShareButton,
-} from "react-share";
-import {
-    EmailIcon,
-    FacebookIcon,
-    FacebookMessengerIcon,
-    GabIcon,
-    HatenaIcon,
-    InstapaperIcon,
-    LineIcon,
-    LinkedinIcon,
-    LivejournalIcon,
-    MailruIcon,
-    OKIcon,
-    PinterestIcon,
-    PocketIcon,
-    RedditIcon,
-    TelegramIcon,
-    TumblrIcon,
-    TwitterIcon,
-    ViberIcon,
-    VKIcon,
-    WeiboIcon,
-    WhatsappIcon,
-    WorkplaceIcon,
-    XIcon,
-} from "react-share";
+import { ShareIcon, XMarkIcon } from '@heroicons/react/24/solid'
+
 import { Helmet } from 'react-helmet';
 
 export default function Home() {
-    
+
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isShareCardOpen, setIsShareCardOpen]=useState(false);
+    const [isShareCardOpen, setIsShareCardOpen] = useState(false);
     const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
-    const [showIcons,setShowIcons]=useState(false);
+    const [showIcons, setShowIcons] = useState(false);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -75,15 +29,24 @@ export default function Home() {
     const [showContestList, setShowContestList] = useState(true);
 
     const [contestDetails, setContestDetails] = useState(defaultFormData);
-    const [shareUrl,setShareUrl ]=useState(`https://contest-sphere.vercel.app/?contestId=${contestDetails.id}`);
+    const [shareUrl, setShareUrl] = useState(`https://contest-sphere.vercel.app/?contestId=${contestDetails.id}`);
     const [contestList, setContestList] = useState([]);
     const [fetchError, setFetchError] = useState(null);
     const [filters, setFilters] = useState({
         category: '',
         sort: '',
         prize: '',
-        searchTerm: ''
+        searchTerm: '',
+        freeEntry:false,
+        noRestriction:false,
     });
+    const filterItems = [
+        { id: 1, name: 'Free entry' },
+        { id: 2, name: 'No eligibility restrictions' },
+        { id: 3, name: 'Option 3' },
+        { id: 4, name: 'Option 4' },
+    ];
+    const [selectedFilterItems, setSelectedFilterItems] = useState([]);
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPage] = useState(1);
     const searchParams = useSearchParams();
@@ -117,11 +80,14 @@ export default function Home() {
             searchTerm: searchParams.get('search') || '',
             selectedPrizeName: prizeRangeList[parseInt(searchParams.get('prize') || 0)].name,
             contestId: searchParams.get('contestId') || null,
+            freeEntry:searchParams.get('freeEntry') || false,
+            noRestriction:searchParams.get('noRestrictions') || false,
+
         });
 
 
         const fetchContests = async () => {
-
+            
             try {
                 let query = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
 
@@ -158,6 +124,16 @@ export default function Home() {
 
                     setContestList(data);
                 }
+                if(filters.freeEntry==="true"){
+                   
+                    query = query.eq('entryFee', 'Free');
+
+                }
+                if(filters.noRestriction==="true"){
+                    query = query.neq('eligibility', null);
+
+                }
+                
                 const { data, error, count } = await query;
 
 
@@ -193,7 +169,7 @@ export default function Home() {
 
         fetchContests();
 
-    }, [searchParams, start, end]);
+    }, [searchParams, start, end , filters.freeEntry, filters.noRestriction, filters.category]);
     // Function to handle window resize
     function handleWindowSizeChange() {
         setWidth(window.innerWidth);
@@ -214,7 +190,8 @@ export default function Home() {
             viewContestDetails(contestList[0].id);
 
         }
-    }, [isMobile, contestList]);
+       
+    }, [isMobile, contestList, selectedFilterItems]);
 
     // Handle search change
     const handleSearchChange = (searchTerm) => {
@@ -296,11 +273,7 @@ export default function Home() {
 
 
     };
-    const updateUrl = () => {
-       
-        setShareUrl(`Check out this contest -> https://contest-sphere.vercel.app/?contestId=${contestDetails.id}` )
-       
-    };
+   
     const handleAddUserContest = async (contestId) => {
         try {
             if (userAuth) {
@@ -339,73 +312,93 @@ export default function Home() {
             alert(`Unexpected error: ${err.message}`);
         }
     };
-    const handleCopy = () => {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          setCopied(true);
-          setTimeout(() => setCopied(false), 5000); // Reset after 2 seconds
-        }).catch(err => {
-          console.error('Failed to copy text: ', err);
-        });
-      };
 
-      const handleDiscord = () => {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          setCopied(true);
-          setTimeout(() => setCopied(false), 5000); // Reset after 5 seconds
+    const addItem=(item)=>{
+        let filterType ='';
+        if(item.id==1){
+            filterType="freeEntry";
+        }
+        if(item.id==2){
+             filterType="noRestrictions";
+        }
+        setSelectedFilterItems((prevItems) => {
+            if (prevItems.some((i) => i.id === item.id)) {
+                updateURLParams(filterType, false);
+                // If item exists (by id), remove it
+                return prevItems.filter((i) => i.id !== item.id);
+              } else {
+               
+
+
+                updateURLParams(filterType, true);
+                // If item does not exist, add it
+                
+                return [...prevItems, item];
+              }
+          });
+     
+           
+           
+          
+    /* 
+        setSelectedFilterItems((prevSelectedItems) => {
+          if (prevSelectedItems.some((selectedItem) => selectedItem.id === item.id)) {
+            // Item exists, so remove it
     
-          // Open Discord in a new tab or window
-          window.open(`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`, '_blank');
-        }).catch(err => {
-          console.error('Failed to copy text: ', err);
-        });
-      };
+            alert(item, selectedFilterItems);
+            return prevSelectedItems.filter((selectedItem) => selectedItem.id !== item.id);
+          } else {
+            // Item does not exist, so add it
+    
+            alert(item, selectedFilterItems);
+            return [...prevSelectedItems, item];
+          }
+         
+        });  */ }
+ 
+  
 
     return (
-        
+
         <div className="min-h-screen bg-transparent flex flex-row ">
             <div className=" hidden lg:block w-0 lg:w-2/12">L</div>
 
             <div className="flex flex-col w-full lg:w-8/12 mx-auto px-0 ">
-            <Helmet>
-        <meta property="og:title" content={contestDetails.title} />
-        <meta property="og:description" content={contestDetails.description} />
-        <meta property="og:image" content={contestDetails.linkToThumbnail} />
-        <meta property="og:url" content={shareUrl} />
-        <meta property="og:type" content="website" />
-      </Helmet>
-            
+                <Helmet>
+                    <meta property="og:title" content={contestDetails.title} />
+                    <meta property="og:description" content={contestDetails.description} />
+                    <meta property="og:image" content={contestDetails.linkToThumbnail} />
+                    <meta property="og:url" content={shareUrl} />
+                    <meta property="og:type" content="website" />
+                </Helmet>
+
                 <ReportFeedbackForm contestTitle={contestDetails.title} isOpen={isModalOpen} onClose={handleCloseModal} contestId={contestDetails.id} />
-                <ShareCard contestDetails={contestDetails} isOpen={isShareCardOpen} onClose={handleCloseShare}/>
-{/*                 //mobile contest details card
+                <ShareCard contestDetails={contestDetails} isOpen={isShareCardOpen} onClose={handleCloseShare} />
+                {/*                 //mobile contest details card
  */}                {showDetailsCard && !isModalOpen && !isShareCardOpen && (
                     <div className=" fixed default border  bottom-0 top-0  lg:hidden   z-50 ">
-                        <div className="w-full py-3 px-8 default border-b flex justify-between text-default-2 text-xl  ">
-
-                            <button onClick={() => [setShowDetailsCard(false),setShowIcons(false)]} className='  '> X </button>
-                         
-                                <button
-                                    onClick={()=>setIsShareCardOpen(true)}
-                                    className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
-                                    Share <ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
-                                </button>
-
-                            
+                        <div className="w-full py-4 default border-b items-center flex justify-end text-default-2 text-xl  ">
 
 
-                            {/*  <button 
-              
-              className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
-              Share Contest<ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
-            </button> */}
+
+                            <button
+                                onClick={() => setIsShareCardOpen(true)}
+                                className=" flex flex-row default-2 items-center px-2 p-1 gap-2 text-lg w-fit rounded-lg  text-default-2">
+                                <ShareIcon className="w-6 h-6  cursor-pointer  text-default-2" /> Share
+                            </button>
+                            <button onClick={() => [setShowDetailsCard(false), setShowIcons(false)]} className='  '> <XMarkIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" /> </button>
+
+
+
 
                         </div>
-                       
+
                         <ContestDetailsCard
                             contestDetails={contestDetails}
                             isAdded={isAdded}
                             handleAddUserContest={handleAddUserContest}
                             report={handleOpenModal}
-                            showShareCard={()=>setIsShareCardOpen(true)}
+                            showShareCard={() => setIsShareCardOpen(true)}
 
 
                         />
@@ -417,7 +410,7 @@ export default function Home() {
                             <section className="mt-8">
                                 <div className="default border rounded-2xl lg:w-1/2 sm:w-full md:w-5/6 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
                                     <SearchBar onSearchChange={handleSearchChange} initialSearchTerm={filters.searchTerm} />
-                                    
+
                                     <div className="flex flex-col lg:flex-row w-full justify-between gap-2">
                                         <div className="flex-1 "> <MyListbox
                                             items={categoriesList}
@@ -430,11 +423,48 @@ export default function Home() {
                                                 selectedItem={filters.selectedPrizeName}
                                                 onSelect={handlePrizeChange}
                                             /></div>
-                                        <div className="flex-1"> <MyListbox
-                                            items={sortList}
-                                            selectedItem={"Filters"}
-                                            onSelect={handleSortChange}
-                                        /></div>
+                                        <div className="flex-1">
+                                            <Listbox value={filterItems} >
+                                                <ListboxButton className="flex flex-row w-full text-default-2 text-sm text-left py-1.5 px-3 rounded-lg items-center justify-between ">
+                                                    <div className="w-full pr-4 flex items-center truncate">
+                                                        {selectedFilterItems.length > 0 ? `${selectedFilterItems.length} filter(s) selected` : "Filters"}
+                                                    </div>
+                                                    <div className="flex items-center justify-center">
+                                                        <ChevronDownIcon className="size-4" />
+                                                    </div>
+                                                </ListboxButton>
+                                                <ListboxOptions anchor="bottom start" className="mt-2 w-full lg:w-72 default border text-sm text-left rounded-md py-3">
+                                                    {filterItems.map((item) => (
+                                                        <ListboxOption
+                                                            key={item.id}
+                                                            value={item}
+                                                            className="group gap-2 flex cursor-default items-center py-2 px-4 select-none data-[focus]:bg-slate-200 dark:data-[focus]:bg-slate-700"
+                                                        >
+
+                                                            <button onClick={() => addItem(item)} className='text-default-2 flex flex-row gap-2 items-center'>
+                                                                {selectedFilterItems.some((selectedItem) => selectedItem.id === item.id) ? (
+                                                                    <StopIcon className="size-4 text-green-400" />
+                                                                ) : (
+                                                                    <StopIcon className="size-4 text-slate-300 dark:text-slate-500" />
+                                                                )}
+                                                                {item.name}</button>
+                                                        </ListboxOption>
+                                                    ))}
+                                                </ListboxOptions>
+                                            </Listbox>
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
 
                                     </div>
                                 </div>
@@ -497,7 +527,7 @@ export default function Home() {
                                                     isAdded={isAdded}
                                                     handleAddUserContest={handleAddUserContest}
                                                     report={handleOpenModal}
-                                                    showShareCard={()=>setIsShareCardOpen(true)}
+                                                    showShareCard={() => setIsShareCardOpen(true)}
 
                                                 />
                                             </>
