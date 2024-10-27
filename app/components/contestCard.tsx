@@ -7,7 +7,6 @@ import CustomButton from './customButton';
 import Link from 'next/link';
 import { TrophyIcon } from '@heroicons/react/24/solid'
 import { formatDateManual, formatEntry, calculateDaysRemaining } from '@/utils/contestUtils';
-import { CategoryLink } from './contestDetailsCard/components';
 
 
 interface ContestCardProps {
@@ -50,7 +49,9 @@ const ContestCard = ({ contest, onClick }: ContestCardProps) => {
 
           <div className='px-3   flex flex-col w-full pb-2'>
             <div className="flex flex-row align-middle">
-            <CategoryLink category={category} />
+              <a href={`/?category=${category}`} className="self-start text-sm text-blue-500  border border-blue-600   p-1 px-2 rounded-lg">
+                {category}
+              </a>
              
               <span className={`ml-auto text-sm font-bold py-1  ${daysRemaining <= 14 ? "text-red-400" : "text-green-400 "}`}>
               {daysRemaining == 0 ? "Ends Today" : daysRemaining === -1 ? " Closed" :   daysRemaining + " days left"}</span>
@@ -61,7 +62,7 @@ const ContestCard = ({ contest, onClick }: ContestCardProps) => {
         </div>
 
 
-        <div className="w-full flex flex-col pt-1 border-t rounded-br-2xl default-border text-default-2">
+        <div className="w-full flex flex-col pt-1 border-t rounded-b-2xl default text-default-2">
           <span className='text-sm mt-1 text-justify line-clamp-4   px-3 '>{description}</span>
           <div className=" flex flex-row items-center justify-bottom text-center py-2  rounded-br-xl">
             <div className="w-4/12 ">

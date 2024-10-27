@@ -18,7 +18,7 @@ const ContestDetailsCard = ({
 
   return (
 
-    <div className=" sticky lg:top-24  default   border  overflow-y-auto  border-t-0 lg:border-t default  w-full lg:rounded-xl  p-0 lg:pr-2"  style={{ height: "calc(95vh - 4rem)" }}>
+    <div className=" sticky lg:top-24  default   border  overflow-y-auto  border-t-0 lg:border-t default  w-full lg:rounded-xl  p-0 lg:pr-2 h-[calc(100vh-4rem)] lg:h-[calc(95vh-4rem)]"  >
 
       {/* Image Section */}
       <div

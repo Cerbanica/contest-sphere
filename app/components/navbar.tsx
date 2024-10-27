@@ -131,6 +131,7 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Menu: Shows when mobile menu is toggled */}
           {mobileMenuOpen && (
+            
             <div className="absolute top-full left-0 border rounded-b-xl default w-full  lg:hidden shadow-lg">
               <div className="flex flex-col border-b default  ">
                 <div className="flex default  border-b py-2 justify-center ">
