@@ -37,8 +37,8 @@ export default function Home() {
         sort: '',
         prize: '',
         searchTerm: '',
-        freeEntry:false,
-        noRestriction:false,
+        freeEntry: false,
+        noRestrictions: false,
     });
     const filterItems = [
         { id: 1, name: 'Free entry' },
@@ -64,7 +64,7 @@ export default function Home() {
 
         const params = new URLSearchParams(searchParams);
         params.set(key, value);
-        router.push(`/?${params.toString()}`, { shallow: true })
+        router.push(`/?${params.toString()}`, undefined, { shallow: true })
     };
     function handleWindowSizeChange() {
         setWidth(window.innerWidth);
@@ -80,14 +80,14 @@ export default function Home() {
             searchTerm: searchParams.get('search') || '',
             selectedPrizeName: prizeRangeList[parseInt(searchParams.get('prize') || 0)].name,
             contestId: searchParams.get('contestId') || null,
-            freeEntry:searchParams.get('freeEntry') || false,
-            noRestriction:searchParams.get('noRestrictions') || false,
+            freeEntry: searchParams.get('freeEntry') || false,
+            noRestrictions: searchParams.get('noRestrictions') || false,
 
         });
 
 
         const fetchContests = async () => {
-            
+
             try {
                 let query = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
 
@@ -124,16 +124,16 @@ export default function Home() {
 
                     setContestList(data);
                 }
-                if(filters.freeEntry==="true"){
-                   
+                if (filters.freeEntry === "true") {
+
                     query = query.eq('entryFee', 'Free');
 
                 }
-                if(filters.noRestriction==="true"){
-                    query = query.neq('eligibility', null);
+                if (filters.noRestrictions === "true") {
+                    query = query.eq('eligibility', "No");
 
                 }
-                
+
                 const { data, error, count } = await query;
 
 
@@ -166,10 +166,11 @@ export default function Home() {
             }
 
         };
+        console.log('Filters:', filters); // Debugging line
 
         fetchContests();
 
-    }, [searchParams, start, end , filters.freeEntry, filters.noRestriction, filters.category]);
+    }, [start, end, searchParams]);
     // Function to handle window resize
     function handleWindowSizeChange() {
         setWidth(window.innerWidth);
@@ -189,8 +190,9 @@ export default function Home() {
         if (!isMobile && contestList && contestList.length > 0) {
             viewContestDetails(contestList[0].id);
 
+
         }
-       
+
     }, [isMobile, contestList, selectedFilterItems]);
 
     // Handle search change
@@ -227,6 +229,7 @@ export default function Home() {
     };
 
     const viewContestDetails = (contestId) => {
+
         const checkIfContestAdded = async () => {
             if (userAuth) {
                 const { data: existingEntry, error } = await supabase
@@ -270,10 +273,11 @@ export default function Home() {
 
 
         checkIfContestAdded();
+        console.log("eligibility", contestDetails.eligibility)
 
 
     };
-   
+
     const handleAddUserContest = async (contestId) => {
         try {
             if (userAuth) {
@@ -313,50 +317,60 @@ export default function Home() {
         }
     };
 
-    const addItem=(item)=>{
-        let filterType ='';
-        if(item.id==1){
-            filterType="freeEntry";
-        }
-        if(item.id==2){
-             filterType="noRestrictions";
-        }
-        setSelectedFilterItems((prevItems) => {
-            if (prevItems.some((i) => i.id === item.id)) {
-                updateURLParams(filterType, false);
-                // If item exists (by id), remove it
-                return prevItems.filter((i) => i.id !== item.id);
-              } else {
-               
+    const addItem = (item) => {
+
+        if (item.id == 1) {
+            setSelectedFilterItems((prevItems) => {
+                if (prevItems.some((i) => i.id === item.id)) {
+
+                    setFilters((prevFilters) => ({ ...prevFilters, freeEntry: "false" }));
+                    updateURLParams("freeEntry", false);
+                    // If item exists (by id), remove it
+                    return prevItems.filter((i) => i.id !== item.id);
+                } else {
 
 
-                updateURLParams(filterType, true);
-                // If item does not exist, add it
-                
-                return [...prevItems, item];
-              }
-          });
-     
-           
-           
-          
-    /* 
-        setSelectedFilterItems((prevSelectedItems) => {
-          if (prevSelectedItems.some((selectedItem) => selectedItem.id === item.id)) {
-            // Item exists, so remove it
-    
-            alert(item, selectedFilterItems);
-            return prevSelectedItems.filter((selectedItem) => selectedItem.id !== item.id);
-          } else {
-            // Item does not exist, so add it
-    
-            alert(item, selectedFilterItems);
-            return [...prevSelectedItems, item];
-          }
-         
-        });  */ }
- 
-  
+
+                    setFilters((prevFilters) => ({ ...prevFilters, freeEntry: "true" }));
+                    updateURLParams("freeEntry", true);
+
+                    // If item does not exist, add it
+
+                    return [...prevItems, item];
+                }
+            });
+
+
+        }
+        if (item.id == 2) {
+            setSelectedFilterItems((prevItems) => {
+                if (prevItems.some((i) => i.id === item.id)) {
+
+                    setFilters((prevFilters) => ({ ...prevFilters, noRestrictions: "false" }));
+                    updateURLParams("noRestrictions", false);
+                    // If item exists (by id), remove it
+                    return prevItems.filter((i) => i.id !== item.id);
+                } else {
+
+
+
+                    setFilters((prevFilters) => ({ ...prevFilters, noRestrictions: "true" }));
+                    updateURLParams("noRestrictions", true);
+
+                    // If item does not exist, add it
+
+                    return [...prevItems, item];
+                }
+            });
+
+        }
+
+
+
+    }
+
+
+
 
     return (
 
