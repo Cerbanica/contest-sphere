@@ -35,7 +35,7 @@ const ContestDetailsCard = ({
             {/* Title and Bookmark */}
             <div className="flex w-full flex-row items-center justify-between pb-2 mb-2  ">
               <div className=' flex flex-col'>
-                <span className=" font-bold text-3xl overflow-hidden m-0">
+                <span className=" font-bold text-lg lg:text-3xl overflow-hidden m-0">
                   {contestDetails.title}
                 </span>
                 <a href={"/?search=" + contestDetails.organizer} className='text-lg text-blue-400 -mt-2 underline'>{contestDetails.organizer}</a>
@@ -60,10 +60,10 @@ const ContestDetailsCard = ({
             </div>
 
             {/* Category, Date, and Deadline */}
-            <div className="flex flex-row  justify-between items-center">
+            <div className="flex flex-row  justify-between items-center pb-2">
               <div className="flex gap-2 flex-row   ">
                 <CategoryLink category={contestDetails.category} />
-                <span className="  text-lg  lg:text-lg text-gray-400 ">
+                <span className="  text-md  lg:text-lg text-gray-400 ">
 
                   {formatDateManual(contestDetails.startdate, contestDetails.deadline)}
                 </span>
@@ -81,15 +81,15 @@ const ContestDetailsCard = ({
 
           <MainPrizeEntryFee mainPrize={contestDetails.mainPrize} entryFee={contestDetails.entryFee} />
           <div className="py-4 border-t shadow-inner default">
-            <span className="text-default-2  text-lg text-justify">
+            <span className="text-default-2  text-md lg:text-lg text-justify">
               {contestDetails.description}
             </span>
 
           </div>
           {contestDetails.howToEnter &&
             <div className="py-4 border-t shadow-inner default">
-              <h1 className='text-default text-center text-2xl font-bold'>How To Enter</h1>
-              <span className="text-default-2  text-lg text-justify">
+              <h1 className='text-default text-center text-md lg:text-lg font-bold'>How To Enter</h1>
+              <span className="text-default-2 text-md lg:text-lg text-justify">
                 {contestDetails.howToEnter}
               </span>
 
