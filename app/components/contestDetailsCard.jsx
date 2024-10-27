@@ -44,7 +44,7 @@ const ContestDetailsCard = ({
 
               <button onClick={showShareCard}
               
-              className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
+              className=" hidden lg:block  flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
               <ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
             </button>
 
