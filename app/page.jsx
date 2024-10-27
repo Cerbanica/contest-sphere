@@ -382,35 +382,14 @@ export default function Home() {
                         <div className="w-full py-3 px-8 default border-b flex justify-between text-default-2 text-xl  ">
 
                             <button onClick={() => [setShowDetailsCard(false),setShowIcons(false)]} className='  '> X </button>
-                            {showIcons ? (
-                                <div className="default-border flex flex-row items-center p-1 rounded-full gap-2 border">
-                                         {/* Discord Share Button */}
-                                <button
-                                   // href={`https://discord.com/channels/@me?content=${encodeURIComponent(discordShareText)}`}
-                                    onClick={handleDiscord}
-                                    className="flex justify-center items-center p-2 rounded-full bg-blue-600 text-white"
-                                >Discord</button>
-                                        <WhatsappShareButton title={contestDetails.title} separator="->" url={shareUrl} >   <WhatsappIcon size={32} round />
-                                    </WhatsappShareButton>
-                                    <TelegramShareButton
-                                        url={shareUrl}
-                                        title={contestDetails.title}
-                                        className=""
-                                    >
-                                        <TelegramIcon size={32} round />
-                                    </TelegramShareButton>
-                                    <button onClick={handleCopy} className="px-4 py-2 bg-blue-500 text-white rounded">
-                                {copied ? 'Copied!' : 'Copy URL'}
-                                </button>
-                                </div>
-                            ):(
+                         
                                 <button
                                     onClick={()=>setIsShareCardOpen(true)}
                                     className=" flex flex-row text-lg w-fit rounded-lg p-1 pt-2 text-default-2">
-                                    Share Contest<ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
+                                    Share <ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
                                 </button>
 
-                            ) }
+                            
 
 
                             {/*  <button 
