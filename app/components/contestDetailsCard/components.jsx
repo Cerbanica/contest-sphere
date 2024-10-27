@@ -11,11 +11,11 @@ import { categoriesList } from '@/app/dataList';
 // Reusable ListSection Component
 const ListSection = ({ title, items }) => (
     <div className="py-4 border-t default">
-      <h6 className="text-default text-2xl w-full text-center font-bold">{title}</h6>
+      <h6 className="text-default text-xl lg:text-2xl w-full text-center font-bold">{title}</h6>
       {items!==null&&(Array.isArray(items) ? items : JSON.parse(items)).map((item, index) => (
         <div key={index} className="mt-2">
-          <h6 className="text-default-2 text-lg">{item.label}</h6>
-          <span className="text-xl text-default">{item.value}</span>
+          <h6 className="text-default-2 text-md lg:text-lg">{item.label}</h6>
+          <span className="text-lg lg:text-xl text-default">{item.value}</span>
         </div>
       ))}
     </div>

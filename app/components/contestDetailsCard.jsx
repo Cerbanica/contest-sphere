@@ -35,10 +35,10 @@ const ContestDetailsCard = ({
             {/* Title and Bookmark */}
             <div className="flex w-full flex-row items-center justify-between pb-2 mb-2  ">
               <div className=' flex flex-col'>
-                <span className=" font-bold text-lg lg:text-3xl overflow-hidden m-0">
+                <span className=" font-bold text-xl lg:text-3xl overflow-hidden m-0">
                   {contestDetails.title}
                 </span>
-                <a href={"/?search=" + contestDetails.organizer} className='text-lg text-blue-400 -mt-2 underline'>{contestDetails.organizer}</a>
+                <a href={"/?search=" + contestDetails.organizer} className='text-md lg:text-lg text-blue-400 -mt-2 underline'>{contestDetails.organizer}</a>
               </div>
               <div className='flex-row flex gap-0  justify-end'>
 
@@ -60,20 +60,23 @@ const ContestDetailsCard = ({
             </div>
 
             {/* Category, Date, and Deadline */}
-            <div className="flex flex-row  justify-between items-center pb-2">
-              <div className="flex gap-2 flex-row   ">
+            <div className="flex flex-row  justify-between items-center gap-2 pb-2">
+              <div className="flex gap-2 flex-row w-fit  ">
                 <CategoryLink category={contestDetails.category} />
-                <span className="  text-md  lg:text-lg text-gray-400 ">
-
+                
+              </div>
+              <div className='flex flex-row justify-between w-full'>
+              <span className="  text-md  lg:text-lg text-gray-400 ">
                   {formatDateManual(contestDetails.startdate, contestDetails.deadline)}
                 </span>
-              </div>
-
 
               {/* Days Remaining */}
-              <div className='flex '>
+              <div className=' flex'>
                 <RemainingDays deadline={contestDetails.deadline} />
               </div>
+
+              </div>
+              
             </div>
           </div>
 

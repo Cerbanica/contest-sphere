@@ -9,8 +9,8 @@ import { Suspense } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ContestSphere",
-  description: "We the best Music",
+  title: "Contest Sphere",
+  description: "Thousands of contests, all in one place",
 };
 
 
