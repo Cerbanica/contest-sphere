@@ -66,7 +66,7 @@ const ListSection = ({ title, items }) => (
     return(
         
           <span
-          className={`text-right px-3 text-lg font-bold w-full ${daysRemaining <= 14 ? "text-red-400" : "text-green-400 "}`}>
+          className={`text-right px-3 text-md lg:text-lg font-bold w-full ${daysRemaining <= 14 ? "text-red-400" : "text-green-400 "}`}>
             {daysRemaining == 0 ? "Ends Today" : daysRemaining === -1 ? " Closed" :  daysRemaining + " days left"}
           </span>
     )
