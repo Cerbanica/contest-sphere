@@ -203,6 +203,8 @@ const Page = () => {
 
   // Handle contest removal
   const handleRemoveContest = async () => {
+    setTotalItems((prevTotal) => prevTotal - 1);
+    setShowDetailsCard(false);
     const { error } = await supabase
       .from('user_contests')
       .delete()
@@ -212,8 +214,15 @@ const Page = () => {
     if (error) {
       console.error('Error removing contest:', error);
     } else {
-      // Remove the contest from the local state
+      alert(contestDetails.title)
+      if(contestList.length>0){
+          // Remove the contest from the local state
       setContestList(contestList.filter(contest => contest.id !== contestDetails.id));
+      }else{
+        
+        setShowDetailsCard(false);
+      }
+    
     }
   };
 
@@ -228,10 +237,21 @@ const Page = () => {
   // Determine if the screen is mobile-sized
   const isMobile = width <= 768;
   useEffect(() => {
-    if (!isMobile && contestList && contestList.length > 0) {
-      viewContestDetails(contestList[0].id);
+    if (contestList.length > 0) {
+      
+      if(!isMobile){
+        alert("not mobile");
+        viewContestDetails(contestList[0].id);
+       
+      }else{
+        alert(" mobile");
+        viewContestDetails(contestList[0].id);
+        setShowDetailsCard(false); 
+      }
 
 
+    }else{
+      setShowDetailsCard(false);
     }
 
   }, [isMobile, contestList, selectedFilterItems]);
@@ -268,8 +288,11 @@ const Page = () => {
 
 
         setContestDetails(data);
+        if(!isMobile){
 
-        setShowDetailsCard(true);
+          setShowDetailsCard(true);
+        }
+       
 
 
 
@@ -415,7 +438,7 @@ const Page = () => {
                               {/* Button on top left */}
                               <button
                                 className="absolute z-10 top-2 left-2 default-2 items-center text-default-invert px-4 py-2 rounded-lg "
-                                onClick={() => handleRemoveContest(contest.id)}
+                                onClick={()=> handleRemoveContest()}
                               >
                                 <TrashIcon className="w-6 fill-red-400 " />
                               </button>

@@ -11,7 +11,7 @@ export default function AuthForm(){
         view="magic_link"
         showLinks={false}
         providers={google}
-        redirectTo='https://contest-sphere.vercel.app/ '
+        redirectTo="https://localhost:3000/"
         appearance={{
             theme: 'dark',  
             button: {
