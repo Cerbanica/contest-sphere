@@ -31,7 +31,7 @@ const ListSection = ({ title, items }) => (
     
       <a 
       href={`/?category=${category}`}
-      className={` border font-bold bg-opacity-20 text-sm p-1  px-2 rounded-lg ${
+      className={` border whitespace-nowrap font-bold bg-opacity-20 text-sm p-1  px-2 min-w-fit rounded-lg ${
         selectedCategory.colour }`}
     >
       {category}

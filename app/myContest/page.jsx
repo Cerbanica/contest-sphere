@@ -286,8 +286,13 @@ const Page = () => {
 
 
 
+  // State to keep track of the active button
+  const [activeButton, setActiveButton] = useState(1);
 
-
+  // Function to handle button click and set the active button
+  const handleButtonClick = (buttonIndex) => {
+    setActiveButton(buttonIndex);
+  };
 
 
 
@@ -333,11 +338,35 @@ const Page = () => {
           </div>)}
         {showContestList && (
           <div className="lg:px-2">
-            <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center text-4xl lg:text-6xl p-2 lg:p-8 pb-2  ">
-              <div className="font-bold text-white"> <h1>Thousands of Contests</h1><h1>All in One Place</h1></div>
-              <section className="mt-8">
-                <div className="default border rounded-2xl lg:w-1/2 sm:w-full md:w-5/6 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">
-                  <h1 className="default-2">Tabs</h1>
+            <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center lg:text-6xl p-2 lg:p-8 pb-2  ">
+              <div className="font-bold text-white text-4xl "> <h1>My Contests</h1></div>
+              <section className="mt-8 mb-2 lg:mb-0">
+                <div className="default border lg:flex-row rounded-2xl lg:w-1/2 w-full  flex flex-row justify-center items-center gap-2 p-2 mt-2 mx-auto ">
+               
+                  <button
+                    onClick={() => handleButtonClick(1)}
+                    className={`flex-1 p-1 text-md lg:text-lg rounded-lg ${
+                      activeButton === 1 ? 'bg-cs text-white' : ' text-default-2'
+                    }`}
+                  >
+                    On Going
+                  </button>
+                  <button
+                    onClick={() => handleButtonClick(2)}
+                    className={`flex-1 p-1 text-md lg:text-lg rounded-lg ${
+                      activeButton === 2 ? 'bg-cs text-white' : ' text-default-2'
+                    }`}
+                  >
+                    Ended
+                  </button>
+                  <button
+                    onClick={() => handleButtonClick(3)}
+                    className={`flex-1 p-1 text-md lg:text-lg rounded-lg ${
+                      activeButton === 3 ? 'bg-cs text-white' : ' text-default-2'
+                    }`}
+                  >
+                    Created
+                  </button>
                 </div>
               </section>
             </div>
@@ -349,7 +378,7 @@ const Page = () => {
                           </div> */}
 
               {contestList.length > 0 ? (
-                <div className="flex flex-row gap-4 mt-4  p-1">
+                <div className="flex flex-row gap-4   p-1">
 
 
                   <div className="flex-1 ">

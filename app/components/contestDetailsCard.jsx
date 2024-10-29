@@ -61,7 +61,7 @@ const ContestDetailsCard = ({
 
             {/* Category, Date, and Deadline */}
             <div className="flex flex-row  justify-between items-center gap-2 pb-2">
-              <div className="flex gap-2 flex-row w-fit  ">
+              <div className="flex gap-2 flex-row   ">
                 <CategoryLink category={contestDetails.category} />
                 
               </div>
