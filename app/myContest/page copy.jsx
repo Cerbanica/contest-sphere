@@ -74,7 +74,10 @@ const Page = () => {
          <hr className="border-t-1 border-cs w-full lg:w-1/2" />
       </div>
     
-      <div className=" flex flex-col  justify-items-center items-center gap-2  lg:w-1/2 sm:w-11/12 mt-2 ">        {contests.map(contest => (
+      <div className=" flex flex-col  justify-items-center items-center gap-2  lg:w-1/2 sm:w-11/12 mt-2 ">      
+      
+      
+        {contests.map(contest => (
           <>
           <div key={contest.id} className=" rounded-2xl bg-gray-100 dark:bg-transparent dark:border dark:border-gray-700">
           <div className="relative  rounded-2xl">
@@ -88,8 +91,7 @@ const Page = () => {
       </button>
           <ContestCard contest={contest} />
           
-         
-            
+                  
       </div>
       </div>
       

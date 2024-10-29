@@ -62,8 +62,8 @@ const LeListbox = ({ items, selectedItem, onSelect }) => {
   );
 };
 
-const LeListboxCheckbox = ({ items, selectedItem, onSelect }) => {
-  const [selectedItems, setSelectedItems] = useState([]);
+const LeListboxCheckbox = ({ items, selected, onSelect }) => {
+  const [selectedItems, setSelectedItems] = useState(selected);
 
   const addItem=(item)=>{
     

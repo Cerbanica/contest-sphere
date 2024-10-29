@@ -23,7 +23,7 @@ const Page = () => {
   const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
   const [showIcons, setShowIcons] = useState(false);
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = () => {setIsModalOpen(true)};
   const handleCloseModal = () => setIsModalOpen(false);
   const handleCloseShare = () => setIsShareCardOpen(false);
   const userAuth = useAuth(); 
@@ -348,7 +348,7 @@ const Page = () => {
 
             <ContestDetailsCard
               contestDetails={contestDetails}
-
+              report={handleOpenModal}
 
               showShareCard={() => setIsShareCardOpen(true)}
 

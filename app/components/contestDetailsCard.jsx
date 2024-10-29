@@ -44,7 +44,7 @@ const ContestDetailsCard = ({
 
                 <div className=' hidden lg:block '>
 
-                  <BookmarkButton isAdded={isAdded} onClick={() => handleAddUserContest(contestDetails.id)} />
+                  <BookmarkButton isAdded={isAdded} onClick={() => handleAddUserContest()} />
 
                 </div>
 

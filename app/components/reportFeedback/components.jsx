@@ -78,7 +78,7 @@ const ReportFeedbackForm = ({ contestTitle, isOpen, onClose, contestId }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-900 backdrop-blur-md bg-opacity-60 flex items-center justify-center z-50">
-      <form onSubmit={handleFormSubmit} className="overflow-y-auto default m-4 flex flex-col border rounded-lg shadow-lg max-w-lg w-full">
+      <form onSubmit={handleFormSubmit} className="overflow-y-auto max-h-[90vh] default m-4 flex flex-col border rounded-lg shadow-lg max-w-lg w-full">
         <div className="relative">
           <button
             onClick={onClose}
@@ -106,12 +106,7 @@ const ReportFeedbackForm = ({ contestTitle, isOpen, onClose, contestId }) => {
 
          
           <label htmlFor="category" className="block text-lg text-default-2 mt-4">Category</label>
-          <LeTextInput
-            title="Category"
-            name="category"
-            value={reportDetails.category}
-            onChange={handleFormChange}
-          />
+          
           </>
         )}
 
