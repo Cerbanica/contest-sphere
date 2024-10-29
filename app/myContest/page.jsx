@@ -428,12 +428,12 @@ const Page = () => {
 
                         <div className="bg-slate-300 dark:bg-slate-950 p-2 lg:bg-transparent lg:p-0" key={contest.id} >
 
-                          <div key={contest.id} className=" rounded-2xl bg-gray-100 dark:bg-transparent dark:border dark:border-gray-700">
-                            <div className="relative  rounded-2xl">
+{/*                          // <div key={contest.id} className=" rounded-2xl bg-gray-100 dark:bg-transparent dark:border-0 dark:border-gray-700">
+ */}                            <div key={contest.id} className="relative  rounded-2xl">
 
                               {/* Button on top left */}
                               <button
-                                className="absolute z-10 top-2 left-2 default-2 items-center text-default-invert px-4 py-2 lg:p-0 lg:m-0 rounded-lg "
+                                className="absolute z-10 top-2 left-2 default backdrop-blur-md items-center text-default-invert px-4 py-2 lg:p-2 lg:m-0 rounded-lg "
                                 onClick={()=> handleRemoveContest()}
                               >
                                 <TrashIcon className="icon-warning " />
@@ -443,8 +443,8 @@ const Page = () => {
 
                             </div>
                           </div>                                              
-                          </div>
-                      ))}
+/*                           </div>
+ */                      ))}
                     </div>
 
                     <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
