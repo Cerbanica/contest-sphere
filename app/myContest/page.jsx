@@ -272,7 +272,7 @@ const Page = () => {
   };
 
   const viewContestDetails = (contestId) => {
-
+      setShowDetailsCard(true);
     
     const fetchContest = async () => {
       const { data, error } = await supabase
@@ -288,10 +288,6 @@ const Page = () => {
 
 
         setContestDetails(data);
-        if(!isMobile){
-
-          setShowDetailsCard(true);
-        }
        
 
 

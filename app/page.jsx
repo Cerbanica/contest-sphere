@@ -390,7 +390,7 @@ export default function Home() {
                         <ContestDetailsCard
                             contestDetails={contestDetails}
                             
-                            
+                            report={handleOpenModal}
                             showShareCard={() => setIsShareCardOpen(true)}
 
 
