@@ -278,7 +278,7 @@ export default function Home() {
 
     };
 
-    const handleAddUserContest = async (contestId) => {
+    const handleAddUserContest = async () => {
         try {
             if (userAuth) {
                 if (isAdded) {
@@ -287,7 +287,7 @@ export default function Home() {
                         .from('user_contests')
                         .delete()
                         .eq('email', userAuth.email)
-                        .eq('contest_id', contestId);
+                        .eq('contest_id', contestDetails.id);
 
                     if (error) {
                         alert(`Error: ${error.message}`);
@@ -299,7 +299,7 @@ export default function Home() {
                     // Add contest
                     const { error } = await supabase
                         .from('user_contests')
-                        .insert([{ email: userAuth.email, contest_id: contestId }]);
+                        .insert([{ email: userAuth.email, contest_id: contestDetails.id }]);
 
                     if (error) {
                         alert(`Error: ${error.message}`);

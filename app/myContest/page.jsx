@@ -202,18 +202,18 @@ const Page = () => {
 
 
   // Handle contest removal
-  const handleRemoveContest = async (contestId) => {
+  const handleRemoveContest = async () => {
     const { error } = await supabase
       .from('user_contests')
       .delete()
       .eq('email', user.email)
-      .eq('contest_id', contestId);
+      .eq('contest_id', contestDetails.id);
 
     if (error) {
       console.error('Error removing contest:', error);
     } else {
       // Remove the contest from the local state
-      setContestList(contestList.filter(contest => contest.id !== contestId));
+      setContestList(contestList.filter(contest => contest.id !== contestDetails.id));
     }
   };
 
