@@ -193,7 +193,7 @@ const Page = () => {
     fetchContest2();
 
     setTotalItems(contestList2.length);
-    setTotalPage(Math.ceil(totalItems / itemsPerPage));
+    setTotalPage(Math.ceil(contestList2.length / itemsPerPage));
 }, [ contestList2, filters.sort]);
 
 
@@ -214,7 +214,7 @@ const Page = () => {
     if (error) {
       console.error('Error removing contest:', error);
     } else {
-      alert(contestDetails.title)
+     // alert(contestDetails.title)
       if(contestList.length>0){
           // Remove the contest from the local state
       setContestList(contestList.filter(contest => contest.id !== contestDetails.id));
@@ -240,11 +240,11 @@ const Page = () => {
     if (contestList.length > 0) {
       
       if(!isMobile){
-        alert("not mobile");
+        //alert("not mobile");
         viewContestDetails(contestList[0].id);
        
       }else{
-        alert(" mobile");
+       // alert(" mobile");
         viewContestDetails(contestList[0].id);
         setShowDetailsCard(false); 
       }
