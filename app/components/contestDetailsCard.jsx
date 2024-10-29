@@ -105,15 +105,15 @@ const ContestDetailsCard = ({
           <ListSection title={"List of Judges"} items={contestDetails.judges} />
           <div className=' relative  p-4 default-border border-t lg:block'>
             <div className='flex flex-col gap-2'>
-            <button
-              onClick={report}
+            <a
+              href='https://www.youtube.com/watch?v=DxbVeHpQU7I&t=29479s'
               className=" min-w-72 button-primary ">
-              Submit Contest
-            </button>
+              Enter Contest
+            </a>
             <button
               onClick={report}
-              className=" min-w-72 button-secondary">
-              Report <FlagIcon className="button-icon" />
+              className=" min-w-72 button-secondary text-md gap-4">
+               <FlagIcon className="w-8 h-6" /> Report 
             </button>
             
             
