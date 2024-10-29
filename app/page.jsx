@@ -89,7 +89,7 @@ export default function Home() {
         const fetchContests = async () => {
 
             try {
-                let query = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
+                let query = supabase.from('contests').select('id, title, linkToThumbnail,created_at ,prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
 
                 // Filter by category
                 if (filters.category && filters.category != "All Categories") {
