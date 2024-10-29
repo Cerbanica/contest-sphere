@@ -496,11 +496,11 @@ export default function Home() {
 
 
                                         </div>
-                                        <div className=" flex flex-col  gap-0 lg:gap-2  w-full  ">
+                                        <div className=" flex flex-col  gap-0 lg:gap-1  w-full  ">
 
                                             {contestList.map((contest) => (
 
-                                                <div className="bg-slate-300 dark:bg-slate-950 p-2 lg:bg-transparent lg:pb-0" key={contest.id} >
+                                                <div className="bg-slate-300 dark:bg-slate-950 p-2 lg:p-0 lg:bg-transparent " key={contest.id} >
                                                     <ContestCard contest={contest} onClick={viewContestDetails} />
                                                 </div>
                                             ))}

@@ -3,9 +3,7 @@
 import { ContestProps } from '@/types';
 import Image from 'next/image'
 import React, { useState } from 'react'
-import CustomButton from './customButton';
-import Link from 'next/link';
-import { TrophyIcon } from '@heroicons/react/24/solid'
+
 import { formatDateManual, formatEntry, calculateDaysRemaining } from '@/utils/contestUtils';
 import { CategoryLink } from './contestDetailsCard/components';
 

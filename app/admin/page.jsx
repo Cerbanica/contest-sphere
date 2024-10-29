@@ -343,8 +343,8 @@ const page = () => {
 
                                 </div>
                                 <div className="flex-1 default flex flex-col gap-2 w-full justify-center">Others
-                                    <button onClick={() => approveReject(contestDetails.id, "On Going")} className=' p-2 rounded  min-w-72 border-green-400 border bg-green-600 dark:bg-green-700 text-white text-lg font-bold'>Approve</button>
-                                    <button onClick={() => approveReject(contestDetails.id, "Denied")} className='min-w-72 border default text-default text-lg font-bold p-2  '>Reject</button>
+                                    <button onClick={() => approveReject(contestDetails.id, "On Going")} className='  min-w-72 button-primary'>Approve</button>
+                                    <button onClick={() => approveReject(contestDetails.id, "Denied")} className='min-w-72 button-warning '>Reject</button>
 
 
                                 </div>

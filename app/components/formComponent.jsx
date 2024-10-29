@@ -105,7 +105,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
         <button
           type="button"
           onClick={addItem}
-          className="mt-4 px-4 py-2 mx-auto bg-green-500 text-white rounded-md"
+          className="button-primary"
         >
           Add {itemType}
         </button>
@@ -207,10 +207,10 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
           />
 
           <div className='flex flex-col mt-2 gap-2 items-center w-full justify-center'>
-            <button type="submit" className='p-2 rounded-lg min-w-72 bg-green-700 text-default text-lg font-bold'>
+            <button type="submit" className='button-primary min-w-72'>
               Submit
             </button>
-            <button type="button" onClick={onClose} className='min-w-72 border border-green-700 text-default text-lg font-bold p-2 rounded-lg'>
+            <button type="button" onClick={onClose} className='min-w-72 border button-secondary'>
               Cancel
             </button>
           </div>

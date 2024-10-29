@@ -105,7 +105,7 @@ const ShareCard = ({ contestDetails, isOpen, onClose }) => {
                             onClick={handleCopy}
                             className="p-2 default-2 rounded-r-lg"
                         >
-                            <DocumentDuplicateIcon className="w-8 h-6 mb-1 cursor-pointer  text-default-2" />
+                            <DocumentDuplicateIcon className="button-icon" />
                         </button>
                     </div>
                     <div className="default border-t">
@@ -160,7 +160,7 @@ const ShareCard = ({ contestDetails, isOpen, onClose }) => {
 
                     <div className='flex flex-col m-2  items-center w-full justify-center'>
 
-                        <button type="button" onClick={onClose} className='min-w-72 text-default text-lg font-bold p-2 rounded-lg'>
+                        <button type="button" onClick={onClose} className='min-w-72 button-secondary'>
                             Close
                         </button>
                     </div>

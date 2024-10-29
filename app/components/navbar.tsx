@@ -101,6 +101,7 @@ const Navbar: React.FC = () => {
 
           {/* Center Section: Menu Items (hidden on mobile) */}
           <div className="hidden lg:flex  justify-center items-center space-x-4">
+          <a href="/" className='text-center default'>Categories</a>
             <a href="/createContestPage" className='text-center default'>Post Contest</a>
             <button className='default ' onClick={handleOpenModal}>Give Feedback</button>
             <button className='default ' onClick={handleOpenModal}>About Us</button>
@@ -132,8 +133,13 @@ const Navbar: React.FC = () => {
           {/* Mobile Menu: Shows when mobile menu is toggled */}
           {mobileMenuOpen && (
             
-            <div className="absolute top-full left-0 border rounded-b-xl default w-full  lg:hidden shadow-lg">
+            <div  onClick={toggleMobileMenu} className="absolute bg-gray-900/60  h-[100vh] top-full left-0  rounded-b-xl  w-full  lg:hidden shadow-lg">
               <div className="flex flex-col border-b default  ">
+              <a href="/" className='default py-2 border-b border-t text-center'>Home</a>
+
+               
+                <a href="/createContestPage" className='default py-2 border-b rounded-lg text-center'>Post Contest</a>
+                <button className='default py-2 border-b rounded-lg text-center ' onClick={handleOpenModal}>Give Feedback</button>
                 <div className="flex default  border-b py-2 justify-center ">
                   <button
                     onClick={toggleTheme}
@@ -142,9 +148,6 @@ const Navbar: React.FC = () => {
 
                   </button>
                 </div>
-                <a href="/createContestPage" className='default py-2 border-b rounded-lg text-center'>Post Contest</a>
-                <button className='default py-2 border-b rounded-lg text-center ' onClick={handleOpenModal}>Give Feedback</button>
-
                 {user ? (
                   <a href="/myContest" className='default py-2 border-b text-center'>My Contest</a>
                 ) : ''}
@@ -156,6 +159,7 @@ const Navbar: React.FC = () => {
                 ) : (
                   <Link href="/login" className="default py-2 border-b text-center">Login</Link>
                 )}
+                
 
                 <button
                   onClick={toggleMobileMenu}

@@ -84,7 +84,7 @@ const page = () => {
             <button
               onClick={handleSignIn}
               disabled={loading}
-              className={`w-full mt-auto mb-12 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-md transition duration-300 ${
+              className={`w-full mt-auto mb-12 button-secondary transition duration-300 ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >

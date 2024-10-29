@@ -32,9 +32,26 @@ const LeGeminiAnalyzer = ({ handleSubmit }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if(files.length>10){
+      alert("Too many files! Max 10 files only.")
+      return;
+    }
+    if(getWordCount(textInput)>5000){
+      alert("Too many words! Max 5000 words only.")
+      return;
+    }
     handleSubmit({ files, textInput });
   };
+  function getWordCount(userInput) {
+    // Trim extra spaces from the start and end
+    const trimmedInput = userInput.trim();
 
+    // Split by one or more whitespace characters and filter out any empty results
+    const words = trimmedInput.split(/\s+/).filter(word => word.length > 0);
+
+    // Return the word count
+    return words.length;
+}
   return (
     <div className="flex flex-col default">
       <h1 className="text-3xl  font-bold text-cs  text-center">

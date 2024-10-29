@@ -18,10 +18,10 @@ const ReportFeedbackCard = ({ reportFeedback, fixed, dismiss }) => {
       </span>
       
       <div className='flex flex-row gap-2 items-center mt-auto w-full justify-center'>
-        <button onClick={() => fixed(reportFeedback.id)} className='p-2 rounded-lg min-w-72 bg-green-700 text-default text-lg font-bold'>
+        <button onClick={() => fixed(reportFeedback.id)} className='button-primary min-w-72 '>
           Fixed
         </button>
-        <button onClick={() => dismiss(reportFeedback.id)} className='min-w-72 border border-green-700 text-default text-lg font-bold p-2 rounded-lg'>
+        <button onClick={() => dismiss(reportFeedback.id)} className='min-w-72 button-warning'>
           Dismiss
         </button>
       </div>
@@ -120,10 +120,10 @@ const ReportFeedbackForm = ({ contestTitle, isOpen, onClose, contestId }) => {
           />
 
           <div className='flex flex-col mt-2 gap-2 items-center w-full justify-center'>
-            <button type="submit" className='p-2 rounded-lg min-w-72 bg-green-700 text-default text-lg font-bold'>
+            <button type="submit" className='min-w-72 button-primary'>
               Submit
             </button>
-            <button type="button" onClick={onClose} className='min-w-72 border border-green-700 text-default text-lg font-bold p-2 rounded-lg'>
+            <button type="button" onClick={onClose} className='min-w-72 button-secondary'>
               Cancel
             </button>
           </div>

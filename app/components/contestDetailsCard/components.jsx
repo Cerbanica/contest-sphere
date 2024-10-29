@@ -47,14 +47,14 @@ const ListSection = ({ title, items }) => (
             onClick={onClick}
             className=" w-fit rounded-lg p-1 pt-2 text-default-2"
           >
-            <BookmarkSolid className="w-10 h-8 mb-1 cursor-pointer " />
+            <BookmarkSolid className="button-icon " />
           </button>
         ) : (
           <button
             onClick={onClick}
             className="w-fit rounded-lg p-1 pt-2 text-default-2"
           >
-            <BookmarkOutline className="w-10 h-8 mb-1 cursor-pointer" />
+            <BookmarkOutline className="button-icon" />
           </button>
         )}
       </div>

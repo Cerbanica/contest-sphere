@@ -51,7 +51,7 @@ const ContestDetailsCard = ({
                 <button onClick={showShareCard}
 
                   className=" hidden lg:block  flex-row text-lg  rounded-lg p-1 pt-2 text-default-2">
-                  <ShareIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" />
+                  <ShareIcon className="button-icon" />
                 </button>
 
               </div>
@@ -107,14 +107,15 @@ const ContestDetailsCard = ({
             <div className='flex flex-row gap-2'>
             <button
               onClick={report}
-              className="border-green-400 border text-center  w-8/12  text-lg bg-green-600  rounded-lg p-1 pt-2 text-white">
+              className="w-8/12 button-primary ">
               Submit Contest
             </button>
             <button
               onClick={report}
-              className="border flex flex-row text-lg default-2 w-fit rounded-lg p-1 pt-2 text-slate-600">
-              Report <FlagIcon className="w-10 h-8 mb-1 cursor-pointer text-default-2" />
+              className=" w-fit  button-secondary">
+              Report <FlagIcon className="button-icon" />
             </button>
+            
             
             </div>
           </div>
