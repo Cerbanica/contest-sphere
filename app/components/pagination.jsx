@@ -39,7 +39,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
   }
 
   return (
-    <div className="flex flex-row w-full justify-center mx-auto  m-4">
+    <div className="flex flex-row w-full justify-center mx-auto  lg:m-4">
     <div className="w-auto p-2 rounded-2xl default border flex items-center justify-center">
       {/* Render previous button only if it's not disabled */}
       {currentPage > 1 && (

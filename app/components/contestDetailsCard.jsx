@@ -104,15 +104,15 @@ const ContestDetailsCard = ({
           {/* Judges List */}
           <ListSection title={"List of Judges"} items={contestDetails.judges} />
           <div className=' relative  p-4 default-border border-t lg:block'>
-            <div className='flex flex-row gap-2'>
+            <div className='flex flex-col gap-2'>
             <button
               onClick={report}
-              className="w-8/12 button-primary ">
+              className=" min-w-72 button-primary ">
               Submit Contest
             </button>
             <button
               onClick={report}
-              className=" w-fit  button-secondary">
+              className=" min-w-72 button-secondary">
               Report <FlagIcon className="button-icon" />
             </button>
             

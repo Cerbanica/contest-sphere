@@ -422,11 +422,11 @@ const Page = () => {
 
 
                     </div>
-                    <div className=" flex flex-col  gap-0   w-full  ">
+                    <div className=" flex flex-col  gap-0  bg-slate-300 dark:bg-slate-950 lg:bg-transparent w-full  ">
 
                       {contestList.map((contest) => (
 
-                        <div className="bg-slate-300 dark:bg-slate-950 p-2 lg:bg-transparent lg:p-0" key={contest.id} >
+                        <div className=" p-2  lg:p-0" key={contest.id} >
 
 {/*                          // <div key={contest.id} className=" rounded-2xl bg-gray-100 dark:bg-transparent dark:border-0 dark:border-gray-700">
  */}                            <div key={contest.id} className="relative  rounded-2xl">
@@ -445,9 +445,10 @@ const Page = () => {
                           </div>                                              
 /*                           </div>
  */                      ))}
+                     <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
+
                     </div>
 
-                    <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
                   </div>
 
                   <div className="flex-1  hidden lg:block   ">

@@ -323,30 +323,30 @@ export default function Home() {
             1: { key: "freeEntry" },
             2: { key: "noRestrictions" },
         };
-    
+
         const filter = filterMap[item.id];
-    
+
         if (!filter) return; // Exit if item ID is not valid
-    
+
         const { key } = filter;
-    
+
         setSelectedFilterItems((prevItems) => {
             const exists = prevItems.some((i) => i.id === item.id);
-            
+
             // Update the filter and URL parameters
             setFilters((prevFilters) => ({
                 ...prevFilters,
                 [key]: exists ? "false" : "true",
             }));
             updateURLParams(key, !exists); // Update URL with the opposite state
-    
+
             // Return the new selected items array
             return exists
                 ? prevItems.filter((i) => i.id !== item.id) // Remove item
                 : [...prevItems, item]; // Add item
         });
     };
-    
+
 
 
 
@@ -371,25 +371,25 @@ export default function Home() {
  */}                {showDetailsCard && !isModalOpen && !isShareCardOpen && (
                     <div className=" fixed default border  bottom-0 top-0  lg:hidden   z-50 ">
                         <div className="w-full py-4 default border-b items-center flex justify-end text-default-2 text-xl  ">
-                              <div className="flex flex-row default-2 rounded-xl">
-                            <BookmarkButton  isAdded={isAdded} onClick={handleAddUserContest}/>
-                                
-                            <button
-                                onClick={() => setIsShareCardOpen(true)}
-                                className=" flex flex-row  items-center px-2 p-1 gap-2 text-lg w-fit rounded-lg  text-default-2">
-                                <ShareIcon className="w-6 h-6  cursor-pointer  text-default-2" /> Share
-                            </button>
+                            <div className="flex flex-row default-2 rounded-xl">
+                                <BookmarkButton isAdded={isAdded} onClick={handleAddUserContest} />
+
+                                <button
+                                    onClick={() => setIsShareCardOpen(true)}
+                                    className=" flex flex-row  items-center px-2 p-1 gap-2 text-lg w-fit rounded-lg  text-default-2">
+                                    <ShareIcon className="w-6 h-6  cursor-pointer  text-default-2" /> Share
+                                </button>
                             </div>
                             <button onClick={() => [setShowDetailsCard(false), setShowIcons(false)]} className=' ml-4 '> <XMarkIcon className="w-10 h-8 mb-1 cursor-pointer  text-default-2" /> </button>
 
-            
+
 
 
                         </div>
 
                         <ContestDetailsCard
                             contestDetails={contestDetails}
-                            
+
                             report={handleOpenModal}
                             showShareCard={() => setIsShareCardOpen(true)}
 
@@ -496,17 +496,18 @@ export default function Home() {
 
 
                                         </div>
-                                        <div className=" flex flex-col  gap-0 lg:gap-1  w-full  ">
+                                        <div className=" flex flex-col  gap-0 lg:gap-1  w-full  bg-slate-300 dark:bg-slate-950 lg:bg-transparent pb-2">
 
                                             {contestList.map((contest) => (
 
-                                                <div className="bg-slate-300 dark:bg-slate-950 p-2 lg:p-0 lg:bg-transparent " key={contest.id} >
+                                                <div className=" p-2 lg:p-0  " key={contest.id} >
                                                     <ContestCard contest={contest} onClick={viewContestDetails} />
                                                 </div>
                                             ))}
+                                            <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
+
                                         </div>
 
-                                        <Pagination totalPages={totalPages} currentPage={page} onPageChange={handlePageChange} />
                                     </div>
 
                                     <div className="flex-1 hidden lg:block   ">
@@ -533,7 +534,7 @@ export default function Home() {
  */}                                </div>
                             ) : (
                                 !fetchError && (
-                                    <h1 className="default">No contest</h1>
+                                    <h1 className="default p-10">No contest</h1>
                                 )
                             )}
                         </section>
