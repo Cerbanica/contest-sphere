@@ -80,7 +80,7 @@ const ListSection = ({ title, items }) => (
             <div className="flex-1">
               <div className="flex flex-col text-start">
                 <span className="text-default-2 text-sm">Entry Fee</span>
-                <span className="text-3xl text-default">
+                <span className="text-2xl lg:text-3xl text-default">
                   {formatEntry(entryFee)}
                 </span>
               </div>
@@ -89,7 +89,7 @@ const ListSection = ({ title, items }) => (
               <div className="flex flex-col px-3 justify-end">
                 <span className="text-default-2 text-sm text-end">Main Prize</span>
                 <div className="flex flex-row justify-end">
-                  <span className="font-bold text-3xl text-cs">
+                  <span className="font-bold text-2xl lg:text-3xl text-cs">
                     {mainPrize}
                   </span>
                 </div>
