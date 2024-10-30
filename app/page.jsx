@@ -370,7 +370,7 @@ export default function Home() {
                 {/*                 //mobile contest details card
  */}                {showDetailsCard && !isModalOpen && !isShareCardOpen && (
                     <div className=" fixed default border  bottom-0 top-0  lg:hidden   z-50 ">
-                        <div className="w-full py-4 default border-b items-center flex justify-end text-default-2 text-xl  ">
+                        <div className="w-full py-1.5 default border-b items-center flex justify-end text-default-2 text-xl  ">
                             <div className="flex flex-row default-2 rounded-xl">
                                 <BookmarkButton isAdded={isAdded} onClick={handleAddUserContest} />
 
