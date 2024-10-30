@@ -34,10 +34,12 @@ const LeGeminiAnalyzer = ({ handleSubmit }) => {
     e.preventDefault();
     if(files.length>10){
       alert("Too many files! Max 10 files only.")
+      setFiles([]);
       return;
     }
     if(getWordCount(textInput)>5000){
       alert("Too many words! Max 5000 words only.")
+      setTextInput('');
       return;
     }
     handleSubmit({ files, textInput });

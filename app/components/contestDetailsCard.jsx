@@ -83,15 +83,15 @@ const ContestDetailsCard = ({
 
 
           <MainPrizeEntryFee mainPrize={contestDetails.mainPrize} entryFee={contestDetails.entryFee} />
-          <div className="py-4 border-t shadow-inner default">
+          <div className="py-4 border-t s default">
             <span className="text-default-2  text-md lg:text-lg text-justify">
               {contestDetails.description}
             </span>
 
           </div>
           {contestDetails.howToEnter &&
-            <div className="py-4 border-t shadow-inner default">
-              <h1 className='text-default text-center text-md lg:text-lg font-bold'>How To Enter</h1>
+            <div className="py-4 border-t default">
+              <h1 className='text-default text-center text-lg lg:text-xl font-bold'>How To Enter</h1>
               <span className="text-default-2 text-md lg:text-lg text-justify">
                 {contestDetails.howToEnter}
               </span>
@@ -103,16 +103,27 @@ const ContestDetailsCard = ({
 
           {/* Judges List */}
           <ListSection title={"List of Judges"} items={contestDetails.judges} />
+         
+            <div className="py-4 border-t default">
+              <h1 className='text-default text-center text-lg lg:text-xl font-bold'>Eligibility and Restrictions</h1>
+              <span className="text-default-2 text-md lg:text-lg text-justify">
+                {contestDetails.eligibility?contestDetails.eligibility:"Open to All"}
+              </span>
+
+            </div>
+
           <div className=' relative  p-4 default-border border-t lg:block'>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col items-center w-full  gap-2'>
             <a
-              href='https://www.youtube.com/watch?v=DxbVeHpQU7I&t=29479s'
-              className=" min-w-72 button-primary ">
+              href={contestDetails.linkToOrigin}
+              className=" min-w-72 button-primary "
+              target="_blank"
+              rel="noopener noreferrer">
               Enter Contest
             </a>
             <button
               onClick={report}
-              className=" min-w-72 button-secondary text-md gap-4">
+              className=" min-w-72  button-secondary text-md gap-4">
                <FlagIcon className="w-8 h-6" /> Report 
             </button>
             
