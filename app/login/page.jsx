@@ -26,7 +26,7 @@ const page = () => {
         const { user, session } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: `${window.location.origin}/updateUsers`,
+            redirectTo: `${window.location.origin}/`,
           },
         });
        

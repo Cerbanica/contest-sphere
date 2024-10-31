@@ -2,43 +2,34 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { NextResponse } from 'next/server';
 
 export async function middleware(req) {
-  const res = NextResponse.next(); // Initialize response
+  const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
 
-  // Fetch the current user
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  // Retrieve the session
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-  if (authError) {
-    console.error("Auth Error:", authError);
-  }
+  // Log session and errors for debugging
+  console.log("Session:", session);
+  console.error("Session Error:", sessionError);
 
-  if (user) {
-    console.log("User logged in:", user.email); // Debugging
-
-    // Fetch user role from the database
-    const { data: userProfile, error: profileError } = await supabase
-      .from('users') // Ensure this table name matches your Supabase setup
-      .select('role') // Only select the role field
-      .eq('email', user.email) // Match the user by their email
+  if (session) {
+    // Fetch the user's role
+    const { data: userProfile, error: roleError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('email', session.user.email)
       .single();
 
-    if (profileError) {
-      console.error("Error fetching user profile:", profileError);
-      return NextResponse.redirect(new URL('/', req.url));
-    }
+    // Log user role and errors for debugging
+    console.log("User Role:", userProfile?.role);
+    console.error("Role Fetch Error:", roleError);
 
-    console.log("User Profile:", userProfile); // Debugging
-
-    const isAdmin = userProfile?.role === 'admin';
-
-    // Redirect non-admin users trying to access /admin
-    if (req.nextUrl.pathname === '/admin' && !isAdmin) {
-      console.log("Non-admin user attempting to access admin page");
+    // Redirect non-admins trying to access /admin
+    if (req.nextUrl.pathname === '/admin' && userProfile?.role !== 'admin') {
       return NextResponse.redirect(new URL('/', req.url));
     }
   } else {
-    console.log("No user logged in");
-    // Redirect non-logged-in users trying to access restricted pages
+    // Redirect unauthenticated users to login for protected routes
     if (req.nextUrl.pathname === '/admin') {
       return NextResponse.redirect(new URL('/login', req.url));
     }
@@ -48,5 +39,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/', '/about', '/contest', '/login', '/myContest', '/updateUsers', '/createContestPage', '/admin'],
+  matcher: ['/admin', '/myContest', '/updateUsers', '/createContestPage','/login','/'], // List protected routes here
 };

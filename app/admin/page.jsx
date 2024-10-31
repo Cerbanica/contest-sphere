@@ -9,8 +9,11 @@ import { formatDateManual, formatEntry, calculateDaysRemaining } from '@/utils/c
 import { BookmarkButton, CategoryLink, ListSection, MainPrizeEntryFee, RemainingDays } from '../components/contestDetailsCard/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { useAuth } from '@/utils/useAuth';
 
 const page = () => {
+    const [user, setUser] = useState(null);
+    const userAuth = useAuth(); 
     const [theme, setTheme] = useState('dark');
     const [count,setCount]=useState({newUser:-1000,totalUser:-1000,totalContest:-1000,pendingContest:-1000, newReport:-1000, totalReport:-1000})
     const [contestDetails, setContestDetails] = useState(defaultFormData);
@@ -126,7 +129,11 @@ const page = () => {
         fetchReportFeedback();
         
     }, []);
-    
+    useEffect(() => {
+        if (userAuth) {
+           
+                }
+      }, [userAuth]);
     const approveReject = async (contestId, newStatus) => {
         const { data, error } = await supabase
             .from('contests')      // Select the 'contests' table

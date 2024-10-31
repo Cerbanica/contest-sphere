@@ -3,25 +3,33 @@ import supabase from '@/utils/supabaseClient';
 import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
+import {NextResponse} from 'next/server'
+import { useAuth } from '@/utils/useAuth';
 
 
 const Page = () => {
+    const userAuth = useAuth(); 
 
   const router = useRouter();
 
   
 
   useEffect(() => {
+   
  
       const getSession = async () => {
           const { data: { session } } = await supabase.auth.getSession();
-
+          if (userAuth) {
+        
+          }else{
+            return console.log("not logged");
+          }
           if (session) {
               try {
                   // Check if email already exists in the 'users' table
                   const { data: existingUser, error: checkError } = await supabase
                       .from('users')
-                      .select('email')
+                      .select('email,role')
                       .eq('email', session.user.email)
                       .single(); // Use single() since email should be unique
 
@@ -32,7 +40,14 @@ const Page = () => {
 
                   if (existingUser) {
                       console.log('User already exists:', existingUser.email);
-                      router.push('/'); // Redirect to home or other page
+                      console.log('Role:', existingUser.role);
+                      if(existingUser.role==='admin'){
+                        router.push('/admin'); // Redirect to home or other page
+
+                      }else{
+                        router.push('/'); // Redirect to home or other page
+
+                      }
                       return;
                   }
 

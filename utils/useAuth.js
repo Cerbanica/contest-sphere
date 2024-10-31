@@ -23,7 +23,8 @@ export const useAuth = (redirectPath = '/login') => {
          
            // Redirect to login or another page if not authenticated
         }else{
-         
+          
+          
           router.push(redirectPath);
         }
       }
