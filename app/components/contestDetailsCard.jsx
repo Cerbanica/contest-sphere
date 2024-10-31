@@ -91,7 +91,7 @@ const ContestDetailsCard = ({
           </div>
           {contestDetails.howToEnter &&
             <div className="py-4 border-t default">
-              <h1 className='text-default text-center text-lg lg:text-xl font-bold'>How To Enter</h1>
+              <h1 className='text-default text-center text-lg lg:text-xl font-bold mt-2'>How To Enter</h1>
               <span className="text-default-2 text-md lg:text-lg text-justify">
                 {contestDetails.howToEnter}
               </span>
@@ -105,7 +105,7 @@ const ContestDetailsCard = ({
           <ListSection title={"List of Judges"} items={contestDetails.judges} />
          
             <div className="py-4 border-t default">
-              <h1 className='text-default text-center text-lg lg:text-xl font-bold'>Eligibility and Restrictions</h1>
+              <h1 className='text-default text-center text-lg lg:text-xl font-bold mt-2'>Eligibility and Restrictions</h1>
               <span className="text-default-2 text-md lg:text-lg text-justify">
                 {contestDetails.eligibility?contestDetails.eligibility:"Open to All"}
               </span>

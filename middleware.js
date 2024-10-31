@@ -8,19 +8,29 @@ export async function middleware(req) {
     const { data: { user } } = await supabase.auth.getUser();
   
     if (user) {
-      // Handle logged-in users (redirect to watch-list if on home)
-      if (req.nextUrl.pathname === '/') {
-        return NextResponse.redirect(new URL('/watch-list', req.url));
+      // Fetch user role from database
+      const { data: userProfile, error } = await supabase
+        .from('users') // Assuming your user profile table is named 'profiles'
+        .select('role') // Only select the role field
+        .eq('email', user.email) // Match the user by their ID
+        .single();
+  
+      if (error || !userProfile) {
+        console.error("Error fetching user profile:", error);
+        return NextResponse.redirect(new URL('/', req.url));
+      }
+  
+      const isAdmin = userProfile.role === 'admin';
+  
+      // Redirect non-admin users if they try to access /admin
+      if (req.nextUrl.pathname === '/admin' && !isAdmin) {
+        return NextResponse.redirect(new URL('/', req.url));
       }
     } else {
-    //   // Handle non-logged-in users (redirect to home for other pages except about)
-    //   if (req.nextUrl.pathname == '/about' ) {
-    //     return NextResponse.redirect(new URL('/about', req.url));
-    //   }
-
-    //   if (req.nextUrl.pathname == '/' ) {
-    //     return NextResponse.redirect(new URL('/', req.url));
-    //   }
+      // Redirect non-logged-in users attempting to access restricted pages
+      if (req.nextUrl.pathname === '/admin') {
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
     }
   
     return res;
