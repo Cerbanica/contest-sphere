@@ -13,12 +13,13 @@ export async function middleware(req) {
         .select('role') // Only select the role field
         .eq('email', user.email) // Match the user by their ID
         .single();
-  
+        alert(user.email,userProfile.role);
+
       if (error || !userProfile) {
         console.error("Error fetching users :", error);
         return NextResponse.redirect(new URL('/', req.url));
       }
-        alert(user.email,userProfile.role);
+       
       const isAdmin = userProfile.role === 'admin';
   
       // Redirect non-admin users if they try to access /admin
@@ -30,6 +31,7 @@ export async function middleware(req) {
     } else {
       // Redirect non-logged-in users attempting to access restricted pages
       if (req.nextUrl.pathname === '/admin') {
+        alert(user.email,userProfile.role);
         return NextResponse.redirect(new URL('/login', req.url));
       }
     }
