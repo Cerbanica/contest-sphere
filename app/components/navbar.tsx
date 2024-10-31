@@ -67,6 +67,7 @@ const Navbar: React.FC = () => {
       setUser(null); // Reset user state after logging out
     }
     router.push("/");
+    router.refresh(); 
   };
   // Don't render the navbar if the current route is the login page
   if (pathname === '/login' || pathname === "/admin") {
