@@ -18,12 +18,14 @@ export async function middleware(req) {
         console.error("Error fetching users :", error);
         return NextResponse.redirect(new URL('/', req.url));
       }
-  
+        alert(user.email,userProfile.role);
       const isAdmin = userProfile.role === 'admin';
   
       // Redirect non-admin users if they try to access /admin
       if (req.nextUrl.pathname === '/admin' && !isAdmin) {
         return NextResponse.redirect(new URL('/', req.url));
+      }else{
+        return NextResponse.redirect(new URL('/admin', req.url));
       }
     } else {
       // Redirect non-logged-in users attempting to access restricted pages
