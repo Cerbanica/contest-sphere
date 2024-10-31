@@ -14,8 +14,8 @@ const ListSection = ({ title, items }) => (
       <h6 className="text-default text-lg lg:text-xl  w-full text-center font-bold">{title}</h6>
       {items!==null&items!==undefined&&(Array.isArray(items) ? items : JSON.parse(items)).map((item, index) => (
         <div key={index} className="mt-2">
-          <h6 className="text-default-2 text-md lg:text-lg -mb-1">{item?.label || "label"}</h6>
-          <span className="text-lg lg:text-xl text-default ">{item?.value || "items"}</span>
+          <h6 className="text-default-2 text-md -mb-1">{item?.label || "label"}</h6>
+          <span className="text-xl text-default ">{item?.value || "items"}</span>
         </div>
       ))}
     </div>
