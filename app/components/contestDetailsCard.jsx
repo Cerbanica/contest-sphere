@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import { useEffect, Suspense, useState } from "react";
 // Import the necessary icons or components
 import { FlagIcon } from '@heroicons/react/24/outline'
 import { ShareIcon } from '@heroicons/react/24/solid'
@@ -13,7 +14,7 @@ const ContestDetailsCard = ({
   handleAddUserContest, report, showShareCard
 
 }) => {
-
+  
 
 
   return (
@@ -98,11 +99,12 @@ const ContestDetailsCard = ({
 
             </div>}
 
-          {/* Prize List */}
+            
+          {/* {/* Prize List */}
           <ListSection title={"List of Other Prizes"} items={contestDetails.prizeList} />
 
           {/* Judges List */}
-          <ListSection title={"List of Judges"} items={contestDetails.judges} />
+          <ListSection title={"List of Judges"} items={contestDetails.judges} /> 
          
             <div className="py-4 border-t default">
               <h1 className='text-default text-center text-lg lg:text-xl font-bold mt-2'>Eligibility and Restrictions</h1>
