@@ -12,7 +12,7 @@ import { categoriesList } from '@/app/dataList';
 const ListSection = ({ title, items }) => (
     <div className="py-4 border-t default">
       <h6 className="text-default text-lg lg:text-xl  w-full text-center font-bold">{title}</h6>
-      {items!==null&&(Array.isArray(items) ? items : JSON.parse(items)).map((item, index) => (
+      {items!==null&items!==undefined&&(Array.isArray(items) ? items : JSON.parse(items)).map((item, index) => (
         <div key={index} className="mt-2">
           <h6 className="text-default-2 text-md lg:text-lg -mb-1">{item?.label || "label"}</h6>
           <span className="text-lg lg:text-xl text-default ">{item?.value || "items"}</span>

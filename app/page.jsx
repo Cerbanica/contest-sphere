@@ -496,7 +496,7 @@ export default function Home() {
 
 
                                         </div>
-                                        <div className=" flex flex-col  gap-0 lg:gap-1  w-full  bg-slate-300 dark:bg-slate-950 lg:bg-transparent pb-2">
+                                        <div className=" flex flex-col  gap-0 lg:gap-1  w-full  bg-slate-300 dark:bg-slate-950 lg:bg-transparent lg:dark:bg-transparent pb-2">
 
                                             {contestList.map((contest) => (
 

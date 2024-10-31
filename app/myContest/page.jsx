@@ -422,7 +422,7 @@ const Page = () => {
 
 
                     </div>
-                    <div className=" flex flex-col  gap-0  bg-slate-300 dark:bg-slate-950 lg:bg-transparent w-full  ">
+                    <div className=" flex flex-col  gap-0  bg-slate-300 dark:bg-slate-950 lg:bg-transparent lg:dark:bg-transparent w-full  ">
 
                       {contestList.map((contest) => (
 
@@ -462,7 +462,7 @@ const Page = () => {
                           isAdded={isAdded}
                           handleAddUserContest={handleRemoveContest}
                           report={handleOpenModal}
-                          showShareCard={() => setIsShareCardOpen(true)}
+                          showShareCard={() => setIsShareCardOpen(true)}                                                                                                                                                                                
 
                         />
                       </>
