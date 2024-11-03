@@ -3,87 +3,87 @@ import supabase from '@/utils/supabaseClient';
 import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
-import {NextResponse} from 'next/server'
-import { useAuth } from '@/utils/useAuth';
+import { NextResponse } from 'next/server'
+
 
 
 const Page = () => {
-    const userAuth = useAuth(); 
+   
 
-  const router = useRouter();
+    const router = useRouter();
 
+
+
+    useEffect(() => {
+
+
+        const getSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (session) {
+                try {
+                    // Check if email already exists in the 'users' table
+                    const { data: existingUser, error: checkError } = await supabase
+                        .from('users')
+                        .select('email,role')
+                        .eq('email', session.user.email)
+                        .single(); // Use single() since email should be unique
+
+                    if (checkError && checkError.code !== 'PGRST116') {
+                        // Handle error if it's not a "no rows found" error
+                        throw checkError;
+                    }
+
+                    /* if (existingUser&&userAuth) {
+                        console.log('User already exists:', existingUser.email);
+                        console.log('Role:', existingUser.role);
+                        if(existingUser.role==='admin'){
+                          router.push('/admin'); // Redirect to home or other page
   
+                        }else{
+                          router.push('/about'); // Redirect to home or other page
+  
+                        }
+                        return;
+                    }else{
+                      alert('not loffed');
+                    } */
 
-  useEffect(() => {
-   
- 
-      const getSession = async () => {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (userAuth) {
-        
-          }else{
-            return console.log("not logged");
-          }
-          if (session) {
-              try {
-                  // Check if email already exists in the 'users' table
-                  const { data: existingUser, error: checkError } = await supabase
-                      .from('users')
-                      .select('email,role')
-                      .eq('email', session.user.email)
-                      .single(); // Use single() since email should be unique
+                    if (!existingUser) {
 
-                  if (checkError && checkError.code !== 'PGRST116') {
-                      // Handle error if it's not a "no rows found" error
-                      throw checkError;
-                  }
+                        // If email does not exist, insert user data
+                        const { data, error } = await supabase
+                            .from('users')
+                            .insert({
+                                email: session.user.email,
+                                full_name: session.user.user_metadata.full_name,
+                            });
 
-                  if (existingUser) {
-                      console.log('User already exists:', existingUser.email);
-                      console.log('Role:', existingUser.role);
-                      if(existingUser.role==='admin'){
-                        router.push('/admin'); // Redirect to home or other page
+                        if (error) throw error;
 
-                      }else{
-                        router.push('/'); // Redirect to home or other page
-
-                      }
-                      return;
-                  }
-
-                  // If email does not exist, insert user data
-                  const { data, error } = await supabase
-                      .from('users')
-                      .insert({
-                          email: session.user.email,
-                          full_name: session.user.user_metadata.full_name,
-                      });
-
-                  if (error) throw error;
-
-                  console.log('User inserted:', data);
-                  router.push('/'); // Redirect to home or other page
-              } catch (err) {
-                  console.error('Error inserting user:', err);
-                  setError('Failed to insert user data');
-              }
-          } else {
-              router.push('/'); // Redirect to home if no session is found
-          }
-      };
-
-      getSession();
-  }, [router]);
+                    }
 
 
-  return (
-    <></>
-   
-  );
+
+                    router.push('/'); // Redirect to home or other page
+                } catch (err) {
+                    console.error('Error inserting user:', err);
+                    //setError('Failed to insert user data');
+                }
+            } else {
+                router.push('/'); // Redirect to home if no session is found
+            }
+        };
+
+        getSession();
+    }, [router]);
+
+
+    return null;
 };
 
 export default Page;
-function setError(arg0: string) {
+/* function setError(arg0: string) {
     throw new Error('Function not implemented.');
 }
-
+ */

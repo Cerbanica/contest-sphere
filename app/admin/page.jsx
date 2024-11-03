@@ -8,19 +8,24 @@ import { ContestCard, ReportFeedbackCard } from '../components'
 import { formatDateManual, formatEntry, calculateDaysRemaining } from '@/utils/contestUtils';
 import { BookmarkButton, CategoryLink, ListSection, MainPrizeEntryFee, RemainingDays } from '../components/contestDetailsCard/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useRouter } from "next/navigation";
+import  useAuthStore  from '@/utils/stores/authStore';
+
+
 
 import { useAuth } from '@/utils/useAuth';
 
 const page = () => {
-    const [user, setUser] = useState(null);
-    const userAuth = useAuth(); 
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
+    const { role, syncUserRole, user } = useAuthStore();
+   // const userAuth = useAuth(); 
     const [theme, setTheme] = useState('dark');
     const [count,setCount]=useState({newUser:-1000,totalUser:-1000,totalContest:-1000,pendingContest:-1000, newReport:-1000, totalReport:-1000})
     const [contestDetails, setContestDetails] = useState(defaultFormData);
     const [contestList, setContestList] = useState([]);
     const [reportFeedbackList, setReportFeedbackList] = useState([]);
     const [showDetailsCard, setShowDetailsCard] = useState(false);
-    let totalContest, pendingContest, newReport, totalReport, newUser, totalUser;
     let status = "Pending";
     const updateCount = (newValues) => {
         setCount((prevCount) => ({
@@ -34,8 +39,27 @@ const page = () => {
     },[count]);
 
     useEffect(() => {
+        // Fetch and sync role once
+        const checkUserRole = async () => {
+            setIsLoading(true);
+            await syncUserRole();
+
+            // Redirect if the user is not an admin
+            if (role !== 'admin') {
+                //router.push('/');
+            } else {
+                setIsLoading(false);
+            }
+        };
+
+        checkUserRole();
+    }, [router, role]);
+    
       
 
+      // Fetch theme, contests, report feedback, and users on mount
+      useEffect(() => {
+        // Theme setup
         const storedTheme = localStorage.getItem('theme');
         if (storedTheme) {
             setTheme(storedTheme);
@@ -45,95 +69,52 @@ const page = () => {
             document.documentElement.classList.add('dark');
         }
 
-
-        const fetchContests = async () => {
+        // Fetch all initial data
+        const fetchData = async () => {
             try {
-                let pendingQuery = supabase.from('contests').select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).eq('status', status);;
+                // Fetch contests
+                const pendingQuery = supabase
+                    .from('contests')
+                    .select('id, title, linkToThumbnail, prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' })
+                    .eq('status', status);
+                const { data: contestData, count: pendingContestCount } = await pendingQuery;
+                setContestList(contestData);
 
+                const totalContestQuery = supabase.from('contests').select('*', { count: 'exact' });
+                const { count: totalContestCount } = await totalContestQuery;
 
-                const { data, error, count:pendingContestCount } = await pendingQuery;
+                // Fetch report feedback
+                const reportFeedbackQuery = supabase.from('reportFeedback').select('*', { count: 'exact' }).eq('status', status);
+                const { count: newReportCount } = await reportFeedbackQuery;
+                const totalReportQuery = supabase.from('reportFeedback').select('*', { count: 'exact' });
+                const { count: totalReportCount } = await totalReportQuery;
 
-                if (error) throw error;
+                // Fetch users
+                const newUserQuery = supabase
+                    .from('users')
+                    .select('*', { count: 'exact' })
+                    .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+                const { count: newUserCount } = await newUserQuery;
+                const totalUserQuery = supabase.from('users').select('*', { count: 'exact' });
+                const { count: totalUserCount } = await totalUserQuery;
 
-                let totalQuery = supabase
-                .from('contests')
-                .select('*', { count: 'exact' });
-    
-                const { count: totalContestCount, error: totalError } = await totalQuery;
-
-                setContestList(data);
-                
-                  // Now update the count state
-        updateCount({
-            pendingContest: pendingContestCount,
-            totalContest: totalContestCount
-        });
-                
-
-
-
-            } catch (error) {
-                //setFetchError('Couldn\'t fetch contest data');
-                setContestList([]);
-
-            }
-        };
-        const fetchReportFeedback = async () => {
-            try {
-                let query = supabase.from('reportFeedback').select('*',{ count: 'exact' }).eq('status', status);
-                let totalQuery = supabase.from('reportFeedback').select('*',{ count: 'exact' });
-
-
-                const { data, error, count:newReportCount } = await query;
-                const {   count:totalReportCount } = await totalQuery;
-               
-                if (error) throw error;
-
-                setReportFeedbackList(data);
-                
+                // Update counts
                 updateCount({
+                    pendingContest: pendingContestCount,
+                    totalContest: totalContestCount,
                     newReport: newReportCount,
                     totalReport: totalReportCount,
-                });
-
-            } catch (error) {
-                console.log("error : ", error)
-                setReportFeedbackList([]);
-            }
-        };
-        const fetchUser = async () => {
-            try {
-                let query = supabase.from('users').select('*',{ count: 'exact' }). gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());  
-                let totalQuery = supabase.from('users').select('*',{ count: 'exact' });
-
-
-                const {  error, count:newUserCount } = await query;
-                const {   count:totalUserCount } = await totalQuery;
-               
-                if (error) throw error;
-
-                
-                
-                updateCount({
                     newUser: newUserCount,
                     totalUser: totalUserCount,
                 });
-
             } catch (error) {
-                console.log("error : ", error)
-               
+                console.error('Error fetching data:', error);
             }
-        };
-        fetchUser();
-        fetchContests();
-        fetchReportFeedback();
-        
+        };  
+
+        fetchData();
     }, []);
-    useEffect(() => {
-        if (userAuth) {
-           
-                }
-      }, [userAuth]);
+    
     const approveReject = async (contestId, newStatus) => {
         const { data, error } = await supabase
             .from('contests')      // Select the 'contests' table
@@ -161,7 +142,6 @@ const page = () => {
         }
     }
     const fixedDismiss = async (Id, newStatus) => {
-        alert("clicked");
         const { data, error } = await supabase
             .from('reportFeedback')      // Select the 'contests' table
             .update({ status: newStatus })  // Specify the column to update and its new value
@@ -221,6 +201,10 @@ const page = () => {
 
     return (
         <div className='flex flex-row p-4 '>
+            {isLoading ?(
+                <div className=' w-full text-default-2  p-10 items-center justify-items-center gap-20 flex flex-col'> <h1 className='text-2xl'>This Page is for Admin Only</h1><a href="/" className='w-96 button-primary'>Back</a></div>
+            ):(
+                <>
             <div className='w-2/12 default border p-4 pt-0 h-[90vh] rounded-2xl rounded-r-none flex flex-col'>
                 <div className="text-lg default border-b min-h-20 flex justify-center  p-2 flex-col ">
 
@@ -375,6 +359,7 @@ const page = () => {
                 </div>
 
             </div>
+            </>)}
         </div>
     )
 }

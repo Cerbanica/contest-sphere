@@ -24,20 +24,14 @@ export async function middleware(req) {
     console.log("User Role:", userProfile?.role);
     console.error("Role Fetch Error:", roleError);
 
-    // Redirect non-admins trying to access /admin
-    if (req.nextUrl.pathname === '/admin' && userProfile?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/', req.url));
-    }
+   
   } else {
-    // Redirect unauthenticated users to login for protected routes
-    if (req.nextUrl.pathname === '/admin') {
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
+   
   }
 
   return res;
 }
 
 export const config = {
-  matcher: ['/admin', '/myContest', '/updateUsers', '/createContestPage','/login','/'], // List protected routes here
+  matcher: ['/admin', '/myContest', '/updateUsers', '/createContestPage'], // List protected routes here
 };
