@@ -325,7 +325,7 @@ const Page = () => {
   </div>
        <div className="output-box mt-8 p-4 rounded-md border">
        
-        <h3 className="text-xl font-semibold mb-4">AI Output</h3>
+        <h3 className="hidden text-xl font-semibold mb-4">AI Output</h3>
         <div className="output" dangerouslySetInnerHTML={{ __html: output }} />
       </div>
  
