@@ -11,12 +11,13 @@ import { TrashIcon} from '@heroicons/react/24/solid'
 import { useAuth } from '@/utils/useAuth';
 import { ShareIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
-
+import useAuthStore from '@/utils/stores/authStore';
 
 const Page = () => {
-  const [user, setUser] = useState(null); // State to store user information
+  const { role,user,loading, checkOrAddUser } = useAuthStore();
+  //const [user, setUser] = useState(null); // State to store user information
   const [contests, setContests] = useState([]); // State to store contests
-  const [loading, setLoading] = useState(true); // Loading state
+ // const [loading, setLoading] = useState(true); // Loading state
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareCardOpen, setIsShareCardOpen] = useState(false);
@@ -26,7 +27,7 @@ const Page = () => {
   const handleOpenModal = () => {setIsModalOpen(true)};
   const handleCloseModal = () => setIsModalOpen(false);
   const handleCloseShare = () => setIsShareCardOpen(false);
-  const userAuth = useAuth(); 
+ // const userAuth = useAuth(); 
   const [isAdded, setIsAdded] = useState(true);
   const [showDetailsCard, setShowDetailsCard] = useState(false);
   const [showContestList, setShowContestList] = useState(true);
@@ -73,14 +74,32 @@ const Page = () => {
   function handleWindowSizeChange() {
     setWidth(window.innerWidth);
   }
+  useEffect(() => {
+    if (!loading) {
+      
+      if (role) {
+        fetchUserContests(user.email);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [role, loading, router]);
+   
+    /* if(role){
+      fetchUserContests(userAuth.email);
+       
+    }else{
+      router.push('/');
+    } */
 
 
+/* 
   useEffect(() => {
     if (userAuth) {
       setUser(userAuth);
       fetchUserContests(userAuth.email);
     }
-  }, [userAuth,  page]); // Depend on `userAuth`, `filters`, and `page`
+  }, [userAuth,  page]); */ // Depend on `userAuth`, `filters`, and `page`
   
   // Use effect to handle URL parameter changes
  

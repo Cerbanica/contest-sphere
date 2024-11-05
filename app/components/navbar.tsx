@@ -9,7 +9,7 @@ import { SunIcon } from '@heroicons/react/24/solid'
 import supabase from '@/utils/supabaseClient'
 import { useRouter, usePathname } from 'next/navigation'
 import { ReportFeedbackForm } from './reportFeedback/components'
-
+import useAuthStore from '@/utils/stores/authStore';
 
 interface User {
   email: string;
@@ -21,6 +21,7 @@ interface User {
 }
 
 const Navbar: React.FC = () => {
+  const { role, logout } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -64,9 +65,10 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
+      await logout();
       setUser(null); // Reset user state after logging out
     }
-    router.refresh(); 
+    
     router.push("/");
    
   };

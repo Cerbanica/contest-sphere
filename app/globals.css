@@ -118,7 +118,7 @@ select{
 }
 
 .button-base {
-  @apply  transition-transform duration-75 ease-in-out hover:scale-105 flex flex-row p-2 px-4 rounded-lg font-bold text-lg justify-center items-center border ;
+  @apply min-w-72 transition-transform duration-75 ease-in-out hover:scale-105 flex flex-row p-2 px-4 rounded-lg font-bold text-lg justify-center items-center border ;
 }
 
 .button-primary {

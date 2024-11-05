@@ -18,7 +18,7 @@ import { useAuth } from '@/utils/useAuth';
 const page = () => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
-    const { role, syncUserRole, user } = useAuthStore();
+    const { role, syncUserRole, user, loading } = useAuthStore();
    // const userAuth = useAuth(); 
     const [theme, setTheme] = useState('dark');
     const [count,setCount]=useState({newUser:-1000,totalUser:-1000,totalContest:-1000,pendingContest:-1000, newReport:-1000, totalReport:-1000})
@@ -40,20 +40,25 @@ const page = () => {
 
     useEffect(() => {
         // Fetch and sync role once
-        const checkUserRole = async () => {
-            setIsLoading(true);
-            await syncUserRole();
+       if(!loading){
 
+        if(role){
+
+       
             // Redirect if the user is not an admin
-            if (role !== 'admin') {
-                //router.push('/');
-            } else {
-                setIsLoading(false);
-            }
-        };
+            if (role === 'admin') {
+                return setIsLoading(false);
+            } 
+            router.push('/');
+        }
+        router.push('/');
+       }
+         
+       
+    
 
-        checkUserRole();
-    }, [router, role]);
+       
+    }, [router, loading,role]);
     
       
 

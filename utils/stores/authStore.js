@@ -1,71 +1,106 @@
 // stores/authStore.js
-import {create }from "zustand";
-import supabase from "../supabaseClient";
+import { create } from 'zustand';
+import supabase from '../supabaseClient';
+import { persist } from 'zustand/middleware';
 
+const useAuthStore = create(
+  persist(
+    (set) => ({
+      user: null,
+      role: null,
+      loading: true,
+      error: null,
 
-const useAuthStore = create((set) => ({
-  user: null,
-  role: null,
-  loading: false,
-  error: null,
+      verifyUserRole: async (userData) => {
+        try {
+          set({ loading: true });
+          const { data: existingUser, error } = await supabase
+            .from("users")
+            .select("email,role")
+            .eq("email", userData.email)
+            .single();
 
-  setUser: (user) => set({ user }),
-  setRole: (role) => set({ role }),
+          if (error && error.code !== 'PGRST116') {
+            throw error;
+          }
+          if(existingUser){
+            set({ role: existingUser.role });
+          }else{
 
-  // For cases where Zustand state needs updating after login
-  syncUserRole: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      const user = session.user;
-      set({ user });
-      
-      const { data, error } = await supabase
-        .from("users")
-        .select("role")
-        .eq("email", user.email)
-        .single();
-        
-      if (error) throw error;
-      set({ role: data.role });
+            // If email does not exist, insert user data
+            const { data, error } = await supabase
+              .from("users")
+              .insert({
+                email: userData.email,
+                full_name: userData.user_metadata.full_name,
+                role: 'normal',
+              });
+
+            if (error) throw error;
+
+            console.log("User inserted:", data);
+            set({ role: 'normal' });
+          }
+          set({ user: userData, loading: false });
+        } catch (error) {
+          set({ error: error.message , loading: false});
+        } finally {
+          set({ loading: false });
+        }
+      },
+
+      checkOrAddUser: async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const userData = session.user;
+          set({ loading: true });
+          
+          const { data: existingUser, error } = await supabase
+            .from("users")
+            .select("email,role")
+            .eq("email", userData.email)
+            .single();
+
+          if (error && error.code !== 'PGRST116') {
+            throw error;
+          }
+
+          let userRole = 'Guest';
+
+          if (!existingUser) {
+            // If email does not exist, insert user data
+            const { data, error } = await supabase
+              .from("users")
+              .insert({
+                email: session.user.email,
+                full_name: session.user.user_metadata.full_name,
+                role: 'normal1',
+              });
+
+            if (error) throw error;
+
+            console.log("User inserted:", data);
+            userRole = 'normal1';
+          } else {
+            userRole = existingUser.role;
+          }
+
+          set({ role: userRole });
+          set({ user: userData });
+        } catch (error) {
+          set({ error: error.message });
+        } finally {
+          set({ loading: false });
+        }
+      },
+
+      logout: () => set({ user: null, role: null }),
+    }),
+    {
+      name: 'user-store', // Unique name for local storage key
+      getStorage: () => localStorage, // Use localStorage for persistence
     }
-  },
-
-  checkOrAddUser: async (userData) => {
-    try {
-      set({ loading: true });
-      const { data: existingUser, error } = await supabase
-        .from("users")
-        .select("email,role")
-        .eq("email", userData.email)
-        .single();
-
-        if (error && error.code !== 'PGRST116') {
-          // Handle error if it's not a "no rows found" error
-          throw error;
-      }
-
-      if (!existingUser) {
-        // If email does not exist, insert user data
-        const { data, error } = await supabase
-        .from('users')
-        .insert({
-            email: session.user.email,
-            full_name: session.user.user_metadata.full_name,
-        });
-        if (error) throw error;
-
-                  console.log('User inserted:', data);
-      }
-
-      set({ user: userData });
-    } catch (error) {
-      set({ error: error.message });
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  logout: () => set({ user: null, role: null }),
-}));
+  )
+);
 
 export default useAuthStore;

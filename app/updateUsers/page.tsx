@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { NextResponse } from 'next/server'
-
+import useAuthStore from '@/utils/stores/authStore';
 
 
 const Page = () => {
-   
+
 
     const router = useRouter();
-
+    const { role, checkOrAddUser, user, verifyUserRole } = useAuthStore();
 
 
     useEffect(() => {
@@ -19,35 +19,26 @@ const Page = () => {
 
         const getSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
-
+            //let userRole = 'users';
             if (session) {
                 try {
+                    await verifyUserRole(session.user);
+                    
+                    
+                   // await checkOrAddUser();
                     // Check if email already exists in the 'users' table
-                    const { data: existingUser, error: checkError } = await supabase
+                    /* const { data: existingUser, error: checkError } = await supabase
                         .from('users')
                         .select('email,role')
                         .eq('email', session.user.email)
                         .single(); // Use single() since email should be unique
-
+                  
                     if (checkError && checkError.code !== 'PGRST116') {
                         // Handle error if it's not a "no rows found" error
                         throw checkError;
                     }
 
-                    /* if (existingUser&&userAuth) {
-                        console.log('User already exists:', existingUser.email);
-                        console.log('Role:', existingUser.role);
-                        if(existingUser.role==='admin'){
-                          router.push('/admin'); // Redirect to home or other page
-  
-                        }else{
-                          router.push('/about'); // Redirect to home or other page
-  
-                        }
-                        return;
-                    }else{
-                      alert('not loffed');
-                    } */
+                  /
 
                     if (!existingUser) {
 
@@ -61,11 +52,28 @@ const Page = () => {
 
                         if (error) throw error;
 
+                    }else{
+
+                        userRole= existingUser.role;
+
                     }
 
+                     // Fetch and sync role once
+                const checkUserRole = async () => {
+                 
+                    await syncUserRole();
+
+                   
+                }; */
+               /*  alert(role);
+                    if (role === 'admin') {
+                        router.push('/admin');
+                    } else {
+                        router.push('/'); // Redirect to home or other page
 
 
-                    router.push('/'); // Redirect to home or other page
+                    } */
+
                 } catch (err) {
                     console.error('Error inserting user:', err);
                     //setError('Failed to insert user data');
@@ -76,7 +84,20 @@ const Page = () => {
         };
 
         getSession();
-    }, [router]);
+    }, [router]); 
+
+    useEffect(()=>{
+        if(role){
+            alert(role);
+            if(role!=='admin'){
+                router.push('/');
+            }
+            if(role==='admin'){
+                router.push('/admin');
+            }
+        }
+
+    },[role])
 
 
     return null;

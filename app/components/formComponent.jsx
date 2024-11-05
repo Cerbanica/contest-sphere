@@ -1,4 +1,6 @@
 import React from 'react';
+import { Input } from '@headlessui/react'
+import { Textarea } from '@headlessui/react'
 
 const LeTextInput = ({ title,name,value, onChange }) => {
   return (
@@ -42,7 +44,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
         <label htmlFor={title} className="default-input-label">
           {title}
         </label>
-        <textarea
+        <Textarea
           type="text"
           id={title}
           name={name}
@@ -50,7 +52,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
           onChange={onChange}
           rows={rows}
           className="default-input"
-        />
+        ></Textarea>
       </div>
     );
   };
