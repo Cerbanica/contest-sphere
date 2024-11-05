@@ -83,7 +83,8 @@ const Page = () => {
               Build up your portfolio by joining contests so you can land an interview later. Hopefully. No promise though.
             </p>
             {error && <p className="text-red-500 mb-4">{error}</p>}
-            <button onClick={handleSignIn} disabled={loading} className={`w-full mt-auto mb-12 button-secondary transition duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            <button onClick={handleSignIn} disabled={loading} className={`w-full mt-auto mb-12 button-secondary transition gap-2 duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            <img width="32" height="32" src="https://img.icons8.com/fluency/48/google-logo.png" alt="google-logo"/>
               {loading ? 'Signing in...' : 'Sign in with Google'}
             </button>
           </div>
