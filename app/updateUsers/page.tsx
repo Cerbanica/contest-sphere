@@ -88,7 +88,7 @@ const Page = () => {
 
     useEffect(()=>{
         if(role){
-            alert(role);
+            //alert(role);
             if(role!=='admin'){
                 router.push('/');
             }
