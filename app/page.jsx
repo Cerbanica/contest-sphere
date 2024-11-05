@@ -398,7 +398,7 @@ export default function Home() {
                     </div>)}
                 {showContestList && (
                     <div className="lg:px-2">
-                        <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center text-4xl lg:text-6xl p-2 lg:p-8 pb-2  ">
+                        <div className="flex flex-col text-center bg-[url('/contestbg2.png')] bg-cover bg-center text-4xl lg:text-6xl p-2 lg:p-8 pb-2  ">
                             <div className="font-bold text-white"> <h1>Thousands of Contests</h1><h1>All in One Place</h1></div>
                             <section className="mt-8">
                                 <div className="default border rounded-2xl lg:w-1/2 sm:w-full md:w-5/6 flex flex-col justify-center items-center space-y-2 mt-2 mx-auto ">

@@ -71,12 +71,12 @@ const LeListboxCheckbox = ({ items, selected, onSelect }) => {
       if (prevSelectedItems.some((selectedItem) => selectedItem.id === item.id)) {
         // Item exists, so remove it
 
-        alert(item, selectedItems);
+       // alert(item, selectedItems);
         return prevSelectedItems.filter((selectedItem) => selectedItem.id !== item.id);
       } else {
         // Item does not exist, so add it
 
-        alert(item, selectedItems);
+        //alert(item, selectedItems);
         return [...prevSelectedItems, item];
       }
      

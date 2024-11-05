@@ -60,7 +60,7 @@ const Page = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-0 m-0" style={{
-      backgroundImage: `url('/csbg (1).png')`,
+      backgroundImage: `url('/csbg3.png')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

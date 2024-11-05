@@ -376,7 +376,7 @@ const Page = () => {
           </div>)}
         {showContestList && (
           <div className="lg:px-2">
-            <div className="flex flex-col text-center bg-[url('/contestbg.png')] bg-cover bg-center lg:text-6xl p-2 lg:p-8 pb-2  ">
+            <div className="flex flex-col text-center bg-[url('/contestbg2.png')] bg-cover bg-center lg:text-6xl p-2 lg:p-8 pb-2  ">
               <div className="font-bold text-white text-4xl "> <h1>My Contests</h1></div>
               <section className="mt-8 mb-2 lg:mb-0">
                 <div className="default border lg:flex-row rounded-2xl lg:w-1/2 w-full  flex flex-row justify-center items-center gap-2 p-2 mt-2 mx-auto ">
