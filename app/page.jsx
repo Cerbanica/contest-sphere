@@ -77,7 +77,7 @@ export default function Home() {
     }
     // Use effect to handle URL parameter changes
     useEffect(() => {
-
+        setContestList([]);
         // Update filters stateSs
         setFilters({
             category: searchParams.get('category') || 'All Categories',
@@ -96,8 +96,9 @@ export default function Home() {
 
             try {
                 let query = supabase.from('contests').select('id, title, linkToThumbnail,created_at ,prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
-
-                // Filter by category
+                alert(start);
+                alert(end);
+;                // Filter by category
                 if (filters.category && filters.category != "All Categories") {
                     query = query.eq('category', filters.category);
                 }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Input } from '@headlessui/react'
 import { Textarea } from '@headlessui/react'
+import { TrashIcon } from '@heroicons/react/24/solid';
+
 
 const LeTextInput = ({ title,name,value, onChange }) => {
   return (
@@ -98,7 +100,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
                 onClick={() => removeItem(index)}
                 className="px-4 py-2 bg-red-500 text-white rounded-lg"
               >
-                &times;
+                <TrashIcon className="w-6 fill-white " />
               </button>
             </div>
           </div>
@@ -107,7 +109,7 @@ const LeTextArea = ({ title,name,value, onChange,rows }) => {
         <button
           type="button"
           onClick={addItem}
-          className="button-primary"
+          className="button-primary mt-4"
         >
           Add {itemType}
         </button>
