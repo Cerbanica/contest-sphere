@@ -1,24 +1,56 @@
 DO $$
 DECLARE
-  name1 TEXT[] := ARRAY['Huion', 'Wacom', 'Xp pen', 'Google', 'Summer', 'Winter','Autumn', 'Spring','Titan'];
-  name2 TEXT[] := ARRAY['Contest', 'Challenge', 'Competition', '2024'];
+  name1 TEXT[] := ARRAY['Huion', 'Wacom', 'Xp pen', 'Google', 'Summer', 'Winter', 'Autumn', 'Spring', 'Titan'];
+  name2 TEXT[] := ARRAY['Contest', 'Challenge', 'Competition', '2024', '2025'];
   category TEXT[] := ARRAY['Writing', 'Digital Arts', 'Programming', 'Arts'];
-  status TEXT[] := ARRAY['On Going', 'Ending Soon', 'Upcoming'];
+  status TEXT[] := ARRAY['On Going', 'Pending'];
   description TEXT := 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.';
-  
+  howToEnter TEXT := description;
+   judges TEXT := '[
+      {"label":"Judge 1", "value":"Judge McJudgeFace"},
+      {"label":"Judge 2", "value":"Miss Judginson"},
+      {"label":"Judge 3", "value":"Jorginho"},
+      {"label":"Judge 4", "value":"Judgemeister"}
+  ]';
+  organizer TEXT[] := ARRAY['Huion', 'Wacom', 'Google', 'Hackathon', 'Metaverse', 'Nvidia', 'Random', 'GPT'];
+  linkToThumbnail TEXT[]:= ARRAY['https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img,w_720,h_423/https://louisem.com/wp-content/uploads/2017/07/youtube-thumbnail-templates.jpghttps://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img,w_720,h_423/https://louisem.com/wp-content/uploads/2017/07/youtube-thumbnail-templates.jpg',
+  'https://cdn.prod.website-files.com/6482d3c81a3b206db8abe8ab/6482d3c81a3b206db8abe93f_Unpacking%20the%20Psychology%20Behind%20Clickbait%20Thumbnails.png',
+  'https://cdn.mos.cms.futurecdn.net/5NT5Sh6nsFh6Rot64jEf8d-320-80.jpg',
+  'https://a.storyblok.com/f/55535/6000x4000/343e688541/photo-n-3.jpg/m/6000x0',
+  'https://moonsterleather.com/cdn/shop/articles/creative_writing_journal_1200x1200.jpg?v=1695818824',
+  'https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg',
+  'https://www.freeimageslive.com/galleries/buildings/themepark/pics/ball_pool_background.jpg',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyLTD-EEs8bxwuZtNSWPEROeaAu3FvGnlGQ6BhxGc4fuuphh9jJz1OWtJQII7BMUlrCHA&usqp=CAU'
+  ];
+  entryFee TEXT[] := ARRAY['Free', '$5', '$25', '£8', 'Free', 'Free', '$10', 'Free'];
+  eligibility TEXT[] := ARRAY['Open To All', 'Age 10-18 Only', 'Age 18+', 'Students age 13-17 only', 'Open To All'];
+  prizeList TEXT;
+  linkToOrigin TEXT := 'https://www.youtube.com/watch?v=Iq_r7IcNmUk';
+
   selected_firstPrize INT;
   prizeRange INT := 0;
   deadline DATE;
   selected_title TEXT;
   selected_category TEXT;
   selected_status TEXT;
+  selected_organizer TEXT;
+  selected_linkToThumbnail TEXT;
+  selected_entryFee TEXT;
+  selected_eligibility TEXT;
+  newPrize TEXT;
 BEGIN
-  FOR i IN 1..40 LOOP
-    -- Generate random firstPrize
-    selected_firstPrize := (RANDOM() * 3000)::int;
+  FOR i IN 1..30 LOOP
+    -- Generate random first prize
+    selected_firstPrize := (RANDOM() * 3000)::INT;
+    
+    -- Construct prize list based on first prize
+    prizeList := '[
+      {"label":"2nd place", "value":"' || (selected_firstPrize / 1.5)::INT || '"},
+      {"label":"3rd place", "value":"' || (selected_firstPrize / 2)::INT || '"},
+      {"label":"Honorary", "value":"' || (selected_firstPrize / 10)::INT || '"}
+    ]';
 
-    -- Set prizeRange based on firstPrize
-       -- Set prizeRange based on firstPrize
+    -- Set prize range based on first prize
     IF selected_firstPrize > 10000 THEN
       prizeRange := 5;
     ELSIF selected_firstPrize > 5000 THEN
@@ -32,23 +64,40 @@ BEGIN
     END IF;
     
     -- Generate a random date for deadline (within the next year)
-    deadline := CURRENT_DATE + (RANDOM() * 365)::int;
+    deadline := CURRENT_DATE + 10 + (RANDOM() * 65)::INT;
     
     -- Randomly select from arrays
-    selected_title := name1[ceil(random() * array_length(name1, 1))] || ' ' || name2[ceil(random() * array_length(name2, 1))];
-    selected_category := category[ceil(random() * array_length(category, 1))];
-    selected_status := status[ceil(random() * array_length(status, 1))];
-    
+    selected_title := 'Dummy ' || name1[CEIL(RANDOM() * ARRAY_LENGTH(name1, 1))] || ' ' || name2[CEIL(RANDOM() * ARRAY_LENGTH(name2, 1))];
+    selected_category := category[CEIL(RANDOM() * ARRAY_LENGTH(category, 1))];
+    selected_status := status[CEIL(RANDOM() * ARRAY_LENGTH(status, 1))];
+    selected_organizer := organizer[CEIL(RANDOM() * ARRAY_LENGTH(organizer, 1))];
+    selected_linkToThumbnail := linkToThumbnail[CEIL(RANDOM() * ARRAY_LENGTH(linkToThumbnail, 1))];
+    selected_entryFee := entryFee[CEIL(RANDOM() * ARRAY_LENGTH(entryFee, 1))];
+    selected_eligibility := eligibility[CEIL(RANDOM() * ARRAY_LENGTH(eligibility, 1))];
+  newPrize := '$' || selected_firstPrize::TEXT;
+
     -- Insert data into the table
-    INSERT INTO contests (title, "firstPrize", category, status, description, deadline, "prizeRange")
+    INSERT INTO contests (
+      title, "mainPrize", category, status, description, deadline, "prizeRange",
+      "prizeList", eligibility, judges, "entryFee", organizer, "linkToThumbnail",
+      "howToEnter", "linkToOrigin"
+    )
     VALUES (
       selected_title,         -- Randomly chosen title
-      selected_firstPrize,             -- Randomly generated first prize
+      newPrize,    -- Randomly generated first prize
       selected_category,      -- Randomly chosen category
       selected_status,        -- Randomly chosen status
       description,            -- Static description
       deadline,               -- Randomly generated deadline
-      prizeRange              -- Calculated prizeRange
+      prizeRange,             -- Calculated prize range
+      prizeList,              -- Calculated prize list
+      selected_eligibility,   -- Randomly chosen eligibility
+      judges,                 -- Static judges
+      selected_entryFee,      -- Randomly chosen entry fee
+      selected_organizer,     -- Randomly chosen organizer
+      selected_linkToThumbnail, -- Randomly chosen thumbnail
+      howToEnter,             -- Static howToEnter
+      linkToOrigin            -- Static linkToOrigin
     );
   END LOOP;
 END $$;

@@ -60,12 +60,18 @@ export default function Home() {
     const discordShareText = `Check out this contest: ${textshareUrl}`;
     const [copied, setCopied] = useState(false);
     // Helper function to update URL params, key=filter type, value is value la
-    const updateURLParams = (key, value) => {
-
+    const updateURLParams = (key, value, resetPage = true) => {
         const params = new URLSearchParams(searchParams);
         params.set(key, value);
-        router.push(`/?${params.toString()}`, undefined, { shallow: true })
+    
+        // Reset page to 1 if any filter changes and resetPage is true
+        if (resetPage && key !== 'page') {
+            params.set('page', '1');
+        }
+    
+        router.push(`/?${params.toString()}`, undefined, { shallow: true });
     };
+    
     function handleWindowSizeChange() {
         setWidth(window.innerWidth);
     }
@@ -98,7 +104,7 @@ export default function Home() {
 
                 // Filter by search term
                 if (filters.searchTerm) {
-                    query = query.or(`title.ilike.%${filters.searchTerm}%,category.ilike.%${filters.searchTerm}%`);
+                    query = query.or(`title.ilike.%${filters.searchTerm}%,category.ilike.%${filters.searchTerm}%,organizer.ilike.%${filters.searchTerm}%`);
                 }
 
                 // Sort by main prize if specified
@@ -225,7 +231,7 @@ export default function Home() {
 
 
     const handlePageChange = (selectedPage) => {
-        updateURLParams('page', selectedPage);
+        updateURLParams('page', selectedPage,false);
     };
 
     const viewContestDetails = (contestId) => {
@@ -470,7 +476,7 @@ export default function Home() {
                                 <hr className="border-t-1 border-cs w-full lg:w-1/2 mb-4" />
                             </div> */}
 
-                            {contestList.length > 0 ? (
+                            {contestList&&contestList.length > 0 ? (
                                 <div className="flex flex-row gap-4 mt-4">
 
 
