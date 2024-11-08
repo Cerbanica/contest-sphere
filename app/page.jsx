@@ -96,8 +96,7 @@ export default function Home() {
 
             try {
                 let query = supabase.from('contests').select('id, title, linkToThumbnail,created_at ,prizeRange, mainPrize, category, deadline,status,startdate, description, entryFee', { count: 'exact' }).range(start, end);
-                alert(start);
-                alert(end);
+               
 ;                // Filter by category
                 if (filters.category && filters.category != "All Categories") {
                     query = query.eq('category', filters.category);
