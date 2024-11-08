@@ -136,7 +136,7 @@ export default function Home() {
 
                 }
                 if (filters.noRestrictions === "true") {
-                    query = query.eq('eligibility', "No");
+                    query = query.eq('eligibility', "Open To All");
 
                 }
 
